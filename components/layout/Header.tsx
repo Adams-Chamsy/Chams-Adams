@@ -166,7 +166,10 @@ function IconButton({ icon: Icon, label, badge, className }: IconButtonProps) {
     >
       <Icon className="h-[18px] w-[18px]" aria-hidden />
       {typeof badge === 'number' && (
-        <span className="absolute -right-0.5 -top-0.5 inline-flex min-w-4 items-center justify-center rounded-full border border-noir bg-or px-1 text-[10px] font-medium leading-4 text-noir">
+        <span
+          aria-hidden
+          className="absolute -right-0.5 -top-0.5 inline-flex min-w-4 items-center justify-center rounded-full border border-noir bg-or px-1 text-[10px] font-medium leading-4 text-noir"
+        >
           {badge}
         </span>
       )}

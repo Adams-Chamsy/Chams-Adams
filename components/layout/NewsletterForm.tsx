@@ -62,8 +62,8 @@ export function NewsletterForm() {
           'font-sans text-xs tracking-wide transition-colors duration-300',
           status === 'success' && 'text-or',
           status === 'error' && 'text-destructive',
-          status === 'idle' && 'text-ivoire/40',
-          status === 'submitting' && 'text-ivoire/40'
+          status === 'idle' && 'text-ivoire/60',
+          status === 'submitting' && 'text-ivoire/60'
         )}
         role="status"
         aria-live="polite"

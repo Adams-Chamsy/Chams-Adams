@@ -154,10 +154,10 @@ export function Footer() {
 
         {/* Mentions basses */}
         <div className="flex flex-col items-start justify-between gap-4 pb-2 text-xs lg:flex-row lg:items-center">
-          <p className="font-sans uppercase tracking-[0.15em] text-ivoire/40">
+          <p className="font-sans uppercase tracking-[0.15em] text-ivoire/60">
             © {foundedYear} Chams Adams — Tous droits réservés
           </p>
-          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 font-sans uppercase tracking-[0.15em] text-ivoire/40">
+          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 font-sans uppercase tracking-[0.15em] text-ivoire/60">
             {legalLinks.map((link) => (
               <li key={link.href}>
                 <Link
@@ -174,7 +174,6 @@ export function Footer() {
                 type="button"
                 data-cursor="hover"
                 className="inline-flex items-center gap-2 uppercase tracking-[0.15em] transition-colors duration-300 hover:text-or"
-                aria-label="Changer de langue"
               >
                 <span aria-current="true" className="text-ivoire">
                   FR
