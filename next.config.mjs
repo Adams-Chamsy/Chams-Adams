@@ -11,6 +11,11 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
+    // Les placeholders d'étape 4 sont des SVG maison (collections, signature).
+    // CSP strict (attachment) pour empêcher toute exécution de script embarqué.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   experimental: {

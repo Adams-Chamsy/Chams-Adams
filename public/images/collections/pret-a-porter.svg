@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — Kaftan prêt-à-porter luxe en ivoire">
+  <defs>
+    <linearGradient id="bgP" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3A2B1F"/>
+      <stop offset="50%" stop-color="#1C1C1C"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <radialGradient id="glowP" cx="50%" cy="42%" r="55%">
+      <stop offset="0%" stop-color="#F5F0E6" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#F5F0E6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fabricP" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8DFC9"/>
+      <stop offset="55%" stop-color="#C5B683"/>
+      <stop offset="100%" stop-color="#7B6352"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgP)"/>
+  <rect width="1200" height="1500" fill="url(#glowP)"/>
+  <!-- Silhouette plus fluide, coupe détendue -->
+  <path d="M 600 280 L 700 450 L 800 1400 L 400 1400 L 500 450 Z" fill="url(#fabricP)" opacity="0.92"/>
+  <ellipse cx="600" cy="295" rx="70" ry="24" fill="#1C1610"/>
+  <!-- Pli central discret -->
+  <line x1="600" y1="450" x2="600" y2="1400" stroke="#4A3728" stroke-width="1" opacity="0.3"/>
+  <!-- Broderies minimales -->
+  <g fill="#4A3728" opacity="0.5">
+    <circle cx="600" cy="480" r="2"/>
+    <circle cx="600" cy="540" r="2"/>
+    <circle cx="600" cy="600" r="2"/>
+  </g>
+  <g fill="#C9A961" opacity="0.25">
+    <circle cx="160" cy="260" r="1.5"/>
+    <circle cx="1040" cy="300" r="1.5"/>
+    <circle cx="140" cy="740" r="1"/>
+    <circle cx="1060" cy="780" r="1.2"/>
+    <circle cx="200" cy="1250" r="1"/>
+    <circle cx="1000" cy="1230" r="1"/>
+  </g>
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="14" letter-spacing="0.25em" fill="#F5F0E6" opacity="0.5">03 · PRÊT-À-PORTER</text>
+</svg>

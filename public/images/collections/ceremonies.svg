@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — Kaftan de cérémonie en or sahélien">
+  <defs>
+    <linearGradient id="bgC" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1C1610"/>
+      <stop offset="55%" stop-color="#0E0A06"/>
+      <stop offset="100%" stop-color="#050302"/>
+    </linearGradient>
+    <radialGradient id="glowC" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.22"/>
+      <stop offset="55%" stop-color="#C9A961" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fabricC" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4A3728"/>
+      <stop offset="60%" stop-color="#1C1610"/>
+      <stop offset="100%" stop-color="#080604"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgC)"/>
+  <rect width="1200" height="1500" fill="url(#glowC)"/>
+  <!-- Silhouette kaftan stylisée -->
+  <path d="M 600 260 L 720 420 L 860 1400 L 340 1400 L 480 420 Z" fill="url(#fabricC)" opacity="0.9"/>
+  <!-- Col -->
+  <ellipse cx="600" cy="270" rx="80" ry="28" fill="#080604"/>
+  <!-- Broderies or verticales -->
+  <g fill="#C9A961" opacity="0.75">
+    <circle cx="600" cy="420" r="3"/>
+    <circle cx="600" cy="480" r="3"/>
+    <circle cx="600" cy="540" r="3"/>
+    <circle cx="600" cy="600" r="3"/>
+    <circle cx="600" cy="660" r="3"/>
+    <circle cx="600" cy="720" r="3"/>
+    <circle cx="600" cy="780" r="3"/>
+    <circle cx="600" cy="840" r="3"/>
+    <circle cx="600" cy="900" r="3"/>
+  </g>
+  <!-- Broderies horizontales col -->
+  <g fill="#C9A961" opacity="0.6">
+    <circle cx="540" cy="380" r="2.5"/>
+    <circle cx="560" cy="390" r="2.5"/>
+    <circle cx="640" cy="390" r="2.5"/>
+    <circle cx="660" cy="380" r="2.5"/>
+  </g>
+  <!-- Particules d'ambiance -->
+  <g fill="#C9A961" opacity="0.25">
+    <circle cx="220" cy="180" r="1.5"/>
+    <circle cx="980" cy="220" r="1.5"/>
+    <circle cx="140" cy="620" r="1"/>
+    <circle cx="1060" cy="580" r="1.2"/>
+    <circle cx="180" cy="1100" r="1"/>
+    <circle cx="1040" cy="1080" r="1.5"/>
+    <circle cx="240" cy="1350" r="1"/>
+    <circle cx="960" cy="1340" r="1"/>
+  </g>
+  <!-- Étiquette discrète -->
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="14" letter-spacing="0.25em" fill="#C9A961" opacity="0.4">01 · CÉRÉMONIES</text>
+</svg>

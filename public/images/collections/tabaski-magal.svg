@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — Kaftan Tabaski et Magal en indigo profond">
+  <defs>
+    <linearGradient id="bgT" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1B2951"/>
+      <stop offset="55%" stop-color="#101830"/>
+      <stop offset="100%" stop-color="#050810"/>
+    </linearGradient>
+    <radialGradient id="glowT" cx="50%" cy="38%" r="65%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#1B2951" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fabricT" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1B2951"/>
+      <stop offset="60%" stop-color="#0A1020"/>
+      <stop offset="100%" stop-color="#050810"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgT)"/>
+  <rect width="1200" height="1500" fill="url(#glowT)"/>
+  <path d="M 600 250 L 740 430 L 880 1400 L 320 1400 L 460 430 Z" fill="url(#fabricT)" opacity="0.95"/>
+  <ellipse cx="600" cy="265" rx="85" ry="30" fill="#050810"/>
+  <!-- Broderies en diagonale -->
+  <g fill="#C9A961" opacity="0.7">
+    <circle cx="540" cy="500" r="3"/>
+    <circle cx="560" cy="560" r="3"/>
+    <circle cx="580" cy="620" r="3"/>
+    <circle cx="600" cy="680" r="3"/>
+    <circle cx="620" cy="620" r="3"/>
+    <circle cx="640" cy="560" r="3"/>
+    <circle cx="660" cy="500" r="3"/>
+  </g>
+  <g fill="#C9A961" opacity="0.55">
+    <circle cx="500" cy="780" r="2.5"/>
+    <circle cx="540" cy="800" r="2.5"/>
+    <circle cx="600" cy="810" r="2.5"/>
+    <circle cx="660" cy="800" r="2.5"/>
+    <circle cx="700" cy="780" r="2.5"/>
+  </g>
+  <g fill="#C9A961" opacity="0.25">
+    <circle cx="180" cy="200" r="1.5"/>
+    <circle cx="1020" cy="260" r="1.5"/>
+    <circle cx="160" cy="680" r="1"/>
+    <circle cx="1040" cy="720" r="1.2"/>
+    <circle cx="220" cy="1200" r="1"/>
+    <circle cx="1000" cy="1180" r="1"/>
+  </g>
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="14" letter-spacing="0.25em" fill="#C9A961" opacity="0.4">02 · TABASKI &amp; MAGAL</text>
+</svg>

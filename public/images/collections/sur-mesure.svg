@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — Sur-mesure : pièce unique composée main">
+  <defs>
+    <linearGradient id="bgS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="60%" stop-color="#050403"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+    <radialGradient id="glowS" cx="50%" cy="36%" r="50%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fabricS" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2B2017"/>
+      <stop offset="60%" stop-color="#0A0A0A"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgS)"/>
+  <rect width="1200" height="1500" fill="url(#glowS)"/>
+  <!-- Silhouette épurée, coupe architecturale -->
+  <path d="M 600 240 L 760 440 L 900 1400 L 300 1400 L 440 440 Z" fill="url(#fabricS)" opacity="0.95"/>
+  <ellipse cx="600" cy="258" rx="90" ry="32" fill="#000"/>
+  <!-- Lignes de patron (fils blancs de couture) -->
+  <g stroke="#C9A961" stroke-width="0.5" fill="none" opacity="0.4">
+    <line x1="440" y1="440" x2="540" y2="1400"/>
+    <line x1="760" y1="440" x2="660" y2="1400"/>
+  </g>
+  <!-- Broderies or sobres -->
+  <g fill="#C9A961" opacity="0.8">
+    <circle cx="600" cy="450" r="3.5"/>
+    <circle cx="600" cy="520" r="2"/>
+    <circle cx="600" cy="590" r="2"/>
+  </g>
+  <!-- Épingle or suggérée -->
+  <g fill="#C9A961" opacity="0.5">
+    <circle cx="560" cy="320" r="2"/>
+    <circle cx="640" cy="320" r="2"/>
+    <line x1="560" y1="320" x2="640" y2="320" stroke="#C9A961" stroke-width="0.5"/>
+  </g>
+  <g fill="#C9A961" opacity="0.2">
+    <circle cx="200" cy="180" r="1"/>
+    <circle cx="1000" cy="200" r="1"/>
+    <circle cx="180" cy="700" r="1.2"/>
+    <circle cx="1020" cy="720" r="1"/>
+  </g>
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="14" letter-spacing="0.25em" fill="#C9A961" opacity="0.45">04 · SUR-MESURE</text>
+</svg>

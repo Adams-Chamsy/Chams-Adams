@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" preserveAspectRatio="xMidYMid meet" role="img" aria-label="L'Aïcha — kaftan de cérémonie en bazin riche teinté indigo">
+  <defs>
+    <radialGradient id="aBg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#1B2951" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="aFabric" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2E4486"/>
+      <stop offset="45%" stop-color="#1B2951"/>
+      <stop offset="100%" stop-color="#0A1020"/>
+    </linearGradient>
+    <linearGradient id="aHighlight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1B2951" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#4F6BAE" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1B2951" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Halo indigo diffus -->
+  <rect width="900" height="1200" fill="url(#aBg)"/>
+  <!-- Silhouette principale du kaftan -->
+  <path d="M 450 160 L 620 340 L 720 1120 L 180 1120 L 280 340 Z" fill="url(#aFabric)"/>
+  <!-- Lustrage central -->
+  <rect x="370" y="340" width="160" height="780" fill="url(#aHighlight)"/>
+  <!-- Col -->
+  <ellipse cx="450" cy="175" rx="85" ry="28" fill="#050810"/>
+  <path d="M 450 200 L 420 260 L 480 260 Z" fill="#050810"/>
+  <!-- Manches -->
+  <path d="M 300 340 L 240 700 L 180 1120" fill="none" stroke="#0A1020" stroke-width="1.5" opacity="0.4"/>
+  <path d="M 600 340 L 660 700 L 720 1120" fill="none" stroke="#0A1020" stroke-width="1.5" opacity="0.4"/>
+  <!-- Broderies dorées centrales (motif vertical) -->
+  <g fill="#C9A961">
+    <circle cx="450" cy="360" r="4"/>
+    <circle cx="450" cy="400" r="3.5"/>
+    <circle cx="450" cy="440" r="3.5"/>
+    <circle cx="420" cy="460" r="2.5"/>
+    <circle cx="480" cy="460" r="2.5"/>
+    <circle cx="450" cy="500" r="4"/>
+    <circle cx="450" cy="560" r="3"/>
+    <circle cx="450" cy="620" r="3"/>
+    <circle cx="450" cy="680" r="3"/>
+    <circle cx="450" cy="740" r="3"/>
+    <circle cx="450" cy="800" r="3"/>
+    <circle cx="450" cy="860" r="3"/>
+  </g>
+  <!-- Motif col brodé -->
+  <g fill="#C9A961">
+    <circle cx="400" cy="230" r="2.5"/>
+    <circle cx="420" cy="250" r="2.5"/>
+    <circle cx="450" cy="260" r="3"/>
+    <circle cx="480" cy="250" r="2.5"/>
+    <circle cx="500" cy="230" r="2.5"/>
+  </g>
+  <!-- Motif bas de robe -->
+  <g fill="#C9A961" opacity="0.7">
+    <circle cx="300" cy="1060" r="2.5"/>
+    <circle cx="350" cy="1070" r="2.5"/>
+    <circle cx="400" cy="1080" r="2.5"/>
+    <circle cx="450" cy="1085" r="3"/>
+    <circle cx="500" cy="1080" r="2.5"/>
+    <circle cx="550" cy="1070" r="2.5"/>
+    <circle cx="600" cy="1060" r="2.5"/>
+  </g>
+  <!-- Étiquette signature discrète -->
+  <text x="450" y="1160" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" letter-spacing="0.3em" fill="#C9A961" opacity="0.5">L'AÏCHA</text>
+</svg>
