@@ -109,6 +109,30 @@ Plus de détails dans [CLAUDE.md](./CLAUDE.md).
 
 ---
 
+## 🖼️ Assets (placeholders temporaires)
+
+Tous les visuels actuels sont **des SVG placeholders** générés à la main,
+à remplacer par les vrais visuels fournis par le client.
+
+| Emplacement | Contenu attendu | Remplacement |
+|-------------|-----------------|--------------|
+| `public/videos/hero-placeholder.mp4` | Vidéo de fond Hero (10–15 s, boucle, ≤ 5 Mo) | À fournir. Specs dans [`public/videos/README.md`](./public/videos/README.md) |
+| `public/videos/hero-placeholder-poster.svg` | Poster du Hero (gradient + particules or) | Remplacer par JPG 1920×1080 issu de la vidéo |
+| `public/images/collections/*.svg` | 4 silhouettes éditoriales (Cérémonies, Tabaski & Magal, Prêt-à-porter, Sur-mesure) | Photos 4:5 haute déf (1200×1500) en AVIF/WebP, ≤ 300 Ko |
+| `public/images/signature/aicha-signature.svg` | Silhouette du kaftan signature « L'Aïcha » (indigo + broderie or) | Idéal : 36 frames à 10° (voir `public/images/signature/aicha-360/`) pour le `<Product360>` mode sprite |
+| `public/images/signature/aicha-360/` | 36 frames de rotation 360° (mode sprite `<Product360>`) | Générer avec un turntable studio + export WebP 1000×1333 chacune |
+
+**Pipeline de compression recommandé** : `squoosh` ou `sharp-cli` en AVIF
+avec quality 72, ou WebP quality 80. Lazy-loading pris en charge par
+`next/image` pour tous sauf l'image above-the-fold.
+
+**SVG activés dans `next/image`** : `dangerouslyAllowSVG: true` avec CSP
+`script-src 'none'; sandbox;` — les placeholders actuels sont des fichiers
+statiques de confiance sans JS. À revisiter si du contenu SVG tiers est
+introduit.
+
+---
+
 ## 🤖 Travail avec Claude Code
 
 Ce projet est conçu pour être développé avec [Claude Code](https://docs.claude.com/claude-code).
