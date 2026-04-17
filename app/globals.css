@@ -89,6 +89,12 @@
     font-feature-settings: 'ss01', 'cv11';
   }
 
+  /* Curseur natif masqué quand CustomCursor est actif (desktop + motion OK) */
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+
   h1, h2, h3, h4 {
     @apply font-serif font-light text-ivoire;
   }

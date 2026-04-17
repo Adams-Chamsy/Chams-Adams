@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Inter, Italianno } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import { SmoothScroll } from '@/components/layout/SmoothScroll';
+import { CustomCursor } from '@/components/layout/CustomCursor';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import './globals.css';
 
 const inter = Inter({
@@ -93,7 +97,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={cn(inter.variable, cormorant.variable, italianno.variable)}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-noir text-ivoire/90 font-sans">{children}</body>
+      <body className="min-h-screen bg-noir text-ivoire/90 font-sans">
+        <SmoothScroll>
+          <CustomCursor />
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </SmoothScroll>
+      </body>
     </html>
   );
 }
