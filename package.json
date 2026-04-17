@@ -20,6 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@react-three/drei": "^9.108.3",
     "@react-three/fiber": "^8.16.8",
     "class-variance-authority": "^0.7.0",
@@ -27,6 +28,7 @@
     "framer-motion": "^11.3.19",
     "gsap": "^3.12.5",
     "lenis": "^1.1.6",
+    "lucide-react": "^1.8.0",
     "next": "14.2.5",
     "next-intl": "^3.17.2",
     "react": "^18.3.1",
