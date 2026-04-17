@@ -1,11 +1,21 @@
 import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Inter, Italianno } from 'next/font/google';
+import dynamic from 'next/dynamic';
 import { cn } from '@/lib/utils';
-import { SmoothScroll } from '@/components/layout/SmoothScroll';
-import { CustomCursor } from '@/components/layout/CustomCursor';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import './globals.css';
+
+// Ces deux composants n'impactent pas le rendu initial (effets post-hydration).
+// On les charge en dynamic sans SSR pour alléger le bundle du premier paint.
+const SmoothScroll = dynamic(
+  () => import('@/components/layout/SmoothScroll').then((m) => m.SmoothScroll),
+  { ssr: false, loading: () => null }
+);
+const CustomCursor = dynamic(
+  () => import('@/components/layout/CustomCursor').then((m) => m.CustomCursor),
+  { ssr: false, loading: () => null }
+);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -99,10 +109,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-screen bg-noir text-ivoire/90 font-sans">
         <SmoothScroll>
-          <CustomCursor />
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <>
+            <CustomCursor />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </>
         </SmoothScroll>
       </body>
     </html>
