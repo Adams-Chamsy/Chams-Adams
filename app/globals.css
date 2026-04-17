@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-noir: 10 10 10;
+    --color-or: 201 169 97;
+    --color-ivoire: 245 240 230;
+    --color-indigo: 27 41 81;
+    --color-terre: 139 69 19;
+    --color-bronze: 74 55 40;
+
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply bg-noir text-ivoire antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply font-sans bg-noir text-ivoire/90 selection:bg-or/30 selection:text-ivoire;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif font-light text-ivoire;
+  }
+
+  /* Focus visible doré — conforme WCAG AA */
+  :focus-visible {
+    @apply outline-none ring-2 ring-or ring-offset-2 ring-offset-noir;
+  }
+
+  /* Respect de prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-wide {
+    @apply mx-auto w-full max-w-wide px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-content {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+
+  /* CTA signature : bordure or + halo hover */
+  .btn-or {
+    @apply inline-flex items-center justify-center border border-or bg-transparent px-8 py-4
+           font-sans text-xs uppercase tracking-luxe text-ivoire
+           transition-all duration-500 ease-out-expo
+           hover:bg-or hover:text-noir hover:shadow-halo-or;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 font-sans text-xs uppercase tracking-luxe text-or
+           transition-all duration-400 ease-out-quart
+           hover:-translate-y-0.5;
+  }
+
+  .eyebrow {
+    @apply font-sans text-eyebrow uppercase text-or/80;
+  }
+
+  .signature {
+    @apply font-script text-4xl text-or;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Masque les scrollbars (conserve le scroll) */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Voile éditorial subtil sur les images */
+  .veil-bottom {
+    mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  }
+}
