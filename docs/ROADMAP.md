@@ -21,7 +21,7 @@ Site e-commerce complet, animations cinématiques, responsive parfait, prêt pou
 - [x] Charte éditoriale
 - [x] Guide design
 
-### 🚧 Étape 1 — Fondations (en cours)
+### ✅ Étape 1 — Fondations (terminée)
 - [ ] Initialisation Next.js 14 + TypeScript + Tailwind
 - [ ] Installation des dépendances (GSAP, Framer, Lenis, R3F, shadcn)
 - [ ] Configuration du design system (couleurs, fonts, variables CSS)
@@ -53,19 +53,28 @@ Site e-commerce complet, animations cinématiques, responsive parfait, prêt pou
 - [ ] Newsletter avec Resend
 - [ ] FabricTransition entre sections
 
-### ⏳ Étape 6 — Boutique
-- [ ] Grille produits avec filtres
-- [ ] Tri (nouveautés, prix, occasion)
-- [ ] Pagination / infinite scroll
-- [ ] Intégration CMS (Sanity) ou Shopify
+### ✅ Étape 6 — E-commerce : Collections + Boutique + Fiche produit (terminée)
+- [x] Types TypeScript produit/collection (compatibles Sanity/Shopify)
+- [x] Mock data : 12 pièces × 4 collections, prix 1 200–4 500 €
+- [x] ProductCard (3 variantes : default, editorial, compact)
+- [x] ProductGallery avec lightbox plein écran (ESC, ←/→, swipe mobile)
+- [x] SizeGuide drawer (6 tailles + sur-mesure, illustration silhouette)
+- [x] VariantSelector (couleurs + tailles, disabled barré)
+- [x] AddToBagButton (4 états : idle / choose-size / loading / success)
+- [x] ProductFilters (sidebar desktop + drawer mobile, 5 filtres)
+- [x] Page /collections — bento éditorial 4 univers
+- [x] Page /collections/[slug] — 4 pages SSG (hero + intro + produits)
+- [x] Page /boutique — filtres + tri + infinite scroll
+- [x] Page /produit/[slug] — 12 pages SSG avec JSON-LD schema.org Product
+- [x] Header : liens réels /collections et /boutique
+- [ ] Intégration CMS Sanity (mock data à remplacer) — prévue étape 8+
+- [ ] Vidéo du kaftan porté (asset à fournir) — étape 8+
 
-### ⏳ Étape 7 — Fiche produit
-- [ ] Galerie zoom haute définition
-- [ ] Vidéo du kaftan porté
-- [ ] Guide des tailles interactif
-- [ ] Sélecteur variantes (couleur, taille)
-- [ ] Ajout panier + wishlist
-- [ ] Suggestions produits similaires
+### ⏳ Étape 7 — Panier & Checkout
+- [ ] Store Zustand (panier persisté via localStorage)
+- [ ] Drawer panier (slide depuis droite)
+- [ ] Checkout Stripe
+- [ ] Emails transactionnels (Resend)
 
 ### ⏳ Étape 8 — Sur-mesure
 - [ ] Page dédiée avec process en 4 étapes
