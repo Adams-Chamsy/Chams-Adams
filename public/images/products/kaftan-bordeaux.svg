@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Placeholder — silhouette de kaftan bordeaux">
+  <defs>
+    <radialGradient id="brBg" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#8B4513" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="brFabric" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6B1F2A"/>
+      <stop offset="50%" stop-color="#4A1520"/>
+      <stop offset="100%" stop-color="#200A0E"/>
+    </linearGradient>
+    <linearGradient id="brLustre" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B1F2A" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#8E2E3C" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#6B1F2A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1125" fill="#0A0A0A"/>
+  <rect width="900" height="1125" fill="url(#brBg)"/>
+  <path d="M 450 150 L 620 330 L 720 1050 L 180 1050 L 280 330 Z" fill="url(#brFabric)"/>
+  <rect x="370" y="330" width="160" height="720" fill="url(#brLustre)"/>
+  <ellipse cx="450" cy="165" rx="85" ry="28" fill="#200A0E"/>
+  <g fill="#C9A961">
+    <circle cx="450" cy="360" r="4"/>
+    <circle cx="420" cy="420" r="2.5"/>
+    <circle cx="480" cy="420" r="2.5"/>
+    <circle cx="450" cy="470" r="3"/>
+    <circle cx="450" cy="540" r="3"/>
+    <circle cx="450" cy="620" r="3"/>
+    <circle cx="450" cy="700" r="3"/>
+    <circle cx="450" cy="780" r="3"/>
+  </g>
+  <g fill="#C9A961" opacity="0.65">
+    <circle cx="320" cy="980" r="2"/>
+    <circle cx="380" cy="995" r="2.5"/>
+    <circle cx="450" cy="1000" r="3"/>
+    <circle cx="520" cy="995" r="2.5"/>
+    <circle cx="580" cy="980" r="2"/>
+  </g>
+</svg>

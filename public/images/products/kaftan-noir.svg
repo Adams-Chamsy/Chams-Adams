@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1125" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Placeholder — silhouette de kaftan noir velours">
+  <defs>
+    <radialGradient id="nBg" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#4A3728" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="nFabric" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2C2C2C"/>
+      <stop offset="60%" stop-color="#121212"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="nLustre" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1C1C1C" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#4A3728" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#1C1C1C" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1125" fill="#0A0A0A"/>
+  <rect width="900" height="1125" fill="url(#nBg)"/>
+  <path d="M 450 150 L 620 330 L 720 1050 L 180 1050 L 280 330 Z" fill="url(#nFabric)"/>
+  <rect x="370" y="330" width="160" height="720" fill="url(#nLustre)"/>
+  <ellipse cx="450" cy="165" rx="85" ry="28" fill="#000"/>
+  <g fill="#C9A961">
+    <circle cx="450" cy="360" r="4.5"/>
+    <circle cx="430" cy="390" r="2.5"/>
+    <circle cx="470" cy="390" r="2.5"/>
+    <circle cx="450" cy="420" r="3"/>
+    <circle cx="450" cy="480" r="3.5"/>
+    <circle cx="450" cy="560" r="3"/>
+    <circle cx="450" cy="640" r="3"/>
+    <circle cx="450" cy="720" r="3"/>
+    <circle cx="450" cy="800" r="3"/>
+  </g>
+  <g fill="#4A3728" opacity="0.8">
+    <circle cx="300" cy="980" r="2"/>
+    <circle cx="370" cy="990" r="2.5"/>
+    <circle cx="450" cy="1000" r="3"/>
+    <circle cx="530" cy="990" r="2.5"/>
+    <circle cx="600" cy="980" r="2"/>
+  </g>
+</svg>
