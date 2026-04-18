@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — macro d'une broderie au fil d'or sur tissu sombre">
+  <defs>
+    <linearGradient id="bgB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2B2017"/>
+      <stop offset="50%" stop-color="#1C1610"/>
+      <stop offset="100%" stop-color="#080503"/>
+    </linearGradient>
+    <radialGradient id="lightB" cx="30%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softB"><feGaussianBlur stdDeviation="0.6"/></filter>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgB)"/>
+  <rect width="1200" height="1500" fill="url(#lightB)"/>
+  <!-- Trame tissu : lignes horizontales subtiles -->
+  <g stroke="#4A3728" stroke-width="0.5" opacity="0.25">
+    <line x1="0" y1="150" x2="1200" y2="150"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="450" x2="1200" y2="450"/>
+    <line x1="0" y1="600" x2="1200" y2="600"/>
+    <line x1="0" y1="750" x2="1200" y2="750"/>
+    <line x1="0" y1="900" x2="1200" y2="900"/>
+    <line x1="0" y1="1050" x2="1200" y2="1050"/>
+    <line x1="0" y1="1200" x2="1200" y2="1200"/>
+    <line x1="0" y1="1350" x2="1200" y2="1350"/>
+  </g>
+  <!-- Motif brodé central : étoile géométrique en points dorés -->
+  <g fill="#C9A961" filter="url(#softB)">
+    <!-- Cercle intérieur -->
+    <circle cx="600" cy="750" r="5" opacity="0.95"/>
+    <!-- Couronne 1 (rayon 90) -->
+    <circle cx="600" cy="660" r="4" opacity="0.9"/>
+    <circle cx="664" cy="686" r="4" opacity="0.9"/>
+    <circle cx="690" cy="750" r="4" opacity="0.9"/>
+    <circle cx="664" cy="814" r="4" opacity="0.9"/>
+    <circle cx="600" cy="840" r="4" opacity="0.9"/>
+    <circle cx="536" cy="814" r="4" opacity="0.9"/>
+    <circle cx="510" cy="750" r="4" opacity="0.9"/>
+    <circle cx="536" cy="686" r="4" opacity="0.9"/>
+    <!-- Couronne 2 (rayon 180) -->
+    <circle cx="600" cy="570" r="3.5" opacity="0.85"/>
+    <circle cx="728" cy="622" r="3.5" opacity="0.85"/>
+    <circle cx="780" cy="750" r="3.5" opacity="0.85"/>
+    <circle cx="728" cy="878" r="3.5" opacity="0.85"/>
+    <circle cx="600" cy="930" r="3.5" opacity="0.85"/>
+    <circle cx="472" cy="878" r="3.5" opacity="0.85"/>
+    <circle cx="420" cy="750" r="3.5" opacity="0.85"/>
+    <circle cx="472" cy="622" r="3.5" opacity="0.85"/>
+    <!-- Couronne 3 (rayon 270) semée -->
+    <circle cx="600" cy="480" r="3" opacity="0.75"/>
+    <circle cx="790" cy="560" r="3" opacity="0.75"/>
+    <circle cx="870" cy="750" r="3" opacity="0.75"/>
+    <circle cx="790" cy="940" r="3" opacity="0.75"/>
+    <circle cx="600" cy="1020" r="3" opacity="0.75"/>
+    <circle cx="410" cy="940" r="3" opacity="0.75"/>
+    <circle cx="330" cy="750" r="3" opacity="0.75"/>
+    <circle cx="410" cy="560" r="3" opacity="0.75"/>
+  </g>
+  <!-- Fil d'or qui traverse (suggestion d'aiguille en mouvement) -->
+  <path d="M 120 1100 Q 400 900 620 750 T 1080 340" stroke="#C9A961" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <!-- Étiquette -->
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="13" letter-spacing="0.3em" fill="#C9A961" opacity="0.45">LA BRODERIE · 01</text>
+</svg>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — foule du Magal de Touba, kaftans clairs sous lumière dorée">
+  <defs>
+    <linearGradient id="skyM" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E6D39E"/>
+      <stop offset="35%" stop-color="#C9A961"/>
+      <stop offset="65%" stop-color="#8B4513"/>
+      <stop offset="100%" stop-color="#0D0A08"/>
+    </linearGradient>
+    <radialGradient id="sunM" cx="50%" cy="22%" r="35%">
+      <stop offset="0%" stop-color="#FDFBF6" stop-opacity="0.9"/>
+      <stop offset="30%" stop-color="#F2E9CE" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softM"><feGaussianBlur stdDeviation="1"/></filter>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#skyM)"/>
+  <!-- Soleil / halo -->
+  <rect width="1200" height="1600" fill="url(#sunM)"/>
+  <circle cx="600" cy="360" r="110" fill="#FDFBF6" opacity="0.35" filter="url(#softM)"/>
+  <circle cx="600" cy="360" r="55" fill="#FDFBF6" opacity="0.7"/>
+  <!-- Minaret suggéré -->
+  <g fill="#1C1610" opacity="0.75">
+    <rect x="570" y="460" width="60" height="420"/>
+    <polygon points="570,460 600,400 630,460"/>
+    <rect x="555" y="830" width="90" height="12"/>
+  </g>
+  <!-- Foule : silhouettes de kaftans clairs -->
+  <g fill="#F5F0E6" opacity="0.9">
+    <!-- Ligne arrière (plus petits) -->
+    <ellipse cx="180" cy="980" rx="22" ry="40"/>
+    <ellipse cx="240" cy="980" rx="22" ry="40"/>
+    <ellipse cx="300" cy="978" rx="24" ry="42"/>
+    <ellipse cx="360" cy="982" rx="22" ry="40"/>
+    <ellipse cx="420" cy="978" rx="24" ry="42"/>
+    <ellipse cx="480" cy="980" rx="22" ry="40"/>
+    <ellipse cx="540" cy="978" rx="24" ry="42"/>
+    <ellipse cx="660" cy="978" rx="24" ry="42"/>
+    <ellipse cx="720" cy="980" rx="22" ry="40"/>
+    <ellipse cx="780" cy="978" rx="24" ry="42"/>
+    <ellipse cx="840" cy="982" rx="22" ry="40"/>
+    <ellipse cx="900" cy="978" rx="24" ry="42"/>
+    <ellipse cx="960" cy="980" rx="22" ry="40"/>
+    <ellipse cx="1020" cy="978" rx="24" ry="42"/>
+  </g>
+  <g fill="#E8DFC9" opacity="0.92">
+    <!-- Ligne intermédiaire -->
+    <ellipse cx="140" cy="1120" rx="34" ry="62"/>
+    <ellipse cx="230" cy="1125" rx="36" ry="65"/>
+    <ellipse cx="320" cy="1120" rx="34" ry="62"/>
+    <ellipse cx="410" cy="1128" rx="36" ry="65"/>
+    <ellipse cx="500" cy="1120" rx="34" ry="62"/>
+    <ellipse cx="600" cy="1125" rx="38" ry="68"/>
+    <ellipse cx="700" cy="1120" rx="34" ry="62"/>
+    <ellipse cx="790" cy="1128" rx="36" ry="65"/>
+    <ellipse cx="880" cy="1120" rx="34" ry="62"/>
+    <ellipse cx="970" cy="1125" rx="36" ry="65"/>
+    <ellipse cx="1060" cy="1120" rx="34" ry="62"/>
+  </g>
+  <g fill="#FDFBF6" opacity="0.95">
+    <!-- Ligne avant (plus grands) -->
+    <ellipse cx="100" cy="1320" rx="54" ry="92"/>
+    <ellipse cx="230" cy="1325" rx="58" ry="96"/>
+    <ellipse cx="360" cy="1320" rx="54" ry="92"/>
+    <ellipse cx="490" cy="1328" rx="58" ry="96"/>
+    <ellipse cx="620" cy="1320" rx="60" ry="100"/>
+    <ellipse cx="750" cy="1325" rx="58" ry="96"/>
+    <ellipse cx="880" cy="1320" rx="54" ry="92"/>
+    <ellipse cx="1010" cy="1328" rx="58" ry="96"/>
+    <ellipse cx="1140" cy="1320" rx="54" ry="92"/>
+  </g>
+  <!-- Points dorés (broderies sur les kaftans) -->
+  <g fill="#C9A961" opacity="0.6">
+    <circle cx="620" cy="1340" r="2.5"/>
+    <circle cx="620" cy="1380" r="2"/>
+    <circle cx="490" cy="1345" r="2"/>
+    <circle cx="750" cy="1345" r="2"/>
+    <circle cx="360" cy="1340" r="1.5"/>
+    <circle cx="880" cy="1340" r="1.5"/>
+  </g>
+  <!-- Étiquette -->
+  <text x="60" y="1550" font-family="Inter, sans-serif" font-size="13" letter-spacing="0.3em" fill="#F5F0E6" opacity="0.8">HÉRITAGE · MAGAL DE TOUBA</text>
+</svg>

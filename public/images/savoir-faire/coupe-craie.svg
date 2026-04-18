@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — tracé à la craie sur tissu noir, ciseaux d'orfèvre">
+  <defs>
+    <linearGradient id="bgC2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0D0A08"/>
+      <stop offset="60%" stop-color="#050403"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+    <radialGradient id="lightC2" cx="40%" cy="25%" r="65%">
+      <stop offset="0%" stop-color="#F5F0E6" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#F5F0E6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgC2)"/>
+  <rect width="1200" height="1500" fill="url(#lightC2)"/>
+  <!-- Tracés à la craie (lignes blanches dessinant un patron de kaftan) -->
+  <g stroke="#E8DFC9" fill="none" stroke-linecap="round" opacity="0.72">
+    <!-- Contour silhouette approximative -->
+    <path d="M 600 300 L 780 460 L 860 1300 L 340 1300 L 420 460 Z" stroke-width="1.5" stroke-dasharray="8 4"/>
+    <!-- Col -->
+    <path d="M 540 310 Q 600 290 660 310" stroke-width="1.5"/>
+    <!-- Ligne de montage centrale -->
+    <line x1="600" y1="310" x2="600" y2="1300" stroke-width="0.8" stroke-dasharray="4 6"/>
+    <!-- Flèches de grain -->
+    <line x1="450" y1="700" x2="480" y2="700" stroke-width="1"/>
+    <line x1="480" y1="700" x2="475" y2="695"/>
+    <line x1="480" y1="700" x2="475" y2="705"/>
+    <line x1="720" y1="700" x2="750" y2="700" stroke-width="1"/>
+    <line x1="750" y1="700" x2="745" y2="695"/>
+    <line x1="750" y1="700" x2="745" y2="705"/>
+    <!-- Points de mesure (les fameux 28) -->
+    <circle cx="420" cy="460" r="3" fill="#E8DFC9" stroke="none"/>
+    <circle cx="780" cy="460" r="3" fill="#E8DFC9" stroke="none"/>
+    <circle cx="380" cy="620" r="3" fill="#E8DFC9" stroke="none"/>
+    <circle cx="820" cy="620" r="3" fill="#E8DFC9" stroke="none"/>
+    <circle cx="360" cy="820" r="3" fill="#E8DFC9" stroke="none"/>
+    <circle cx="840" cy="820" r="3" fill="#E8DFC9" stroke="none"/>
+  </g>
+  <!-- Texte manuscrit (coordonnées / notes de tailleur) -->
+  <g fill="#E8DFC9" opacity="0.35" font-family="Inter, sans-serif">
+    <text x="180" y="540" font-size="11" letter-spacing="0.1em">58 cm</text>
+    <text x="990" y="740" font-size="11" letter-spacing="0.1em">42 cm</text>
+    <text x="260" y="1020" font-size="11" letter-spacing="0.1em">132 cm</text>
+    <text x="930" y="1180" font-size="11" letter-spacing="0.1em">96 cm</text>
+  </g>
+  <!-- Ciseaux d'orfèvre stylisés (coin inférieur droit) -->
+  <g stroke="#C9A961" fill="none" stroke-width="1.5" opacity="0.55">
+    <line x1="960" y1="1300" x2="1080" y2="1180"/>
+    <line x1="960" y1="1180" x2="1080" y2="1300"/>
+    <circle cx="960" cy="1300" r="8"/>
+    <circle cx="960" cy="1180" r="8"/>
+  </g>
+  <!-- Étiquette -->
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="13" letter-spacing="0.3em" fill="#E8DFC9" opacity="0.55">LA COUPE · 03</text>
+</svg>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — bassin de teinture indigo avec reflets profonds">
+  <defs>
+    <linearGradient id="bgT2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2E4486"/>
+      <stop offset="40%" stop-color="#1B2951"/>
+      <stop offset="80%" stop-color="#101830"/>
+      <stop offset="100%" stop-color="#050810"/>
+    </linearGradient>
+    <radialGradient id="waterHighlight" cx="45%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#4F6BAE" stop-opacity="0.3"/>
+      <stop offset="70%" stop-color="#1B2951" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ripple1" cx="50%" cy="55%" r="30%">
+      <stop offset="0%" stop-color="#4F6BAE" stop-opacity="0"/>
+      <stop offset="85%" stop-color="#4F6BAE" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#4F6BAE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ripple2" cx="50%" cy="55%" r="42%">
+      <stop offset="0%" stop-color="#4F6BAE" stop-opacity="0"/>
+      <stop offset="85%" stop-color="#4F6BAE" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#4F6BAE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ripple3" cx="50%" cy="55%" r="58%">
+      <stop offset="0%" stop-color="#4F6BAE" stop-opacity="0"/>
+      <stop offset="85%" stop-color="#4F6BAE" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#4F6BAE" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bgT2)"/>
+  <rect width="1200" height="1500" fill="url(#waterHighlight)"/>
+  <!-- Vagues concentriques (impact d'une goutte) -->
+  <rect width="1200" height="1500" fill="url(#ripple1)"/>
+  <rect width="1200" height="1500" fill="url(#ripple2)"/>
+  <rect width="1200" height="1500" fill="url(#ripple3)"/>
+  <!-- Reflets de lumière sur l'eau -->
+  <g stroke="#8A9DC9" stroke-width="1" fill="none" opacity="0.35">
+    <path d="M 180 420 Q 350 400 520 430 T 860 410"/>
+    <path d="M 250 530 Q 420 510 580 540 T 900 520"/>
+    <path d="M 140 680 Q 320 660 500 690 T 880 670"/>
+  </g>
+  <!-- Reflets doré subtils -->
+  <g fill="#C9A961" opacity="0.25">
+    <circle cx="380" cy="440" r="1.5"/>
+    <circle cx="620" cy="540" r="1.2"/>
+    <circle cx="820" cy="460" r="1"/>
+    <circle cx="520" cy="700" r="1.5"/>
+    <circle cx="780" cy="820" r="1.2"/>
+    <circle cx="280" cy="900" r="1"/>
+    <circle cx="640" cy="1050" r="1.5"/>
+    <circle cx="920" cy="1100" r="1.2"/>
+  </g>
+  <!-- Étiquette -->
+  <text x="60" y="1450" font-family="Inter, sans-serif" font-size="13" letter-spacing="0.3em" fill="#8A9DC9" opacity="0.55">LA TEINTURE · 02</text>
+</svg>

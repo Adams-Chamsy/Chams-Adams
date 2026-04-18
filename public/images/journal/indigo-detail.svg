@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — macro d'un tissu indigo, trame serrée et reflets profonds">
+  <defs>
+    <linearGradient id="bgI" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2E4486"/>
+      <stop offset="50%" stop-color="#1B2951"/>
+      <stop offset="100%" stop-color="#0A1020"/>
+    </linearGradient>
+    <pattern id="weaveH" x="0" y="0" width="12" height="24" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#1B2951"/>
+      <rect y="12" width="12" height="12" fill="#152041"/>
+    </pattern>
+    <pattern id="weaveV" x="0" y="0" width="24" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#2E4486" opacity="0.35"/>
+      <rect x="12" width="12" height="12" fill="#0A1020" opacity="0.4"/>
+    </pattern>
+    <radialGradient id="glowI" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#4F6BAE" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#0A1020" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#bgI)"/>
+  <!-- Tissage horizontal -->
+  <rect width="1200" height="1600" fill="url(#weaveH)" opacity="0.55"/>
+  <!-- Tissage vertical superposé -->
+  <rect width="1200" height="1600" fill="url(#weaveV)" opacity="0.45"/>
+  <!-- Lumière centrée -->
+  <rect width="1200" height="1600" fill="url(#glowI)"/>
+  <!-- Reflets clairs (fils où la lumière accroche) -->
+  <g stroke="#8A9DC9" fill="none" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="280" x2="1200" y2="280"/>
+    <line x1="0" y1="520" x2="1200" y2="520"/>
+    <line x1="0" y1="760" x2="1200" y2="760"/>
+    <line x1="0" y1="1000" x2="1200" y2="1000"/>
+    <line x1="0" y1="1240" x2="1200" y2="1240"/>
+  </g>
+  <g stroke="#4F6BAE" fill="none" stroke-width="0.4" opacity="0.55">
+    <line x1="180" y1="0" x2="180" y2="1600"/>
+    <line x1="420" y1="0" x2="420" y2="1600"/>
+    <line x1="660" y1="0" x2="660" y2="1600"/>
+    <line x1="900" y1="0" x2="900" y2="1600"/>
+  </g>
+  <!-- Petits accrochages or -->
+  <g fill="#C9A961" opacity="0.35">
+    <circle cx="420" cy="520" r="1.5"/>
+    <circle cx="660" cy="760" r="1.5"/>
+    <circle cx="180" cy="1000" r="1.2"/>
+    <circle cx="900" cy="280" r="1.2"/>
+    <circle cx="660" cy="1240" r="1.5"/>
+  </g>
+  <!-- Étiquette -->
+  <text x="60" y="1550" font-family="Inter, sans-serif" font-size="13" letter-spacing="0.3em" fill="#8A9DC9" opacity="0.75">INSPIRATION · L'INDIGO</text>
+</svg>

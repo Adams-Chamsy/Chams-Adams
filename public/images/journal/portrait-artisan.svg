@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder — portrait d'une artisane en lumière chaude">
+  <defs>
+    <radialGradient id="portraitBg" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#4A3728"/>
+      <stop offset="45%" stop-color="#1C1610"/>
+      <stop offset="100%" stop-color="#050403"/>
+    </radialGradient>
+    <radialGradient id="warmLight" cx="35%" cy="25%" r="50%">
+      <stop offset="0%" stop-color="#C9A961" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#C9A961" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="silhouette" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#70370F"/>
+      <stop offset="50%" stop-color="#2B2017"/>
+      <stop offset="100%" stop-color="#0D0A08"/>
+    </linearGradient>
+    <filter id="softP"><feGaussianBlur stdDeviation="1.2"/></filter>
+  </defs>
+  <rect width="1200" height="1600" fill="url(#portraitBg)"/>
+  <rect width="1200" height="1600" fill="url(#warmLight)"/>
+  <!-- Silhouette de profil : tête + épaule -->
+  <g filter="url(#softP)">
+    <!-- Tête -->
+    <ellipse cx="520" cy="580" rx="170" ry="200" fill="url(#silhouette)"/>
+    <!-- Foulard / coiffe -->
+    <path d="M 340 500 Q 380 380 520 360 Q 660 380 720 500 Q 700 560 680 580 L 680 480 Q 520 440 380 500 Q 360 540 360 580 Z" fill="#1C1610"/>
+    <!-- Cou + épaule -->
+    <path d="M 440 740 L 480 820 L 280 980 L 240 1200 L 240 1600 L 800 1600 L 800 1120 L 760 980 L 600 840 L 560 760 Z" fill="url(#silhouette)"/>
+    <!-- Contre-jour sur la joue -->
+    <ellipse cx="660" cy="560" rx="25" ry="60" fill="#C9A961" opacity="0.22"/>
+  </g>
+  <!-- Motifs or : broderie sur la tenue -->
+  <g fill="#C9A961" opacity="0.55">
+    <circle cx="420" cy="1020" r="3"/>
+    <circle cx="460" cy="1040" r="2.5"/>
+    <circle cx="500" cy="1060" r="3"/>
+    <circle cx="540" cy="1080" r="2.5"/>
+    <circle cx="580" cy="1100" r="3"/>
+    <circle cx="620" cy="1120" r="2.5"/>
+    <circle cx="660" cy="1140" r="3"/>
+    <circle cx="420" cy="1100" r="2"/>
+    <circle cx="500" cy="1180" r="2"/>
+    <circle cx="580" cy="1240" r="2.5"/>
+    <circle cx="660" cy="1300" r="2"/>
+  </g>
+  <!-- Particules ambiance -->
+  <g fill="#C9A961" opacity="0.2">
+    <circle cx="180" cy="260" r="1.5"/>
+    <circle cx="980" cy="340" r="1.2"/>
+    <circle cx="1080" cy="680" r="1"/>
+    <circle cx="140" cy="820" r="1"/>
+  </g>
+  <!-- Étiquette -->
+  <text x="60" y="1550" font-family="Inter, sans-serif" font-size="13" letter-spacing="0.3em" fill="#C9A961" opacity="0.5">PORTRAIT · FATOU DIAGNE</text>
+</svg>
