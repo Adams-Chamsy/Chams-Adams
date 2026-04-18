@@ -56,7 +56,7 @@ export function JournalPreview() {
   return (
     <section
       aria-labelledby="journal-title"
-      className="relative isolate bg-noir py-[120px] md:py-[160px]"
+      className="relative isolate bg-noir py-[120px] md:py-[180px]"
     >
       <div className="container-content flex flex-col gap-16 md:gap-20">
         <header className="flex max-w-3xl flex-col gap-6">

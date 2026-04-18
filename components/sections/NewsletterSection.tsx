@@ -38,7 +38,7 @@ export function NewsletterSection() {
   return (
     <section
       aria-labelledby="newsletter-section-title"
-      className="relative isolate overflow-hidden bg-noir py-[100px] md:py-[160px]"
+      className="relative isolate overflow-hidden bg-noir py-[120px] md:py-[180px]"
     >
       {/* Lueur dorée centrale très subtile */}
       <div

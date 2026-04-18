@@ -18,7 +18,7 @@ export function SignaturePiece() {
   return (
     <section
       aria-labelledby="signature-title"
-      className="relative isolate overflow-hidden bg-noir py-[120px] md:py-[160px]"
+      className="relative isolate overflow-hidden bg-noir py-[120px] md:py-[180px]"
     >
       {/* Dégradé subtil noir → touche indigo */}
       <div
