@@ -8,12 +8,14 @@ import { cn } from '@/lib/utils';
 
 type NavLink = { label: string; href: string };
 
+// Routes réelles (étape 6) : Collections et Boutique. Les autres restent
+// en placeholder `#` tant que les pages ne sont pas construites.
 const navItems: NavLink[] = [
   { label: 'Collections', href: '/collections' },
-  { label: 'Sur-mesure', href: '/sur-mesure' },
-  { label: 'Savoir-faire', href: '/savoir-faire' },
-  { label: 'Lookbook', href: '/lookbook' },
-  { label: 'Journal', href: '/journal' },
+  { label: 'Sur-mesure', href: '#' },
+  { label: 'Savoir-faire', href: '#' },
+  { label: 'Lookbook', href: '#' },
+  { label: 'Journal', href: '#' },
 ];
 
 const boutique: NavLink = { label: 'Boutique', href: '/boutique' };
