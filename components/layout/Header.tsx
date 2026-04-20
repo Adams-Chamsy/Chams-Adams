@@ -70,7 +70,8 @@ export function Header() {
           {/* Logo (gauche desktop, centre mobile via grid) */}
           <div className="flex items-center justify-start">
             <Logo
-              size={scrolled ? 36 : 44}
+              variant="wordmark"
+              size={scrolled ? 28 : 36}
               className="transition-[width,height] duration-500 ease-luxe"
             />
           </div>
@@ -218,7 +219,7 @@ function MobileMenu({ onClose }: MobileMenuProps) {
         className="absolute inset-y-0 right-0 flex h-full w-full max-w-md flex-col bg-noir"
       >
         <div className="flex items-center justify-between px-6 py-6">
-          <Logo as="div" size={36} />
+          <Logo as="div" variant="wordmark" size={28} />
           <button
             ref={closeRef}
             type="button"
