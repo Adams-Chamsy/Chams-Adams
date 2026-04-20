@@ -54,6 +54,47 @@ npm run dev
 
 Le site sera accessible sur [http://localhost:3000](http://localhost:3000).
 
+### Tester le flow de paiement (Stripe en mode test)
+
+**Prérequis** : un compte Stripe (mode test suffit, aucune carte bancaire requise).
+
+```bash
+# 1. Récupérer vos clés test sur https://dashboard.stripe.com/test/apikeys
+#    Puis les coller dans .env.local :
+#    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+#    STRIPE_SECRET_KEY=sk_test_...
+
+# 2. Installer Stripe CLI (une fois) :
+#    macOS : brew install stripe/stripe-cli/stripe
+#    Linux : https://docs.stripe.com/stripe-cli
+
+# 3. Dans un terminal séparé, lancer le tunnel webhook :
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+#    Copier le "whsec_..." affiché dans .env.local (STRIPE_WEBHOOK_SECRET)
+
+# 4. Redémarrer le serveur Next.js
+npm run dev
+
+# 5. Dans le site : ajouter une pièce à la sélection → procéder au paiement
+#    Utiliser la carte de test Stripe :
+#    Numéro   : 4242 4242 4242 4242
+#    Date     : n'importe quelle date future
+#    CVC      : 3 chiffres au choix
+#    Code postal : n'importe lequel
+
+# 6. Après paiement → redirection sur /checkout/success
+#    Le webhook déclenche l'envoi de l'email de confirmation (Resend).
+```
+
+**Autres cartes de test** (Stripe) :
+- `4000 0000 0000 9995` → refusée (fonds insuffisants)
+- `4000 0025 0000 3155` → 3D Secure requis
+- [Liste complète](https://docs.stripe.com/testing#cards)
+
+**Emails en dev** : sans clé `RESEND_API_KEY`, l'envoi est simplement loggé
+(aucun crash). Avec une clé `re_...`, Resend envoie vers votre adresse si
+le domaine n'est pas encore vérifié.
+
 ---
 
 ## 📜 Scripts
