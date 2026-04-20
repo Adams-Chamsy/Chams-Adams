@@ -14,7 +14,9 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const POSTER = '/videos/hero-placeholder-poster.svg';
+// Poster JPG extrait de la première frame (372 Ko, rendu réaliste avant lecture vidéo).
+// Le SVG original reste en fallback si le JPG échoue.
+const POSTER = '/videos/hero-placeholder-poster.jpg';
 const VIDEO_SRC = '/videos/hero-placeholder.mp4';
 
 /**
