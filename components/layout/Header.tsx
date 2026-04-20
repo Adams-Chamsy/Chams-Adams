@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Globe, Heart, Menu, Search, ShoppingBag, X, type LucideIcon } from 'lucide-react';
+import { Globe, Heart, Menu, Search, X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { CartButton } from './CartButton';
 
 type NavLink = { label: string; href: string };
 
@@ -94,7 +95,7 @@ export function Header() {
           <div className="flex items-center justify-end gap-2 sm:gap-4">
             <IconButton icon={Search} label="Rechercher" className="hidden sm:inline-flex" />
             <IconButton icon={Heart} label="Garder près de soi" className="hidden sm:inline-flex" />
-            <IconButton icon={ShoppingBag} label="Sélection" badge={0} />
+            <CartButton />
             <IconButton icon={Globe} label="Langue (FR)" className="hidden md:inline-flex" />
             <button
               ref={burgerRef}
