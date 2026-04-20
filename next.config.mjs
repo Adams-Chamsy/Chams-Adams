@@ -1,8 +1,18 @@
+import createMDX from '@next/mdx';
+
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+
+  // Active les pages MDX (le dossier `content/journal` est lu via gray-matter,
+  // mais .mdx dans `app/` pourra aussi être rendu directement).
+  pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
 
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -11,8 +21,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
-    // Les placeholders d'étape 4 sont des SVG maison (collections, signature).
-    // CSP strict (attachment) pour empêcher toute exécution de script embarqué.
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -20,6 +28,7 @@ const nextConfig = {
 
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion', '@react-three/drei'],
+    mdxRs: true,
   },
 
   async headers() {
@@ -36,4 +45,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);
