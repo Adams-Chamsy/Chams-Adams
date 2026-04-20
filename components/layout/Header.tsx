@@ -10,14 +10,13 @@ import { Logo } from './Logo';
 
 type NavLink = { label: string; href: string };
 
-// Routes réelles (étape 6) : Collections et Boutique. Les autres restent
-// en placeholder `#` tant que les pages ne sont pas construites.
+// Toutes les routes sont réelles depuis l'étape 8.
 const navItems: NavLink[] = [
   { label: 'Collections', href: '/collections' },
-  { label: 'Sur-mesure', href: '#' },
-  { label: 'Savoir-faire', href: '#' },
-  { label: 'Lookbook', href: '#' },
-  { label: 'Journal', href: '#' },
+  { label: 'Sur-mesure', href: '/sur-mesure' },
+  { label: 'Savoir-faire', href: '/savoir-faire' },
+  { label: 'Lookbook', href: '/lookbook' },
+  { label: 'Journal', href: '/journal' },
 ];
 
 const boutique: NavLink = { label: 'Boutique', href: '/boutique' };
