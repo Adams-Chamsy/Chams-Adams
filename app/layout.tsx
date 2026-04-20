@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
 import './globals.css';
 
 // Ces deux composants n'impactent pas le rendu initial (effets post-hydration).
@@ -116,6 +117,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main>{children}</main>
             <Footer />
             <CartDrawer />
+            <WishlistDrawer />
           </>
         </SmoothScroll>
       </body>

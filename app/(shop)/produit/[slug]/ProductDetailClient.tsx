@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
+import { useWishlistStore } from '@/lib/store/wishlist.store';
+import { centsFromAmount } from '@/lib/utils/price';
+import { getPrimaryImage } from '@/lib/types/product';
+import { cn } from '@/lib/utils';
 import { ProductGallery } from '@/components/product/ProductGallery';
 import { VariantSelector } from '@/components/product/VariantSelector';
 import { AddToBagButton } from '@/components/product/AddToBagButton';
@@ -41,7 +45,26 @@ export function ProductDetailClient({
     variant.sizes.length === 1 ? variant.sizes[0]! : null
   );
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
-  const [wishlisted, setWishlisted] = useState(false);
+
+  // Wishlist : persisted store (identique au cart). Toggle = add/remove.
+  const wishlisted = useWishlistStore((s) => s.has(product.id));
+  const toggleWish = useWishlistStore((s) => s.toggleItem);
+  const openWishDrawer = useWishlistStore((s) => s.openWishlist);
+
+  const onToggleWish = () => {
+    const img = getPrimaryImage(product);
+    toggleWish({
+      productId: product.id,
+      productSlug: product.slug,
+      productName: product.name,
+      productSubtitle: product.subtitle,
+      price: centsFromAmount(product.price.amount),
+      currency: product.price.currency,
+      image: { url: img.url, alt: img.alt },
+    });
+    // Si on vient de l'ajouter, ouvre le drawer pour confirmer
+    if (!wishlisted) setTimeout(() => openWishDrawer(), 300);
+  };
 
   return (
     <>
@@ -150,7 +173,7 @@ export function ProductDetailClient({
                   </Link>
                   <button
                     type="button"
-                    onClick={() => setWishlisted((w) => !w)}
+                    onClick={onToggleWish}
                     aria-pressed={wishlisted}
                     aria-label={
                       wishlisted
@@ -158,7 +181,10 @@ export function ProductDetailClient({
                         : 'Garder près de soi'
                     }
                     data-cursor="hover"
-                    className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full text-ivoire transition-colors duration-300 hover:text-or"
+                    className={cn(
+                      'ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300',
+                      wishlisted ? 'text-or' : 'text-ivoire hover:text-or'
+                    )}
                   >
                     <Heart
                       className="h-5 w-5"
