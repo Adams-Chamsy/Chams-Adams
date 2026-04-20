@@ -1,0 +1,126 @@
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+
+export type LogoProps = {
+  /** Niveau sémantique. Header/Footer → link vers /, sinon `as="div"`. */
+  as?: 'link' | 'div';
+  /** Hauteur en px (le width est auto selon le ratio du monogramme ≈ 1.11). */
+  size?: number;
+  /** Ajoute le texte "Chams Adams" en Cormorant à côté du monogramme. */
+  withWordmark?: boolean;
+  /** Orientation quand `withWordmark` : horizontale (default) ou verticale. */
+  wordmarkPosition?: 'right' | 'below';
+  className?: string;
+};
+
+/**
+ * Logo officiel de la Maison — monogramme C&A en dégradé or, SVG inline
+ * (4 Ko, rendu parfait à toutes les tailles).
+ *
+ * 3 modes d'usage :
+ *  - Compact  : `<Logo size={44} />` — monogramme seul (Header desktop)
+ *  - Complet  : `<Logo size={36} withWordmark />` — + "Chams Adams"
+ *  - Signature: `<Logo size={80} withWordmark wordmarkPosition="below" />` — Footer
+ */
+export function Logo({
+  as = 'link',
+  size = 44,
+  withWordmark = false,
+  wordmarkPosition = 'right',
+  className,
+}: LogoProps) {
+  const monogram = <Monogram heightPx={size} />;
+
+  const content = withWordmark ? (
+    <span
+      className={cn(
+        'inline-flex items-center gap-3',
+        wordmarkPosition === 'below' && 'flex-col gap-2'
+      )}
+    >
+      {monogram}
+      <span
+        className={cn(
+          'font-serif font-light uppercase text-ivoire leading-none',
+          wordmarkPosition === 'below'
+            ? 'text-xl tracking-[0.3em]'
+            : 'text-sm md:text-base tracking-[0.25em]'
+        )}
+      >
+        Chams Adams
+      </span>
+    </span>
+  ) : (
+    monogram
+  );
+
+  if (as === 'div') {
+    return (
+      <span
+        className={cn('inline-flex items-center', className)}
+        aria-label="Chams Adams"
+      >
+        {content}
+      </span>
+    );
+  }
+
+  return (
+    <Link
+      href="/"
+      aria-label="Chams Adams — Accueil"
+      data-cursor="hover"
+      className={cn(
+        'inline-flex items-center transition-opacity duration-300 hover:opacity-90',
+        className
+      )}
+    >
+      {content}
+    </Link>
+  );
+}
+
+// --------------------------------------------------------------------
+// Monogramme inline SVG — pas de fetch, pas de Flash of Unstyled Content
+// --------------------------------------------------------------------
+function Monogram({ heightPx }: { heightPx: number }) {
+  // Ratio viewBox ≈ 305 / 275 ≈ 1.109
+  const width = Math.round(heightPx * (305 / 275));
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="215 130 305 275"
+      width={width}
+      height={heightPx}
+      role="img"
+      aria-hidden
+      className="block shrink-0"
+    >
+      <linearGradient
+        id="chams-logo-or"
+        gradientUnits="userSpaceOnUse"
+        x1="232"
+        y1="264"
+        x2="509"
+        y2="264"
+      >
+        <stop offset="0" stopColor="#EFCE5D" />
+        <stop offset="0.11" stopColor="#CBA44A" />
+        <stop offset="0.33" stopColor="#B0833D" />
+        <stop offset="0.62" stopColor="#D0B157" />
+        <stop offset="0.71" stopColor="#E0C564" />
+        <stop offset="0.91" stopColor="#C29A4A" />
+        <stop offset="1" stopColor="#AE7C3B" />
+      </linearGradient>
+      <path
+        fill="none"
+        stroke="url(#chams-logo-or)"
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M462.9,186.31l0.22,10.91l15.35,0.33c5.86,0.27,11.12,0.87,16.1,3.7c4.13,2.34,7.3,5.57,9.37,9.83c2.65,5.45,4.4,11.13,4.32,17.19l-0.67,26.2l-0.87,90.04c-0.05,6.54-2.26,11.94-7.1,16.55c-23.66,22.58-51.81,36.56-84.26,42.11c-29.63,5.07-58.67,2.46-86.72-8.32c-31.35-12.04-56.43-31.79-74.19-60.05c-11.63-18.52-18.5-38.65-19.95-60.38c-2.87-42.83,12.05-79.13,42.93-109.04c25.25-24.46,56.07-38.24,91.21-42.47c40.12-4.83,77.13,3.84,110.74,26.01c3.95,2.6,7.66,5.56,11.35,8.51c3.6,2.88,6.05,6.55,7.08,11.07c1.46,6.39-2.96,14.42-9.33,16.31c-2.8,0.83-5.8,1.24-8.73,1.39C474.52,186.5,468.14,186.2,462.9,186.31L462.9,186.31z M404.83,187.22c-1.3-0.03-2.22-0.08-3.15-0.08c-12.14,0.06-24.29,0.05-36.43,0.21c-9.41,0.13-18.81,0.48-28.22,0.71c-19.05,0.45-38.1,0.91-57.16,1.29c-1.87,0.04-3.05,0.63-4.16,2.09c-19.43,25.68-28.13,54.43-24.4,86.26c3.84,32.75,19.58,59.51,45.42,80.39c25.07,20.25,54.17,30.24,86.55,31.25c21.28,0.66,41.69-3.2,61.28-11.29c1.18-0.49,2.31-1.08,3.45-1.62c0.04-1.52,0.11-2.8,0.1-4.08c-0.08-13.67-0.16-27.33-0.28-40.99c-0.33-37.95-0.99-79.49-1.35-117.43c-8.64,0.08-16.92,0.15-25.38,0.23c0,0,0.21,45.74-1.5,71.49c-0.63,9.41-3.19,18.38-7.13,26.97c-20.26,44.17-76.32,58.16-115.04,28.22c-24.06-18.61-33.97-43.62-30.57-73.38c2.21-19.31,11.03-35.57,25.82-48.57c9.66-8.49,21.08-13.88,33.34-17.72c5-1.57,10.65-2.52,16.11-3c20.01-0.09,62.43-0.33,62.43-0.33C404.65,194.26,404.74,191.01,404.83,187.22z M404.43,214.31l-42.18-0.05c-12.1-0.1-23.99,1.01-35.64,4.37c-8.11,2.34-15.47,6.03-21.89,11.42c-22.61,18.96-28.85,51.12-14.67,77.46c10.13,18.83,26,30.48,47.79,32.56c24.17,2.31,42.74-7.66,55.94-27.41c7.58-11.34,9.76-24.24,10.11-37.42C404.39,256.1,404.23,233.46,404.43,214.31z M486.09,351.33c3.08-2.88,4.72-7.02,4.72-11.32c0.01-16,0.07-32,0.11-48c0.06-19.27,0.38-63.04,0.38-63.04c0.1-4.53-0.55-7.91-2.64-11.31c-0.89-1.44-2.79-2.49-4.47-3.18c-1.47-0.61-3.26-0.63-4.91-0.65c1.65,0.02-15.91,0.33-15.91,0.33c0,0,0.25,16.73,0.32,23.5c0.2,19.5,0.38,39,0.52,58.5c0.16,23.12,0.52,48.31,0.66,71.43C472.72,362.7,479.71,357.31,486.09,351.33z M293.22,172.66c36.79-0.62,74.77-1.24,111.74-1.86l0.25-32.28C362.73,134.4,325.76,145.92,293.22,172.66z M421.6,170.82h26.52v-16.97c-0.08-4.77-1.55-4.46-6.01-6.21c-2.76-1.09-20.33-6.31-20.33-6.31L421.6,170.82z M421.33,197.95l25.31-0.21v-10.6L421.61,187L421.33,197.95z M462.75,170.29l17.46-0.51c-5.71-4.67-11.14-8.49-17.15-11.99L462.75,170.29z"
+      />
+    </svg>
+  );
+}

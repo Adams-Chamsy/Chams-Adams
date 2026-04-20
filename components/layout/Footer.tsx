@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { NewsletterForm } from './NewsletterForm';
+import { Logo } from './Logo';
 
 type FooterLink = { label: string; href: string };
 type FooterColumn = { title: string; links: FooterLink[] };
@@ -136,14 +137,17 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Signature maison */}
-        <div className="flex flex-col items-start justify-between gap-6 border-t border-bronze/15 pt-12 lg:flex-row lg:items-end">
-          <h2
-            aria-hidden
-            className="font-serif font-light uppercase leading-none tracking-[0.3em] text-ivoire text-4xl sm:text-6xl lg:text-7xl"
-          >
-            Chams Adams
-          </h2>
+        {/* Signature maison : monogramme or + "Chams Adams" + italianno fondation */}
+        <div className="flex flex-col items-start justify-between gap-10 border-t border-bronze/15 pt-12 lg:flex-row lg:items-end">
+          <div className="flex flex-col items-start gap-5">
+            <Logo as="div" size={88} />
+            <h2
+              aria-hidden
+              className="font-serif font-light uppercase leading-none tracking-[0.3em] text-ivoire text-3xl sm:text-5xl lg:text-6xl"
+            >
+              Chams Adams
+            </h2>
+          </div>
           <p className="font-script text-3xl text-or lg:text-4xl">
             Maison fondée en {foundedYear}
           </p>

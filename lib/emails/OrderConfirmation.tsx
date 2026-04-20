@@ -207,7 +207,16 @@ export function OrderConfirmation({
       </Preview>
       <Body style={body}>
         <Container style={container}>
-          {/* Logo */}
+          {/* Logo — monogramme or (rendu via SITE_URL + /icon.svg) */}
+          {process.env.NEXT_PUBLIC_SITE_URL && (
+            <Img
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}/icon.svg`}
+              alt=""
+              width={52}
+              height={47}
+              style={{ display: 'block', margin: '0 auto 8px auto' }}
+            />
+          )}
           <Text style={logoTxt}>CHAMS ADAMS</Text>
           <Hr style={lineOr} />
 

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Globe, Heart, Menu, Search, X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CartButton } from './CartButton';
+import { Logo } from './Logo';
 
 type NavLink = { label: string; href: string };
 
@@ -67,18 +68,11 @@ export function Header() {
       >
         <div className="mx-auto grid w-full max-w-wide grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-6 lg:px-12">
           {/* Logo (gauche desktop, centre mobile via grid) */}
-          <div className="flex items-center justify-start lg:justify-start">
-            <Link
-              href="/"
-              aria-label="Chams Adams — Accueil"
-              data-cursor="hover"
-              className={cn(
-                'inline-block font-serif font-light uppercase text-ivoire tracking-[0.25em] transition-all duration-500 ease-luxe',
-                scrolled ? 'text-base lg:text-lg' : 'text-lg lg:text-xl'
-              )}
-            >
-              Chams Adams
-            </Link>
+          <div className="flex items-center justify-start">
+            <Logo
+              size={scrolled ? 36 : 44}
+              className="transition-[width,height] duration-500 ease-luxe"
+            />
           </div>
 
           {/* Nav desktop */}
@@ -224,9 +218,7 @@ function MobileMenu({ onClose }: MobileMenuProps) {
         className="absolute inset-y-0 right-0 flex h-full w-full max-w-md flex-col bg-noir"
       >
         <div className="flex items-center justify-between px-6 py-6">
-          <span className="font-serif text-lg uppercase tracking-[0.25em] text-ivoire">
-            Chams Adams
-          </span>
+          <Logo as="div" size={36} />
           <button
             ref={closeRef}
             type="button"
