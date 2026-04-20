@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useCartStore } from '@/lib/store/cart.store';
+import { centsFromAmount } from '@/lib/utils/price';
 import type {
   Product,
   ProductSize,
@@ -16,19 +18,17 @@ type Props = {
   size: ProductSize | null;
   disabled?: boolean;
   className?: string;
-  onAdded?: (payload: {
-    productId: string;
-    variantId: string;
-    size: ProductSize;
-  }) => void;
 };
 
 type Status = 'idle' | 'loading' | 'success';
 
 /**
- * CTA principal de la fiche produit — gère 4 états visuels (idle, disabled,
- * loading, success). Pour étape 6, l'ajout est simulé (setTimeout 700ms) ;
- * l'intégration avec le store panier Zustand se fait en étape 7.
+ * CTA principal de la fiche produit.
+ * Au clic : ajoute au store Zustand `useCartStore`, ouvre le drawer,
+ * affiche un état "Ajouté ✓" pendant 1.5 s puis revient à l'idle.
+ *
+ * Le compteur du Header et le drawer se mettent à jour en temps réel
+ * via les hooks dérivés (useCartCount, useCartSubtotal).
  */
 export function AddToBagButton({
   product,
@@ -36,9 +36,10 @@ export function AddToBagButton({
   size,
   disabled,
   className,
-  onAdded,
 }: Props) {
   const [status, setStatus] = useState<Status>('idle');
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
 
   const isSurMesure = size === 'sur-mesure';
   const noSizeChosen = !size && !isSurMesure;
@@ -47,17 +48,39 @@ export function AddToBagButton({
   async function handleClick() {
     if (finalDisabled || !size) return;
     setStatus('loading');
+
     try {
-      // TODO(étape 7) : brancher le store panier (Zustand).
-      await new Promise((r) => setTimeout(r, 700));
-      setStatus('success');
-      onAdded?.({
+      // Micro-délai pour la sensation de progression (pas de vrai réseau ici)
+      await new Promise((r) => setTimeout(r, 300));
+
+      const primaryImage =
+        variant.images.find((i) => i.isPrimary) ?? variant.images[0];
+      if (!primaryImage) throw new Error('No variant image');
+
+      addItem({
         productId: product.id,
+        productSlug: product.slug,
+        productName: product.name,
+        productSubtitle: product.subtitle,
         variantId: variant.id,
+        variantColor: variant.color,
+        variantColorName: variant.colorName,
         size,
+        price: centsFromAmount(product.price.amount),
+        currency: product.price.currency,
+        image: {
+          url: primaryImage.url,
+          alt: primaryImage.alt,
+        },
+        quantity: 1,
       });
-      // Revenir à l'état idle après 2.5s
-      setTimeout(() => setStatus('idle'), 2500);
+
+      setStatus('success');
+      // Ouvre le drawer après un léger délai pour laisser le user voir le feedback
+      setTimeout(() => {
+        openCart();
+      }, 400);
+      setTimeout(() => setStatus('idle'), 1500);
     } catch {
       setStatus('idle');
     }
@@ -97,7 +120,8 @@ export function AddToBagButton({
         status === 'success'
           ? 'border-or bg-noir text-or'
           : 'border-or bg-transparent text-ivoire hover:bg-or hover:text-noir hover:shadow-halo-or',
-        finalDisabled && 'cursor-not-allowed opacity-50 hover:bg-transparent hover:text-ivoire hover:shadow-none',
+        finalDisabled &&
+          'cursor-not-allowed opacity-50 hover:bg-transparent hover:text-ivoire hover:shadow-none',
         className
       )}
       aria-live="polite"
