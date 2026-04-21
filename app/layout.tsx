@@ -18,6 +18,14 @@ const CustomCursor = dynamic(
   () => import('@/components/layout/CustomCursor').then((m) => m.CustomCursor),
   { ssr: false, loading: () => null }
 );
+const Toaster = dynamic(
+  () => import('@/components/ui/Toaster').then((m) => m.Toaster),
+  { ssr: false, loading: () => null }
+);
+const CookieBanner = dynamic(
+  () => import('@/components/layout/CookieBanner').then((m) => m.CookieBanner),
+  { ssr: false, loading: () => null }
+);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -118,6 +126,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
             <CartDrawer />
             <WishlistDrawer />
+            <Toaster />
+            <CookieBanner />
           </>
         </SmoothScroll>
       </body>
