@@ -6,6 +6,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
+import { LocaleProvider } from '@/lib/i18n/client';
+import { getLocale } from '@/lib/i18n/server';
 import './globals.css';
 
 // Ces deux composants n'impactent pas le rendu initial (effets post-hydration).
@@ -124,28 +126,31 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = getLocale();
   return (
     <html
-      lang="fr"
+      lang={locale}
       className={cn(inter.variable, cormorant.variable, italianno.variable)}
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-noir text-ivoire/90 font-sans">
-        <SmoothScroll>
-          <>
-            <CustomCursor />
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <CartDrawer />
-            <WishlistDrawer />
-            <Toaster />
-            <CookieBanner />
-            <ScrollToTop />
-            <WhatsAppButton />
-            <PlausibleAnalytics />
-          </>
-        </SmoothScroll>
+        <LocaleProvider locale={locale}>
+          <SmoothScroll>
+            <>
+              <CustomCursor />
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <CartDrawer />
+              <WishlistDrawer />
+              <Toaster />
+              <CookieBanner />
+              <ScrollToTop />
+              <WhatsAppButton />
+              <PlausibleAnalytics />
+            </>
+          </SmoothScroll>
+        </LocaleProvider>
       </body>
     </html>
   );

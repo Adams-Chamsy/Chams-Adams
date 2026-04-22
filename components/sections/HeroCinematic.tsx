@@ -8,6 +8,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { useReducedMotion } from '@/lib/animations/useReducedMotion';
+import { useT } from '@/lib/i18n/client';
 import { cn } from '@/lib/utils';
 
 if (typeof window !== 'undefined') {
@@ -44,6 +45,7 @@ export function HeroCinematic() {
   const contentRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
+  const t = useT();
   const [muted, setMuted] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
@@ -193,7 +195,7 @@ export function HeroCinematic() {
           className="mt-4"
         >
           <Link href="/collections" data-cursor="magnetic" className="btn-or">
-            Entrer dans l&apos;univers
+            {t('hero.cta')}
           </Link>
         </motion.div>
       </div>

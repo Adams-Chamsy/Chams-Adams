@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n/client';
 import { CartButton } from './CartButton';
 import { WishlistButton } from './WishlistButton';
 import { SearchButton } from './SearchButton';
@@ -13,23 +14,30 @@ import { Logo } from './Logo';
 
 type NavLink = { label: string; href: string };
 
-// Toutes les routes sont réelles depuis l'étape 8.
-const navItems: NavLink[] = [
-  { label: 'Collections', href: '/collections' },
-  { label: 'Sur-mesure', href: '/sur-mesure' },
-  { label: 'Savoir-faire', href: '/savoir-faire' },
-  { label: 'Lookbook', href: '/lookbook' },
-  { label: 'Journal', href: '/journal' },
+// Clés i18n → href ; le label est résolu depuis les messages au rendu.
+const NAV_KEYS: { key: string; href: string }[] = [
+  { key: 'nav.collections', href: '/collections' },
+  { key: 'nav.surMesure', href: '/sur-mesure' },
+  { key: 'nav.savoirFaire', href: '/savoir-faire' },
+  { key: 'nav.lookbook', href: '/lookbook' },
+  { key: 'nav.journal', href: '/journal' },
 ];
 
-const boutique: NavLink = { label: 'Boutique', href: '/boutique' };
+const BOUTIQUE_KEY = { key: 'nav.boutique', href: '/boutique' };
 
 const SCROLL_THRESHOLD = 80;
 
 export function Header() {
+  const t = useT();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const burgerRef = useRef<HTMLButtonElement>(null);
+
+  const navItems: NavLink[] = NAV_KEYS.map((n) => ({
+    label: t(n.key),
+    href: n.href,
+  }));
+  const boutique: NavLink = { label: t(BOUTIQUE_KEY.key), href: BOUTIQUE_KEY.href };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -79,7 +87,7 @@ export function Header() {
           </div>
 
           {/* Nav desktop */}
-          <nav aria-label="Navigation principale" className="hidden items-center gap-10 lg:flex">
+          <nav aria-label={t('nav.ariaPrimary')} className="hidden items-center gap-10 lg:flex">
             {navItems.map((item) => (
               <NavItem key={item.href} {...item} />
             ))}
@@ -98,7 +106,7 @@ export function Header() {
               ref={burgerRef}
               type="button"
               className="inline-flex items-center justify-center rounded-full p-2 text-ivoire transition-colors duration-300 hover:text-or lg:hidden"
-              aria-label="Ouvrir le menu"
+              aria-label={t('common.openMenu')}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               onClick={() => setMenuOpen(true)}
@@ -113,6 +121,9 @@ export function Header() {
       <AnimatePresence>
         {menuOpen && (
           <MobileMenu
+            items={[...navItems, boutique]}
+            closeLabel={t('common.closeMenu')}
+            navLabel={t('nav.ariaMobile')}
             onClose={() => {
               setMenuOpen(false);
               burgerRef.current?.focus();
@@ -177,23 +188,26 @@ function IconButton({ icon: Icon, label, badge, className }: IconButtonProps) {
   );
 }
 
-type MobileMenuProps = { onClose: () => void };
+type MobileMenuProps = {
+  onClose: () => void;
+  items: NavLink[];
+  closeLabel: string;
+  navLabel: string;
+};
 
-function MobileMenu({ onClose }: MobileMenuProps) {
+function MobileMenu({ onClose, items, closeLabel, navLabel }: MobileMenuProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     closeRef.current?.focus();
   }, []);
 
-  const items = [...navItems, boutique];
-
   return (
     <motion.div
       id="mobile-menu"
       role="dialog"
       aria-modal="true"
-      aria-label="Menu principal"
+      aria-label={navLabel}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -203,7 +217,7 @@ function MobileMenu({ onClose }: MobileMenuProps) {
       {/* Backdrop */}
       <motion.button
         type="button"
-        aria-label="Fermer le menu"
+        aria-label={closeLabel}
         onClick={onClose}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -226,7 +240,7 @@ function MobileMenu({ onClose }: MobileMenuProps) {
             ref={closeRef}
             type="button"
             onClick={onClose}
-            aria-label="Fermer le menu"
+            aria-label={closeLabel}
             data-cursor="hover"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ivoire transition-colors duration-300 hover:text-or"
           >
@@ -235,7 +249,7 @@ function MobileMenu({ onClose }: MobileMenuProps) {
         </div>
 
         <nav
-          aria-label="Navigation mobile"
+          aria-label={navLabel}
           className="flex flex-1 flex-col justify-center gap-6 px-8"
         >
           {items.map((item, i) => (

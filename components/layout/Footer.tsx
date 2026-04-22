@@ -1,43 +1,47 @@
 import Link from 'next/link';
 import { NewsletterForm } from './NewsletterForm';
 import { Logo } from './Logo';
+import { getT } from '@/lib/i18n/server';
 
 type FooterLink = { label: string; href: string };
 type FooterColumn = { title: string; links: FooterLink[] };
 
-const columns: FooterColumn[] = [
-  {
-    title: 'Maison',
-    links: [
-      { label: 'La Maison', href: '/maison' },
-      { label: 'Savoir-faire', href: '/savoir-faire' },
-      { label: 'Nos artisans', href: '/savoir-faire#artisans' },
-      { label: 'Journal', href: '/journal' },
-      { label: 'Calendrier', href: '/evenements' },
-    ],
-  },
-  {
-    title: 'Collections',
-    links: [
-      { label: 'Cérémonies', href: '/collections/ceremonies' },
-      { label: 'Tabaski & Magal', href: '/collections/tabaski-magal' },
-      { label: 'Prêt-à-porter', href: '/collections/pret-a-porter' },
-      { label: 'Sur-mesure', href: '/sur-mesure' },
-    ],
-  },
-  {
-    title: 'Service',
-    links: [
-      { label: 'Prise de mesures', href: '/sur-mesure/mesures' },
-      { label: 'Guide des tailles', href: '/guide-tailles' },
-      { label: 'Livraison & retours', href: '/livraison-retours' },
-      { label: 'Questions fréquentes', href: '/faq' },
-      { label: 'Mon compte', href: '/compte' },
-      { label: 'Nous contacter', href: '/contact' },
-      { label: 'Revue de presse', href: '/presse' },
-    ],
-  },
-];
+/** Construit les colonnes en lisant les titres dans les messages i18n. */
+function buildColumns(t: (k: string) => string): FooterColumn[] {
+  return [
+    {
+      title: t('footer.colMaison'),
+      links: [
+        { label: 'La Maison', href: '/maison' },
+        { label: 'Savoir-faire', href: '/savoir-faire' },
+        { label: 'Nos artisans', href: '/savoir-faire#artisans' },
+        { label: 'Journal', href: '/journal' },
+        { label: 'Calendrier', href: '/evenements' },
+      ],
+    },
+    {
+      title: t('footer.colCollections'),
+      links: [
+        { label: 'Cérémonies', href: '/collections/ceremonies' },
+        { label: 'Tabaski & Magal', href: '/collections/tabaski-magal' },
+        { label: 'Prêt-à-porter', href: '/collections/pret-a-porter' },
+        { label: 'Sur-mesure', href: '/sur-mesure' },
+      ],
+    },
+    {
+      title: t('footer.colService'),
+      links: [
+        { label: 'Prise de mesures', href: '/sur-mesure/mesures' },
+        { label: 'Guide des tailles', href: '/guide-tailles' },
+        { label: 'Livraison & retours', href: '/livraison-retours' },
+        { label: 'Questions fréquentes', href: '/faq' },
+        { label: 'Mon compte', href: '/compte' },
+        { label: 'Nous contacter', href: '/contact' },
+        { label: 'Revue de presse', href: '/presse' },
+      ],
+    },
+  ];
+}
 
 const legalLinks: FooterLink[] = [
   { label: 'Mentions légales', href: '/mentions-legales' },
@@ -66,6 +70,8 @@ const socials = [
 const foundedYear = new Date().getFullYear();
 
 export function Footer() {
+  const t = getT();
+  const columns = buildColumns(t);
   return (
     <footer className="bg-noir pt-[120px] pb-12 text-ivoire" aria-labelledby="footer-title">
       <h2 id="footer-title" className="sr-only">
@@ -85,10 +91,10 @@ export function Footer() {
                 id="newsletter-title"
                 className="font-serif text-2xl font-light text-ivoire"
               >
-                Recevoir nos correspondances
+                {t('footer.newsletterTitle')}
               </h3>
               <p className="max-w-prose font-serif italic text-ivoire/60">
-                L&apos;élégance par l&apos;écrit, tous les mois.
+                {t('footer.newsletterSubtitle')}
               </p>
             </header>
             <NewsletterForm />
@@ -145,7 +151,7 @@ export function Footer() {
         <div className="flex flex-col items-start justify-between gap-10 border-t border-bronze/15 pt-12 lg:flex-row lg:items-end">
           <Logo as="div" variant="stacked" size={88} className="items-start" />
           <p className="font-script text-3xl text-or lg:text-4xl">
-            Maison fondée en {foundedYear}
+            {t('footer.foundedIn')} {foundedYear}
           </p>
         </div>
 
@@ -155,7 +161,7 @@ export function Footer() {
         {/* Mentions basses */}
         <div className="flex flex-col items-start justify-between gap-4 pb-2 text-xs lg:flex-row lg:items-center">
           <p className="font-sans uppercase tracking-[0.15em] text-ivoire/60">
-            © {foundedYear} Chams Adams — Tous droits réservés
+            © {foundedYear} Chams Adams — {t('footer.rightsReserved')}
           </p>
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 font-sans uppercase tracking-[0.15em] text-ivoire/60">
             {legalLinks.map((link) => (
