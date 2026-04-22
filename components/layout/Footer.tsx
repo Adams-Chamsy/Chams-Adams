@@ -9,10 +9,11 @@ const columns: FooterColumn[] = [
   {
     title: 'Maison',
     links: [
-      { label: 'Le Manifeste', href: '/manifeste' },
+      { label: 'La Maison', href: '/maison' },
       { label: 'Savoir-faire', href: '/savoir-faire' },
       { label: 'Nos artisans', href: '/savoir-faire#artisans' },
       { label: 'Journal', href: '/journal' },
+      { label: 'Calendrier', href: '/evenements' },
     ],
   },
   {
