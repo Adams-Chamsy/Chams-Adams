@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { TurnstileCaptcha } from '@/components/forms/TurnstileCaptcha';
 import {
   contactSchema,
   CONTACT_TOPICS,
@@ -24,6 +25,12 @@ const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 export function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [serverError, setServerError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRequired = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const onCaptchaToken = useCallback(
+    (token: string | null) => setCaptchaToken(token),
+    []
+  );
 
   const {
     register,
@@ -39,13 +46,17 @@ export function ContactForm() {
   });
 
   const onSubmit = async (data: ContactInput) => {
+    if (captchaRequired && !captchaToken) {
+      setServerError('Merci de valider le captcha pour continuer.');
+      return;
+    }
     setStatus('submitting');
     setServerError(null);
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, captchaToken }),
       });
       if (!res.ok) {
         const { error } = await res.json().catch(() => ({ error: 'Erreur inconnue.' }));
@@ -203,6 +214,9 @@ export function ContactForm() {
         </p>
       )}
 
+      {/* Captcha (si configuré) */}
+      <TurnstileCaptcha onToken={onCaptchaToken} className="mt-2" />
+
       {/* Erreur serveur */}
       {serverError && (
         <p
@@ -218,7 +232,11 @@ export function ContactForm() {
       {/* CTA */}
       <button
         type="submit"
-        disabled={status === 'submitting' || !isValid}
+        disabled={
+          status === 'submitting' ||
+          !isValid ||
+          (captchaRequired && !captchaToken)
+        }
         data-cursor="magnetic"
         className={cn(
           'btn-or mt-2 self-start disabled:cursor-not-allowed disabled:opacity-50',

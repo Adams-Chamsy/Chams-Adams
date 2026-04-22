@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
+import { Marquee } from '@/components/ui/Marquee';
 import { PRESS, sortPressByDate, type PressEntry } from '@/lib/data/press.mock';
 import { cn } from '@/lib/utils';
 
@@ -69,6 +70,15 @@ export default function PressePage() {
           </div>
         </section>
       )}
+
+      {/* Marquee — mur de logos presse (éditorial) */}
+      <section aria-label="Publications" className="bg-noir">
+        <Marquee
+          items={sorted.map((p) => p.logoText)}
+          durationSec={60}
+          pauseOnHover
+        />
+      </section>
 
       {/* Liste secondaire */}
       {rest.length > 0 && (

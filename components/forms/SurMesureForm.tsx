@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { TurnstileCaptcha } from '@/components/forms/TurnstileCaptcha';
 import {
   surMesureSchema,
   OCCASIONS,
@@ -30,6 +31,12 @@ type Status = 'idle' | 'submitting' | 'success' | 'error';
 export function SurMesureForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [serverError, setServerError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRequired = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const onCaptchaToken = useCallback(
+    (token: string | null) => setCaptchaToken(token),
+    []
+  );
 
   const {
     register,
@@ -47,13 +54,18 @@ export function SurMesureForm() {
   });
 
   const onSubmit = async (data: SurMesureInput) => {
+    if (captchaRequired && !captchaToken) {
+      setStatus('error');
+      setServerError('Merci de valider le captcha pour continuer.');
+      return;
+    }
     setStatus('submitting');
     setServerError(null);
     try {
       const res = await fetch('/api/sur-mesure', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, captchaToken }),
       });
       if (!res.ok) {
         const { error } = await res.json().catch(() => ({ error: 'Erreur inconnue.' }));
@@ -218,6 +230,9 @@ export function SurMesureForm() {
         </p>
       )}
 
+      {/* Captcha (si configuré) */}
+      <TurnstileCaptcha onToken={onCaptchaToken} />
+
       {/* Erreur serveur globale */}
       {status === 'error' && serverError && (
         <p role="alert" className="font-sans text-xs italic text-destructive">
@@ -228,7 +243,7 @@ export function SurMesureForm() {
       {/* Submit */}
       <button
         type="submit"
-        disabled={status === 'submitting'}
+        disabled={status === 'submitting' || (captchaRequired && !captchaToken)}
         data-cursor="magnetic"
         className={cn(
           'inline-flex w-full items-center justify-center border border-or bg-or px-8 py-4',

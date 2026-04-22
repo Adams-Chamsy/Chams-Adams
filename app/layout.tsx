@@ -30,6 +30,14 @@ const ScrollToTop = dynamic(
   () => import('@/components/layout/ScrollToTop').then((m) => m.ScrollToTop),
   { ssr: false, loading: () => null }
 );
+const WhatsAppButton = dynamic(
+  () => import('@/components/layout/WhatsAppButton').then((m) => m.WhatsAppButton),
+  { ssr: false, loading: () => null }
+);
+const PlausibleAnalytics = dynamic(
+  () => import('@/components/analytics/Plausible').then((m) => m.PlausibleAnalytics),
+  { ssr: false, loading: () => null }
+);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -105,6 +113,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  manifest: '/manifest.webmanifest',
 };
 
 export const viewport: Viewport = {
@@ -133,6 +142,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Toaster />
             <CookieBanner />
             <ScrollToTop />
+            <WhatsAppButton />
+            <PlausibleAnalytics />
           </>
         </SmoothScroll>
       </body>

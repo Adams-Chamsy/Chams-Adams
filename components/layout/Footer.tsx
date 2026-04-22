@@ -31,6 +31,7 @@ const columns: FooterColumn[] = [
       { label: 'Prise de mesures', href: '/sur-mesure/mesures' },
       { label: 'Guide des tailles', href: '/guide-tailles' },
       { label: 'Livraison & retours', href: '/livraison-retours' },
+      { label: 'Questions fréquentes', href: '/faq' },
       { label: 'Nous contacter', href: '/contact' },
       { label: 'Revue de presse', href: '/presse' },
     ],

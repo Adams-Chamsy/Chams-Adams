@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { surMesureSchema } from '@/lib/schemas/surMesure';
 import { sendSurMesureEmails } from '@/lib/emails/sendSurMesureEmails';
+import { verifyTurnstile } from '@/lib/captcha/verifyTurnstile';
 
 /**
  * POST /api/sur-mesure
@@ -56,14 +57,25 @@ export async function POST(req: NextRequest) {
   }
 
   // Parse + validate
-  let body: unknown;
+  let body: (Record<string, unknown> & { captchaToken?: string }) | null = null;
   try {
-    body = await req.json();
+    body = (await req.json()) as Record<string, unknown> & {
+      captchaToken?: string;
+    };
   } catch {
     return NextResponse.json({ error: 'Corps JSON invalide.' }, { status: 400 });
   }
 
-  const parsed = surMesureSchema.safeParse(body);
+  const captcha = await verifyTurnstile(body?.captchaToken);
+  if (!captcha.success) {
+    return NextResponse.json(
+      { error: 'Validation anti-spam échouée. Merci de réessayer.' },
+      { status: 400 }
+    );
+  }
+
+  const { captchaToken: _ignored, ...rest } = body ?? {};
+  const parsed = surMesureSchema.safeParse(rest);
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];
     return NextResponse.json(
