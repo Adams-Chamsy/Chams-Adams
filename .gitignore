@@ -81,6 +81,10 @@ logs
 # --------------------------------------------------------------
 coverage/
 .nyc_output/
+/tests/e2e/.results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # --------------------------------------------------------------
 # Cache
