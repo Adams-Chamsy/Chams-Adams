@@ -13,6 +13,7 @@ import {
   useCartSubtotal,
 } from '@/lib/store/cart.store';
 import { formatPrice } from '@/lib/utils/price';
+import { PaymentMethods } from '@/components/ui/PaymentMethods';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -279,6 +280,10 @@ export function CheckoutClient() {
                   Vos données bancaires ne transitent jamais par nos serveurs.
                   Stripe traite le paiement dans le respect des normes PCI-DSS.
                 </p>
+
+                <div className="mt-2 border-t border-bronze/15 pt-5">
+                  <PaymentMethods showMobileMoney />
+                </div>
               </div>
             </div>
           </div>
