@@ -9,6 +9,7 @@ import {
   DEFAULT_FILTERS,
   type FilterState,
 } from '@/components/product/ProductFilters';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
 import { useRef } from 'react';
@@ -54,9 +55,12 @@ export function BoutiqueClient() {
       {/* Header compact */}
       <section className="bg-noir pt-[140px] pb-[40px] md:pt-[180px]">
         <div className="container-content flex flex-col gap-6">
-          <nav aria-label="Fil d'Ariane" className="font-sans text-xs uppercase tracking-[0.2em] text-ivoire/60">
-            <span className="text-ivoire">Boutique</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: 'Accueil', href: '/' },
+              { label: 'Boutique' },
+            ]}
+          />
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between md:gap-6">
             <div className="flex flex-col gap-3">
               <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">

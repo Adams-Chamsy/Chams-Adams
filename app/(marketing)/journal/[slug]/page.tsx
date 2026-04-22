@@ -11,6 +11,8 @@ import {
 } from '@/lib/journal';
 import { mdxComponents } from '@/mdx-components';
 import { TextReveal } from '@/components/animations/TextReveal';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { ReadingProgress } from '@/components/ui/ReadingProgress';
 
 export const dynamicParams = false;
 
@@ -82,20 +84,19 @@ export default async function JournalArticlePage(
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      <ReadingProgress />
+
       {/* HEADER */}
       <article>
         <header className="bg-noir pt-[140px] md:pt-[180px]">
           <div className="container-content flex flex-col gap-6">
-            <nav
-              aria-label="Fil d'Ariane"
-              className="font-sans text-xs uppercase tracking-[0.2em] text-ivoire/60"
-            >
-              <Link href="/journal" className="transition-colors duration-300 hover:text-or">
-                Journal
-              </Link>
-              <span className="mx-2">·</span>
-              <span className="text-or">{meta.category}</span>
-            </nav>
+            <Breadcrumbs
+              items={[
+                { label: 'Accueil', href: '/' },
+                { label: 'Journal', href: '/journal' },
+                { label: meta.category },
+              ]}
+            />
             <TextReveal
               as="h1"
               splitBy="words"

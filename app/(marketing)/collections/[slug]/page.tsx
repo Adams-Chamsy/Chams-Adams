@@ -6,6 +6,7 @@ import { COLLECTIONS, getCollectionBySlug } from '@/lib/data/collections.mock';
 import { getProductsByIds } from '@/lib/data/products.mock';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ProductCard } from '@/components/product/ProductCard';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 
 export function generateStaticParams() {
   return COLLECTIONS.map((c) => ({ slug: c.slug }));
@@ -58,17 +59,13 @@ export default async function CollectionDetailPage(
           className="absolute inset-0 bg-gradient-to-b from-noir/40 via-noir/50 to-noir"
         />
         <div className="container-content relative z-10 flex flex-col gap-6 pb-24">
-          <nav aria-label="Fil d'Ariane" className="font-sans text-xs uppercase tracking-[0.2em] text-ivoire/60">
-            <Link href="/" className="transition-colors duration-300 hover:text-or">
-              Accueil
-            </Link>
-            <span className="mx-2">·</span>
-            <Link href="/collections" className="transition-colors duration-300 hover:text-or">
-              Collections
-            </Link>
-            <span className="mx-2">·</span>
-            <span className="text-ivoire">{collection.name}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: 'Accueil', href: '/' },
+              { label: 'Collections', href: '/collections' },
+              { label: collection.name },
+            ]}
+          />
           <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
             Collection
           </span>

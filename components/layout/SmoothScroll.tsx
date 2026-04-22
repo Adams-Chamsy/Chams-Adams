@@ -32,6 +32,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       syncTouch: false,
     });
     lenisRef.current = lenis;
+    // Expose pour ScrollToTop et autres utilitaires.
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -43,6 +45,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       gsap.ticker.remove(raf);
       lenis.destroy();
       lenisRef.current = null;
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
   }, []);
 

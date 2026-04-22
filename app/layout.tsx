@@ -26,6 +26,10 @@ const CookieBanner = dynamic(
   () => import('@/components/layout/CookieBanner').then((m) => m.CookieBanner),
   { ssr: false, loading: () => null }
 );
+const ScrollToTop = dynamic(
+  () => import('@/components/layout/ScrollToTop').then((m) => m.ScrollToTop),
+  { ssr: false, loading: () => null }
+);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -128,6 +132,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <WishlistDrawer />
             <Toaster />
             <CookieBanner />
+            <ScrollToTop />
           </>
         </SmoothScroll>
       </body>

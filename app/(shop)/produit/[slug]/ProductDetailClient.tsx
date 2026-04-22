@@ -14,6 +14,7 @@ import { VariantSelector } from '@/components/product/VariantSelector';
 import { AddToBagButton } from '@/components/product/AddToBagButton';
 import { SizeGuide } from '@/components/product/SizeGuide';
 import { ProductCard } from '@/components/product/ProductCard';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { TextReveal } from '@/components/animations/TextReveal';
 import {
@@ -83,34 +84,21 @@ export function ProductDetailClient({
             {/* Infos */}
             <div className="flex flex-col gap-8 lg:col-span-5">
               {/* Breadcrumb */}
-              <nav
-                aria-label="Fil d'Ariane"
-                className="font-sans text-xs uppercase tracking-[0.2em] text-ivoire/60"
-              >
-                <Link href="/" className="transition-colors duration-300 hover:text-or">
-                  Accueil
-                </Link>
-                <span className="mx-2">·</span>
-                <Link
-                  href="/collections"
-                  className="transition-colors duration-300 hover:text-or"
-                >
-                  Collections
-                </Link>
-                {collectionName && (
-                  <>
-                    <span className="mx-2">·</span>
-                    <Link
-                      href={`/collections/${collectionSlug}`}
-                      className="transition-colors duration-300 hover:text-or"
-                    >
-                      {collectionName}
-                    </Link>
-                  </>
-                )}
-                <span className="mx-2">·</span>
-                <span className="text-ivoire">{product.name}</span>
-              </nav>
+              <Breadcrumbs
+                items={[
+                  { label: 'Accueil', href: '/' },
+                  { label: 'Collections', href: '/collections' },
+                  ...(collectionName
+                    ? [
+                        {
+                          label: collectionName,
+                          href: `/collections/${collectionSlug}`,
+                        },
+                      ]
+                    : []),
+                  { label: product.name },
+                ]}
+              />
 
               {/* Badges */}
               {product.isSignature && (

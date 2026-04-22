@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { COLLECTIONS } from '@/lib/data/collections.mock';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -34,6 +35,12 @@ export default function CollectionsPage() {
       {/* Hero */}
       <section className="relative flex min-h-[60vh] items-center justify-center bg-noir pt-[140px] pb-[80px] md:pt-[180px]">
         <div className="container-content flex flex-col items-center gap-6 text-center">
+          <Breadcrumbs
+            items={[
+              { label: 'Accueil', href: '/' },
+              { label: 'Collections' },
+            ]}
+          />
           <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
             Collections
           </span>
