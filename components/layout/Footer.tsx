@@ -32,6 +32,7 @@ const columns: FooterColumn[] = [
       { label: 'Guide des tailles', href: '/guide-tailles' },
       { label: 'Livraison & retours', href: '/livraison-retours' },
       { label: 'Questions fréquentes', href: '/faq' },
+      { label: 'Mon compte', href: '/compte' },
       { label: 'Nous contacter', href: '/contact' },
       { label: 'Revue de presse', href: '/presse' },
     ],
