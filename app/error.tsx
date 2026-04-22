@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import * as Sentry from '@sentry/nextjs';
 
 /**
  * Boundary d'erreur globale — Next.js App Router.
@@ -15,7 +16,8 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Hook d'intégration Sentry / Datadog à brancher ici le jour venu.
+    // Capture l'erreur côté Sentry (no-op si DSN absent).
+    Sentry.captureException(error);
     if (process.env.NODE_ENV !== 'production') {
       console.error('[App error boundary]', error);
     }

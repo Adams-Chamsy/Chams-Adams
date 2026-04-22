@@ -1,4 +1,5 @@
 import createMDX from '@next/mdx';
+import { withSentryConfig } from '@sentry/nextjs';
 
 const withMDX = createMDX({
   extension: /\.mdx?$/,
@@ -45,4 +46,20 @@ const nextConfig = {
   },
 };
 
-export default withMDX(nextConfig);
+const withSentry = (cfg) => {
+  // Ne wrappe avec Sentry que si une org + project sont configurés ;
+  // sinon on renvoie la config telle quelle pour éviter des warnings à chaque build.
+  const hasSentryOrg = Boolean(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT);
+  if (!hasSentryOrg) return cfg;
+  return withSentryConfig(cfg, {
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    silent: true,
+    widenClientFileUpload: true,
+    disableLogger: true,
+    automaticVercelMonitors: true,
+  });
+};
+
+export default withSentry(withMDX(nextConfig));
