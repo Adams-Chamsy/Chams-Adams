@@ -69,13 +69,11 @@ export default function GuideTaillesPage() {
             <figure className="flex flex-col items-center gap-6 border border-bronze/20 bg-noir p-8 md:p-12">
               <svg
                 viewBox="0 0 300 500"
-                role="img"
-                aria-labelledby="silhouette-title"
+                role="group"
+                aria-label="Silhouette kaftan avec points de mesure interactifs"
                 className="h-auto w-full max-w-[320px] text-ivoire/35"
               >
-                <title id="silhouette-title">
-                  Silhouette kaftan avec points de mesure
-                </title>
+                <title>Silhouette kaftan avec points de mesure</title>
 
                 {/* Tête */}
                 <circle
@@ -117,12 +115,13 @@ export default function GuideTaillesPage() {
                   <line x1="215" y1="85" x2="230" y2="470" stroke="#C9A961" strokeWidth="1.8" />
                 )}
 
-                {/* Points cliquables */}
+                {/* Points cliquables — un seul élément interactif par point
+                    pour éviter les nested-interactive controls flaggés par axe */}
                 {DOTS.map((d) => {
                   const isActive = d.point === activePoint;
                   return (
                     <g key={d.point}>
-                      {/* Halo au survol / actif */}
+                      {/* Halo au survol / actif — décoratif */}
                       {isActive && (
                         <motion.circle
                           cx={d.cx}
@@ -132,8 +131,10 @@ export default function GuideTaillesPage() {
                           transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
                           fill="#C9A961"
                           opacity="0.25"
+                          aria-hidden
                         />
                       )}
+                      {/* Cercle visuel — décoratif, pas d'onClick */}
                       <circle
                         cx={d.cx}
                         cy={d.cy}
@@ -141,17 +142,17 @@ export default function GuideTaillesPage() {
                         fill={isActive ? '#C9A961' : '#0A0A0A'}
                         stroke="#C9A961"
                         strokeWidth="1.5"
-                        className="cursor-pointer transition-colors"
-                        onClick={() => setActivePoint(d.point)}
+                        className="pointer-events-none transition-colors"
+                        aria-hidden
                       />
-                      {/* Bouton SR invisible pour accessibilité clavier */}
+                      {/* Unique cible interactive, zone de clic élargie */}
                       <rect
-                        x={d.cx - 12}
-                        y={d.cy - 12}
-                        width="24"
-                        height="24"
+                        x={d.cx - 14}
+                        y={d.cy - 14}
+                        width="28"
+                        height="28"
                         fill="transparent"
-                        className="cursor-pointer"
+                        className="cursor-pointer focus:outline-none focus-visible:stroke-or"
                         onClick={() => setActivePoint(d.point)}
                         aria-label={`${MEASURE_LABELS[d.point]} — sélectionner`}
                         role="button"
@@ -296,24 +297,27 @@ export default function GuideTaillesPage() {
               Comment prendre vos mesures
             </h2>
           </header>
-          <dl className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+          <ol className="grid grid-cols-1 gap-10 list-none md:grid-cols-2 lg:grid-cols-3">
             {MEASURE_ORDER.map((m, i) => (
-              <div
+              <li
                 key={m}
                 className="flex flex-col gap-3 border-t border-bronze/20 pt-5"
               >
-                <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-or/80">
+                <span
+                  aria-hidden
+                  className="font-sans text-[10px] uppercase tracking-[0.3em] text-or/80"
+                >
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <dt className="font-serif text-xl font-light text-ivoire md:text-2xl">
+                <h3 className="font-serif text-xl font-light text-ivoire md:text-2xl">
                   {MEASURE_LABELS[m]}
-                </dt>
-                <dd className="font-serif italic leading-relaxed text-ivoire/70">
+                </h3>
+                <p className="font-serif italic leading-relaxed text-ivoire/70">
                   {MEASURE_INSTRUCTIONS[m]}
-                </dd>
-              </div>
+                </p>
+              </li>
             ))}
-          </dl>
+          </ol>
         </div>
       </section>
 

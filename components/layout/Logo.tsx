@@ -76,8 +76,9 @@ export function Logo({
   if (as === 'div') {
     return (
       <span
-        className={cn('inline-flex items-center text-ivoire', className)}
+        role="img"
         aria-label="Chams Adams"
+        className={cn('inline-flex items-center text-ivoire', className)}
       >
         {content}
       </span>
