@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { faqSchema } from '@/lib/seo/json-ld';
 import {
   FAQ,
   FAQ_CATEGORY_LABELS,
@@ -31,9 +33,13 @@ const CATEGORY_ORDER: FAQCategory[] = [
 
 export default function FaqPage() {
   const grouped = groupFAQ(FAQ);
+  const faqJsonLd = faqSchema(
+    FAQ.map((item) => ({ question: item.question, answer: item.answer }))
+  );
 
   return (
     <>
+      <JsonLd data={faqJsonLd} />
       {/* Header */}
       <section className="bg-noir pt-[140px] pb-[40px] md:pt-[180px]">
         <div className="container-content flex flex-col gap-6">

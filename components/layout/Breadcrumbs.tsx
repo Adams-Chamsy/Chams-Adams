@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { breadcrumbSchema } from '@/lib/seo/json-ld';
 
 export type BreadcrumbItem = {
   label: string;
@@ -12,6 +14,8 @@ type BreadcrumbsProps = {
   className?: string;
   /** Teinte alternative pour fonds clairs (inutile ici, kept for future). */
   tone?: 'default' | 'muted';
+  /** Désactive l'émission du JSON-LD BreadcrumbList (utile si déjà couvert ailleurs). */
+  skipJsonLd?: boolean;
 };
 
 /**
@@ -23,11 +27,14 @@ export function Breadcrumbs({
   items,
   className,
   tone = 'default',
+  skipJsonLd,
 }: BreadcrumbsProps) {
   if (items.length === 0) return null;
 
   return (
-    <nav
+    <>
+      {!skipJsonLd && <JsonLd data={breadcrumbSchema(items)} />}
+      <nav
       aria-label="Fil d'Ariane"
       className={cn(
         'font-sans text-xs uppercase tracking-[0.2em]',
@@ -66,5 +73,6 @@ export function Breadcrumbs({
         })}
       </ol>
     </nav>
+    </>
   );
 }

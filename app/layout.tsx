@@ -8,6 +8,8 @@ import { CartDrawer } from '@/components/cart/CartDrawer';
 import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
 import { LocaleProvider } from '@/lib/i18n/client';
 import { getLocale } from '@/lib/i18n/server';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { organizationSchema, websiteSchema } from '@/lib/seo/json-ld';
 import './globals.css';
 
 // Ces deux composants n'impactent pas le rendu initial (effets post-hydration).
@@ -134,6 +136,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-noir text-ivoire/90 font-sans">
+        <JsonLd data={organizationSchema()} />
+        <JsonLd data={websiteSchema()} />
         <LocaleProvider locale={locale}>
           <SmoothScroll>
             <>
