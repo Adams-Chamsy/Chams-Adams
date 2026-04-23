@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { surMesureSchema } from '@/lib/schemas/surMesure';
 import { sendSurMesureEmails } from '@/lib/emails/sendSurMesureEmails';
 import { verifyTurnstile } from '@/lib/captcha/verifyTurnstile';
+import { rateLimitHourly, getClientIp } from '@/lib/rate-limit';
 
 /**
  * POST /api/sur-mesure
@@ -15,37 +16,8 @@ import { verifyTurnstile } from '@/lib/captcha/verifyTurnstile';
  * ligne pour protéger du spam bot. Documenté dans les points d'attention.
  */
 
-type RateEntry = { count: number; resetAt: number };
-const RATE_LIMIT = 5;
-const WINDOW_MS = 60 * 60 * 1000; // 1 heure
-const rateStore = new Map<string, RateEntry>();
-
-function getClientIp(req: NextRequest): string {
-  const fwd = req.headers.get('x-forwarded-for');
-  if (fwd) return fwd.split(',')[0]!.trim();
-  const real = req.headers.get('x-real-ip');
-  if (real) return real.trim();
-  return 'unknown';
-}
-
-function checkRateLimit(ip: string): { allowed: boolean; retryAt?: number } {
-  const now = Date.now();
-  const existing = rateStore.get(ip);
-  if (!existing || existing.resetAt < now) {
-    rateStore.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return { allowed: true };
-  }
-  if (existing.count >= RATE_LIMIT) {
-    return { allowed: false, retryAt: existing.resetAt };
-  }
-  existing.count += 1;
-  return { allowed: true };
-}
-
 export async function POST(req: NextRequest) {
-  // Rate limit
-  const ip = getClientIp(req);
-  const rate = checkRateLimit(ip);
+  const rate = rateLimitHourly(req, 'sur-mesure');
   if (!rate.allowed) {
     return NextResponse.json(
       {
@@ -94,7 +66,7 @@ export async function POST(req: NextRequest) {
 
   // Log structuré (console pour l'instant ; à brancher sur un monitoring en prod)
   console.info('[sur-mesure] demande traitée', {
-    ip,
+    ip: getClientIp(req),
     email: parsed.data.email,
     name: `${parsed.data.firstName} ${parsed.data.lastName}`,
     ack: results.acknowledgement,

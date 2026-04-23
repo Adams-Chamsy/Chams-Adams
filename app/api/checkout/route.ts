@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe, getSiteUrl } from '@/lib/stripe';
+import { rateLimitPerMinute } from '@/lib/rate-limit';
 import type { CartItem } from '@/lib/store/cart.store';
 
 /**
@@ -23,6 +24,15 @@ import type { CartItem } from '@/lib/store/cart.store';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
+  // 10 tentatives / IP / minute — usage légitime fréquent possible (retry CB)
+  const rate = rateLimitPerMinute(req, 'checkout', 10);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Trop de tentatives. Merci de patienter une minute.' },
+      { status: 429 }
+    );
+  }
+
   let body: { items?: CartItem[]; email?: string };
   try {
     body = await req.json();

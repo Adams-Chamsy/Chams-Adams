@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { contactSchema, CONTACT_TOPIC_LABELS } from '@/lib/schemas/contact';
 import { verifyTurnstile } from '@/lib/captcha/verifyTurnstile';
+import { rateLimitHourly } from '@/lib/rate-limit';
 
 /**
  * POST /api/contact
@@ -11,34 +12,9 @@ import { verifyTurnstile } from '@/lib/captcha/verifyTurnstile';
  * si RESEND_API_KEY est absent, on log et on répond OK — pratique en dev.
  */
 
-type RateEntry = { count: number; resetAt: number };
-const RATE_LIMIT = 5;
-const WINDOW_MS = 60 * 60 * 1000;
-const rateStore = new Map<string, RateEntry>();
-
-function getClientIp(req: NextRequest): string {
-  const fwd = req.headers.get('x-forwarded-for');
-  if (fwd) return fwd.split(',')[0]!.trim();
-  const real = req.headers.get('x-real-ip');
-  if (real) return real.trim();
-  return 'unknown';
-}
-
-function checkRateLimit(ip: string): { allowed: boolean } {
-  const now = Date.now();
-  const existing = rateStore.get(ip);
-  if (!existing || existing.resetAt < now) {
-    rateStore.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return { allowed: true };
-  }
-  if (existing.count >= RATE_LIMIT) return { allowed: false };
-  existing.count += 1;
-  return { allowed: true };
-}
-
 export async function POST(req: NextRequest) {
-  const ip = getClientIp(req);
-  if (!checkRateLimit(ip).allowed) {
+  const rate = rateLimitHourly(req, 'contact');
+  if (!rate.allowed) {
     return NextResponse.json(
       {
         error:
