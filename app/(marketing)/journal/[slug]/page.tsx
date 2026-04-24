@@ -8,6 +8,7 @@ import { TextReveal } from '@/components/animations/TextReveal';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
 import { PortableBody } from '@/components/editorial/PortableBody';
+import { TiptapBody } from '@/components/editorial/TiptapBody';
 import {
   getArticleBySlug,
   getAllArticleSlugs,
@@ -52,9 +53,11 @@ export default async function JournalArticlePage(
 
   const { meta } = article;
 
-  // Corps : Portable Text (Sanity) ou MDX compilé (fallback content/journal/)
+  // Corps : Tiptap (Supabase) | Portable Text (Sanity) | MDX (fallback)
   let bodyNode: React.ReactNode;
-  if (article.source === 'sanity') {
+  if (article.source === 'supabase') {
+    bodyNode = <TiptapBody value={article.body} />;
+  } else if (article.source === 'sanity') {
     bodyNode = <PortableBody value={article.body} />;
   } else {
     const { content: mdxContent } = await compileMDX({
