@@ -62,8 +62,8 @@ type Card = {
 
 const CARDS: Card[] = [
   { key: 'faq', label: 'FAQ', href: '/admin/faq', active: true },
-  { key: 'events', label: 'Événements', href: '/admin/events' },
-  { key: 'press', label: 'Revue de presse', href: '/admin/press' },
+  { key: 'events', label: 'Événements', href: '/admin/events', active: true },
+  { key: 'press', label: 'Revue de presse', href: '/admin/press', active: true },
   { key: 'articles', label: 'Articles Journal', href: '/admin/articles' },
   { key: 'products', label: 'Produits', href: '/admin/products' },
   { key: 'collections', label: 'Collections', href: '/admin/collections' },

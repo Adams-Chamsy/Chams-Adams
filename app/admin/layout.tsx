@@ -7,8 +7,8 @@ import { logoutAction } from './actions';
 const NAV_ITEMS = [
   { href: '/admin', label: 'Tableau de bord' },
   { href: '/admin/faq', label: 'FAQ' },
-  { href: '/admin/events', label: 'Événements', disabled: true },
-  { href: '/admin/press', label: 'Presse', disabled: true },
+  { href: '/admin/events', label: 'Événements' },
+  { href: '/admin/press', label: 'Presse' },
   { href: '/admin/articles', label: 'Articles', disabled: true },
   { href: '/admin/products', label: 'Produits', disabled: true },
   { href: '/admin/collections', label: 'Collections', disabled: true },
@@ -19,8 +19,6 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // La protection principale est dans middleware.ts ; ici on fait une seconde
-  // lecture pour afficher l'email de l'admin connecté.
   let userEmail = '—';
   if (isSupabaseEnabled()) {
     try {
@@ -31,7 +29,7 @@ export default async function AdminLayout({
       if (!user) redirect('/admin/login');
       userEmail = user.email ?? '—';
     } catch {
-      // Laisser passer en dev si Supabase pas dispo
+      // dev fallback
     }
   }
 

@@ -1,7 +1,10 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import {
+  createSupabaseServerClient,
+  createSupabaseServiceClient,
+} from '@/lib/supabase/server';
 
 export type LoginResult =
   | { ok: true }
@@ -29,8 +32,10 @@ export async function loginAction(
     return { ok: false, error: 'Identifiants invalides.' };
   }
 
-  // Vérif rôle admin
-  const { data: adminRow } = await supabase
+  // Vérif rôle admin via service_role — évite les subtilités de timing
+  // cookies + RLS récursive au moment immédiat du signIn.
+  const serviceSupabase = createSupabaseServiceClient();
+  const { data: adminRow } = await serviceSupabase
     .from('admin_users')
     .select('role')
     .eq('id', data.user.id)

@@ -25,7 +25,8 @@
     "sanity:deploy": "sanity deploy",
     "sanity:seed": "tsx --env-file=.env.local scripts/sanity-seed.ts",
     "supabase:migrate": "tsx --env-file=.env.local scripts/supabase-migrate.ts",
-    "supabase:setup": "tsx --env-file=.env.local scripts/supabase-setup.ts"
+    "supabase:setup": "tsx --env-file=.env.local scripts/supabase-setup.ts",
+    "supabase:seed": "tsx --env-file=.env.local scripts/supabase-seed.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
