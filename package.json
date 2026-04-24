@@ -23,7 +23,9 @@
     "sanity:dev": "sanity dev",
     "sanity:build": "sanity build",
     "sanity:deploy": "sanity deploy",
-    "sanity:seed": "tsx --env-file=.env.local scripts/sanity-seed.ts"
+    "sanity:seed": "tsx --env-file=.env.local scripts/sanity-seed.ts",
+    "supabase:migrate": "tsx --env-file=.env.local scripts/supabase-migrate.ts",
+    "supabase:setup": "tsx --env-file=.env.local scripts/supabase-setup.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -83,6 +85,7 @@
     "eslint-config-next": "14.2.5",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.4.40",
+    "postgres": "^3.4.9",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.7",
