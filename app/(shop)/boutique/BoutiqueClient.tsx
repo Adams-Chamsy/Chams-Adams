@@ -7,6 +7,7 @@ import {
   ProductFiltersMobile,
   DEFAULT_FILTERS,
   type FilterState,
+  type ColorOption,
 } from '@/components/product/ProductFilters';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
@@ -39,6 +40,22 @@ export function BoutiqueClient({ products }: BoutiqueClientProps) {
 
   const filtered = useMemo(() => applyFilters(products, filters), [products, filters]);
   const sorted = useMemo(() => applySort(filtered, sort), [filtered, sort]);
+
+  // Options couleur dynamiques : une entrée par hex unique rencontré dans
+  // les variantes. Le label prend le premier `colorName` trouvé.
+  const colorOptions = useMemo<ColorOption[]>(() => {
+    const map = new Map<string, string>();
+    for (const p of products) {
+      for (const v of p.variants) {
+        if (v.color && !map.has(v.color)) {
+          map.set(v.color, v.colorName || v.color);
+        }
+      }
+    }
+    return Array.from(map.entries())
+      .map(([hex, name]) => ({ hex, name }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+  }, [products]);
   const visible = sorted.slice(0, visibleCount);
   const hasMore = visibleCount < sorted.length;
 
@@ -117,6 +134,7 @@ export function BoutiqueClient({ products }: BoutiqueClientProps) {
               setVisibleCount(PAGE_SIZE);
             }}
             resultCount={sorted.length}
+            colorOptions={colorOptions}
           />
           <p className="font-sans text-xs uppercase tracking-[0.2em] text-ivoire/60">
             {sorted.length} pièces
@@ -134,6 +152,7 @@ export function BoutiqueClient({ products }: BoutiqueClientProps) {
               setVisibleCount(PAGE_SIZE);
             }}
             resultCount={sorted.length}
+            colorOptions={colorOptions}
           />
 
           <div className="min-w-0 flex-1">

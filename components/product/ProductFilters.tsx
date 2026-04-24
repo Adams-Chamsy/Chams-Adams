@@ -29,7 +29,10 @@ export const DEFAULT_FILTERS: FilterState = {
   inStockOnly: false,
 };
 
-const COLOR_OPTIONS: { hex: string; name: string }[] = [
+export type ColorOption = { hex: string; name: string };
+
+/** Palette de fallback — utilisée si aucun produit n'est chargé. */
+const FALLBACK_COLOR_OPTIONS: ColorOption[] = [
   { hex: '#0A0A0A', name: 'Noir' },
   { hex: '#1B2951', name: 'Indigo' },
   { hex: '#F5F0E6', name: 'Ivoire' },
@@ -65,6 +68,8 @@ type DesktopProps = {
   onChange: (f: FilterState) => void;
   resultCount: number;
   className?: string;
+  /** Couleurs dynamiques extraites des produits actuels — fallback palette par défaut. */
+  colorOptions?: ColorOption[];
 };
 
 export function ProductFiltersSidebar({
@@ -72,6 +77,7 @@ export function ProductFiltersSidebar({
   onChange,
   resultCount,
   className,
+  colorOptions,
 }: DesktopProps) {
   const activeCount = useMemo(() => countActiveFilters(filters), [filters]);
 
@@ -85,6 +91,7 @@ export function ProductFiltersSidebar({
         onChange={onChange}
         activeCount={activeCount}
         resultCount={resultCount}
+        colorOptions={colorOptions}
       />
     </aside>
   );
@@ -101,6 +108,7 @@ type MobileProps = {
   filters: FilterState;
   onChange: (f: FilterState) => void;
   resultCount: number;
+  colorOptions?: ColorOption[];
 };
 
 export function ProductFiltersMobile({
@@ -110,6 +118,7 @@ export function ProductFiltersMobile({
   filters,
   onChange,
   resultCount,
+  colorOptions,
 }: MobileProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const activeCount = useMemo(() => countActiveFilters(filters), [filters]);
@@ -194,6 +203,7 @@ export function ProductFiltersMobile({
                   onChange={onChange}
                   activeCount={activeCount}
                   resultCount={resultCount}
+                  colorOptions={colorOptions}
                   hideResetOnTop
                 />
               </div>
@@ -233,15 +243,20 @@ function FiltersCore({
   activeCount,
   resultCount,
   hideResetOnTop,
+  colorOptions,
 }: {
   filters: FilterState;
   onChange: (f: FilterState) => void;
   activeCount: number;
   resultCount: number;
   hideResetOnTop?: boolean;
+  colorOptions?: ColorOption[];
 }) {
   const update = <K extends keyof FilterState>(key: K, value: FilterState[K]) =>
     onChange({ ...filters, [key]: value });
+
+  const colors =
+    colorOptions && colorOptions.length > 0 ? colorOptions : FALLBACK_COLOR_OPTIONS;
 
   return (
     <div className="flex flex-col gap-8">
@@ -278,21 +293,23 @@ function FiltersCore({
         </ul>
       </FilterGroup>
 
-      {/* Couleur */}
-      <FilterGroup title="Couleur">
-        <ul className="flex flex-col gap-3">
-          {COLOR_OPTIONS.map((c) => (
-            <li key={c.hex}>
-              <CheckboxRow
-                label={c.name}
-                checked={filters.colors.includes(c.hex)}
-                onChange={() => update('colors', toggleInList(filters.colors, c.hex))}
-                swatch={c.hex}
-              />
-            </li>
-          ))}
-        </ul>
-      </FilterGroup>
+      {/* Couleur — dynamique depuis les variantes présentes */}
+      {colors.length > 0 && (
+        <FilterGroup title="Couleur">
+          <ul className="flex flex-col gap-3">
+            {colors.map((c) => (
+              <li key={c.hex}>
+                <CheckboxRow
+                  label={c.name}
+                  checked={filters.colors.includes(c.hex)}
+                  onChange={() => update('colors', toggleInList(filters.colors, c.hex))}
+                  swatch={c.hex}
+                />
+              </li>
+            ))}
+          </ul>
+        </FilterGroup>
+      )}
 
       {/* Matière */}
       <FilterGroup title="Matière">
