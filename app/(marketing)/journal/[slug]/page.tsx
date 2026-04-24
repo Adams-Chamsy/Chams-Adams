@@ -3,21 +3,22 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { compileMDX } from 'next-mdx-remote/rsc';
-import {
-  getAllSlugs,
-  getArticleBySlug,
-  getAllArticleMetas,
-  formatArticleDate,
-} from '@/lib/journal';
 import { mdxComponents } from '@/mdx-components';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
+import { PortableBody } from '@/components/editorial/PortableBody';
+import {
+  getArticleBySlug,
+  getAllArticleSlugs,
+  getAllArticles,
+  formatArticleDate,
+} from '@/lib/data/articles';
 
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
+  const slugs = await getAllArticleSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
@@ -49,19 +50,24 @@ export default async function JournalArticlePage(
   const article = await getArticleBySlug(params.slug);
   if (!article) notFound();
 
-  const { meta, content } = article;
-  const { content: mdxContent } = await compileMDX({
-    source: content,
-    components: mdxComponents,
-  });
+  const { meta } = article;
 
-  // Articles suggérés (3, autres que celui-ci)
-  const allArticles = await getAllArticleMetas();
-  const related = allArticles
-    .filter((a) => a.slug !== meta.slug)
-    .slice(0, 3);
+  // Corps : Portable Text (Sanity) ou MDX compilé (fallback content/journal/)
+  let bodyNode: React.ReactNode;
+  if (article.source === 'sanity') {
+    bodyNode = <PortableBody value={article.body} />;
+  } else {
+    const { content: mdxContent } = await compileMDX({
+      source: article.content,
+      components: mdxComponents,
+    });
+    bodyNode = mdxContent;
+  }
 
-  // JSON-LD Article
+  // Articles suggérés (3 autres que celui-ci)
+  const allArticles = await getAllArticles();
+  const related = allArticles.filter((a) => a.slug !== meta.slug).slice(0, 3);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -135,9 +141,7 @@ export default async function JournalArticlePage(
 
         {/* CORPS */}
         <div className="bg-noir py-[80px] md:py-[120px]">
-          <div className="mx-auto max-w-[720px] px-6 md:px-0">
-            {mdxContent}
-          </div>
+          <div className="mx-auto max-w-[720px] px-6 md:px-0">{bodyNode}</div>
         </div>
       </article>
 
@@ -151,7 +155,11 @@ export default async function JournalArticlePage(
             <ul className="grid grid-cols-1 gap-10 md:grid-cols-3">
               {related.map((a) => (
                 <li key={a.slug} className="flex flex-col gap-4">
-                  <Link href={`/journal/${a.slug}`} data-cursor="hover" className="group flex flex-col gap-3">
+                  <Link
+                    href={`/journal/${a.slug}`}
+                    data-cursor="hover"
+                    className="group flex flex-col gap-3"
+                  >
                     <div className="relative aspect-[3/4] w-full overflow-hidden bg-noir-800">
                       <Image
                         src={a.coverImage}
