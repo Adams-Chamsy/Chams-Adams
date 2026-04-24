@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
 import {
-  EVENTS,
+  getEvents,
   EVENT_TYPE_LABELS,
   groupByMonth,
   sortEventsByDate,
   statusForEvent,
   type Event,
   type EventStatus,
-} from '@/lib/data/events.mock';
+} from '@/lib/data/events';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -45,8 +45,9 @@ const STATUS_LABELS: Record<EventStatus, string> = {
   past: 'Passé',
 };
 
-export default function EvenementsPage() {
-  const sorted = sortEventsByDate(EVENTS);
+export default async function EvenementsPage() {
+  const events = await getEvents();
+  const sorted = sortEventsByDate(events);
   const today = new Date().toISOString().slice(0, 10);
   const grouped = groupByMonth(sorted);
   const monthKeys = Object.keys(grouped).sort();

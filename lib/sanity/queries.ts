@@ -66,13 +66,14 @@ export const ALL_PRODUCTS_QUERY = /* groq */ `
   }
 `;
 
+// Events — GROQ renomme pour matcher la shape des mocks (id, date)
 export const ALL_EVENTS_QUERY = /* groq */ `
   *[_type == "event"] | order(startDate asc) {
-    _id,
+    "id": _id,
     title,
     type,
-    startDate,
-    endDate,
+    "date": startDate,
+    "endDate": endDate,
     location,
     city,
     country,
@@ -83,10 +84,10 @@ export const ALL_EVENTS_QUERY = /* groq */ `
 
 export const ALL_PRESS_QUERY = /* groq */ `
   *[_type == "pressEntry"] | order(publishedAt desc) {
-    _id,
+    "id": _id,
     publication,
     logoText,
-    publishedAt,
+    "date": publishedAt,
     title,
     excerpt,
     articleUrl,
@@ -96,7 +97,7 @@ export const ALL_PRESS_QUERY = /* groq */ `
 
 export const ALL_FAQ_QUERY = /* groq */ `
   *[_type == "faqItem"] | order(category asc, order asc) {
-    _id,
+    "id": _id,
     category,
     question,
     answer

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Marquee } from '@/components/ui/Marquee';
-import { PRESS, sortPressByDate, type PressEntry } from '@/lib/data/press.mock';
+import { getPress, sortPressByDate, type PressEntry } from '@/lib/data/press';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -22,8 +22,9 @@ const DATE_FORMAT = new Intl.DateTimeFormat('fr-FR', {
   year: 'numeric',
 });
 
-export default function PressePage() {
-  const sorted = sortPressByDate(PRESS);
+export default async function PressePage() {
+  const press = await getPress();
+  const sorted = sortPressByDate(press);
   const featured = sorted.filter((p) => p.featured);
   const rest = sorted.filter((p) => !p.featured);
 

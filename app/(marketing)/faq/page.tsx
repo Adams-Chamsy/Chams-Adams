@@ -5,11 +5,11 @@ import { TextReveal } from '@/components/animations/TextReveal';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { faqSchema } from '@/lib/seo/json-ld';
 import {
-  FAQ,
+  getFAQ,
   FAQ_CATEGORY_LABELS,
   groupFAQ,
   type FAQCategory,
-} from '@/lib/data/faq.mock';
+} from '@/lib/data/faq';
 
 export const metadata: Metadata = {
   title: 'Questions fréquentes',
@@ -31,10 +31,11 @@ const CATEGORY_ORDER: FAQCategory[] = [
   'atelier',
 ];
 
-export default function FaqPage() {
-  const grouped = groupFAQ(FAQ);
+export default async function FaqPage() {
+  const faq = await getFAQ();
+  const grouped = groupFAQ(faq);
   const faqJsonLd = faqSchema(
-    FAQ.map((item) => ({ question: item.question, answer: item.answer }))
+    faq.map((item) => ({ question: item.question, answer: item.answer }))
   );
 
   return (
