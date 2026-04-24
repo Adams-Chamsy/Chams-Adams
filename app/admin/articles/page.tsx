@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil } from 'lucide-react';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
 import type { ArticleRow } from '@/lib/supabase/types';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { DeleteConfirmButton } from '@/components/admin/DeleteConfirmButton';
 import { deleteArticleAction } from './actions';
 
 async function getItems(): Promise<ArticleRow[]> {
@@ -92,20 +93,11 @@ export default async function AdminArticlesPage() {
                 >
                   <Pencil className="h-4 w-4" aria-hidden />
                 </Link>
-                <form
-                  action={async () => {
-                    'use server';
-                    await deleteArticleAction(a.id);
-                  }}
-                >
-                  <button
-                    type="submit"
-                    aria-label="Supprimer"
-                    className="inline-flex h-9 w-9 items-center justify-center text-ivoire/70 hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" aria-hidden />
-                  </button>
-                </form>
+                <DeleteConfirmButton
+                  action={deleteArticleAction.bind(null, a.id)}
+                  itemName={a.title}
+                  itemLabel="cet article"
+                />
               </div>
             </li>
           ))}

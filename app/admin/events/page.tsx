@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil } from 'lucide-react';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
 import type { EventRow } from '@/lib/supabase/types';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { DeleteConfirmButton } from '@/components/admin/DeleteConfirmButton';
 import { deleteEventAction } from './actions';
 
 const TYPE_LABELS: Record<EventRow['type'], string> = {
@@ -84,20 +85,11 @@ export default async function AdminEventsPage() {
                   >
                     <Pencil className="h-4 w-4" aria-hidden />
                   </Link>
-                  <form
-                    action={async () => {
-                      'use server';
-                      await deleteEventAction(e.id);
-                    }}
-                  >
-                    <button
-                      type="submit"
-                      aria-label="Supprimer"
-                      className="inline-flex h-9 w-9 items-center justify-center text-ivoire/70 hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" aria-hidden />
-                    </button>
-                  </form>
+                  <DeleteConfirmButton
+                    action={deleteEventAction.bind(null, e.id)}
+                    itemName={e.title}
+                    itemLabel="cet événement"
+                  />
                 </div>
               </li>
             );

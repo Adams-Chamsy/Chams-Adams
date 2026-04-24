@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { Plus, Pencil, Trash2, Star } from 'lucide-react';
+import { Plus, Pencil, Star } from 'lucide-react';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
 import type { PressEntryRow } from '@/lib/supabase/types';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { DeleteConfirmButton } from '@/components/admin/DeleteConfirmButton';
 import { deletePressAction } from './actions';
 
 async function getItems(): Promise<PressEntryRow[]> {
@@ -70,20 +71,11 @@ export default async function AdminPressListPage() {
                 >
                   <Pencil className="h-4 w-4" aria-hidden />
                 </Link>
-                <form
-                  action={async () => {
-                    'use server';
-                    await deletePressAction(p.id);
-                  }}
-                >
-                  <button
-                    type="submit"
-                    aria-label="Supprimer"
-                    className="inline-flex h-9 w-9 items-center justify-center text-ivoire/70 hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" aria-hidden />
-                  </button>
-                </form>
+                <DeleteConfirmButton
+                  action={deletePressAction.bind(null, p.id)}
+                  itemName={p.title}
+                  itemLabel="cette parution"
+                />
               </div>
             </li>
           ))}
