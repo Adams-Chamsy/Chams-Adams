@@ -8,6 +8,9 @@ type NavItem = { href: string; label: string; disabled?: boolean };
 
 const NAV_ITEMS: NavItem[] = [
   { href: '/admin', label: 'Tableau de bord' },
+  { href: '/admin/orders', label: 'Commandes' },
+  { href: '/admin/customers', label: 'Clients' },
+  { href: '/admin/newsletter', label: 'Newsletter' },
   { href: '/admin/faq', label: 'FAQ' },
   { href: '/admin/events', label: 'Événements' },
   { href: '/admin/press', label: 'Presse' },

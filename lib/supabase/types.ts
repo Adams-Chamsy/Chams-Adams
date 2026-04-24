@@ -121,3 +121,46 @@ export interface AuthorRow {
   created_at: string;
   updated_at: string;
 }
+
+export type OrderStatus =
+  | 'pending'
+  | 'paid'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled'
+  | 'refunded';
+
+export interface OrderRow {
+  id: string;
+  user_id: string | null;
+  stripe_session_id: string | null;
+  stripe_payment_intent_id: string | null;
+  email: string;
+  status: OrderStatus;
+  subtotal_cents: number;
+  shipping_cents: number;
+  total_cents: number;
+  currency: string;
+  shipping_address: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderItemRow {
+  id: string;
+  order_id: string;
+  product_id: string | null;
+  product_name: string;
+  variant_color_name: string | null;
+  size: string | null;
+  quantity: number;
+  unit_price_cents: number;
+  line_total_cents: number;
+}
+
+export interface NewsletterSubscriberRow {
+  id: string;
+  email: string;
+  subscribed_at: string;
+  unsubscribed_at: string | null;
+}
