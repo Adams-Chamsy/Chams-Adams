@@ -48,21 +48,43 @@ export const ALL_COLLECTIONS_QUERY = /* groq */ `
   }
 `;
 
+const PRODUCT_PROJECTION = /* groq */ `
+  "id": _id,
+  "slug": slug.current,
+  name,
+  subtitle,
+  description,
+  longDescription,
+  price,
+  "category": category->slug.current,
+  materials,
+  details,
+  tags,
+  isSignature,
+  isNew,
+  "variants": variants[] {
+    "id": coalesce(_key, ""),
+    color,
+    colorName,
+    sizes,
+    stock,
+    "images": images[] {
+      "asset": asset,
+      "alt": coalesce(alt, ""),
+      "type": coalesce(type, "flat")
+    }
+  }
+`;
+
 export const ALL_PRODUCTS_QUERY = /* groq */ `
-  *[_type == "product"] | order(_createdAt desc) {
-    _id,
-    "slug": slug.current,
-    name,
-    subtitle,
-    description,
-    price,
-    "category": category->slug.current,
-    "categoryName": category->name,
-    materials,
-    tags,
-    isSignature,
-    isNew,
-    variants
+  *[_type == "product" && defined(slug.current)] | order(_createdAt desc) {
+    ${PRODUCT_PROJECTION}
+  }
+`;
+
+export const PRODUCT_BY_SLUG_QUERY = /* groq */ `
+  *[_type == "product" && slug.current == $slug][0] {
+    ${PRODUCT_PROJECTION}
   }
 `;
 

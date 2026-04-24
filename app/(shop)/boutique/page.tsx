@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getAllProducts } from '@/lib/data/products';
 import { BoutiqueClient } from './BoutiqueClient';
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BoutiquePage() {
-  return <BoutiqueClient />;
+export default async function BoutiquePage() {
+  const products = await getAllProducts();
+  return <BoutiqueClient products={products} />;
 }

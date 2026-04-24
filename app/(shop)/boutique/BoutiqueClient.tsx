@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { PRODUCTS } from '@/lib/data/products.mock';
 import { ProductCard } from '@/components/product/ProductCard';
 import {
   ProductFiltersSidebar,
@@ -26,7 +25,11 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 
 const PAGE_SIZE = 6;
 
-export function BoutiqueClient() {
+type BoutiqueClientProps = {
+  products: Product[];
+};
+
+export function BoutiqueClient({ products }: BoutiqueClientProps) {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [sort, setSort] = useState<SortOption>('newest');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -34,7 +37,7 @@ export function BoutiqueClient() {
 
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const filtered = useMemo(() => applyFilters(PRODUCTS, filters), [filters]);
+  const filtered = useMemo(() => applyFilters(products, filters), [products, filters]);
   const sorted = useMemo(() => applySort(filtered, sort), [filtered, sort]);
   const visible = sorted.slice(0, visibleCount);
   const hasMore = visibleCount < sorted.length;

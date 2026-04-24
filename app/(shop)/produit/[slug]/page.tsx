@@ -4,20 +4,21 @@ import {
   getProductBySlug,
   getProductsByIds,
   getAllProductSlugs,
-} from '@/lib/data/products.mock';
+} from '@/lib/data/products';
 import { getCollectionBySlug } from '@/lib/data/collections.mock';
 import { formatPrice } from '@/lib/types/product';
 import { ProductDetailClient } from './ProductDetailClient';
 
-export function generateStaticParams() {
-  return getAllProductSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllProductSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const params = await props.params;
-  const product = getProductBySlug(params.slug);
+  const product = await getProductBySlug(params.slug);
   if (!product) return {};
   const image = product.variants[0]?.images[0];
   return {
@@ -36,13 +37,12 @@ export default async function ProductPage(
   props: { params: Promise<{ slug: string }> }
 ) {
   const params = await props.params;
-  const product = getProductBySlug(params.slug);
+  const product = await getProductBySlug(params.slug);
   if (!product) notFound();
 
   const collection = getCollectionBySlug(product.category);
-  const related = getProductsByIds(product.relatedProductIds ?? []).filter(
-    (p) => p.id !== product.id
-  );
+  const related = (await getProductsByIds(product.relatedProductIds ?? []))
+    .filter((p) => p.id !== product.id);
 
   // Schema.org Product (JSON-LD) pour SEO / résultats riches Google
   const jsonLd = {
