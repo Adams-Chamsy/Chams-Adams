@@ -65,7 +65,7 @@ const CARDS: Card[] = [
   { key: 'events', label: 'Événements', href: '/admin/events', active: true },
   { key: 'press', label: 'Revue de presse', href: '/admin/press', active: true },
   { key: 'articles', label: 'Articles Journal', href: '/admin/articles', active: true },
-  { key: 'products', label: 'Produits', href: '/admin/products' },
+  { key: 'products', label: 'Produits', href: '/admin/products', active: true },
   { key: 'collections', label: 'Collections', href: '/admin/collections' },
 ];
 
