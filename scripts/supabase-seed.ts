@@ -10,6 +10,7 @@ import { FAQ } from '../lib/data/faq.mock';
 import { EVENTS } from '../lib/data/events.mock';
 import { PRESS } from '../lib/data/press.mock';
 import { COLLECTIONS } from '../lib/data/collections.mock';
+import { PRODUCTS } from '../lib/data/products.mock';
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -98,12 +99,81 @@ async function seedCollections() {
   console.log(`  ✓ ${rows.length} collections`);
 }
 
+async function seedProducts() {
+  console.log('→ Produits');
+  for (const p of PRODUCTS) {
+    const productId = deterministicId('product', p.slug);
+
+    // 1. Upsert product
+    const { error: pErr } = await supabase.from('products').upsert(
+      {
+        id: productId,
+        slug: p.slug,
+        name: p.name,
+        subtitle: p.subtitle ?? null,
+        description: p.description,
+        long_description: p.longDescription ?? null,
+        price_amount: Math.round(p.price.amount * 100), // units → cents
+        price_currency: p.price.currency,
+        category_slug: p.category,
+        materials: p.materials,
+        details: p.details ?? {},
+        tags: p.tags ?? [],
+        is_signature: p.isSignature ?? false,
+        is_new: p.isNew ?? false,
+        related_product_slugs: p.relatedProductIds ?? [],
+        published: true,
+        published_at: new Date().toISOString(),
+      },
+      { onConflict: 'id' }
+    );
+    if (pErr) throw pErr;
+
+    // 2. Clear old variants (cascade delete les images)
+    await supabase.from('product_variants').delete().eq('product_id', productId);
+
+    // 3. Insert variants + images
+    for (let vIdx = 0; vIdx < p.variants.length; vIdx++) {
+      const v = p.variants[vIdx]!;
+      const { data: vRow, error: vErr } = await supabase
+        .from('product_variants')
+        .insert({
+          product_id: productId,
+          color: v.color,
+          color_name: v.colorName,
+          sizes: v.sizes,
+          stock: v.stock ?? null,
+          sort_order: vIdx,
+        })
+        .select('id')
+        .single();
+      if (vErr || !vRow) throw vErr ?? new Error('variant insert failed');
+
+      if (v.images.length > 0) {
+        const { error: iErr } = await supabase.from('product_variant_images').insert(
+          v.images.map((img, i) => ({
+            variant_id: vRow.id,
+            url: img.url,
+            alt: img.alt,
+            type: img.type ?? 'flat',
+            sort_order: i,
+            is_primary: img.isPrimary ?? i === 0,
+          }))
+        );
+        if (iErr) throw iErr;
+      }
+    }
+    console.log(`  ✓ ${p.name}`);
+  }
+}
+
 async function main() {
   console.log('\n→ Seed Supabase\n');
   await seedFaq();
   await seedEvents();
   await seedPress();
   await seedCollections();
+  await seedProducts();
   console.log('\n✓ Seed terminé.\n');
 }
 

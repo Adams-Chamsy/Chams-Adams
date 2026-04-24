@@ -96,7 +96,9 @@ function supaToProduct(raw: SupaProduct): Product | null {
     description: raw.description,
     longDescription: raw.long_description ?? undefined,
     price: {
-      amount: raw.price_amount,
+      // price_amount est stocké en cents côté Supabase ; le reste du code
+      // (mock, formatPrice) attend des unités entières (ex: 3200 → "3 200 €").
+      amount: raw.price_amount / 100,
       currency: raw.price_currency as 'EUR' | 'XOF' | 'USD',
     },
     category: raw.category_slug as ProductCategory,
