@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * Middleware d'authentification admin.
@@ -56,18 +57,25 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Vérification du rôle admin
-  const { data: adminRow } = await supabase
-    .from('admin_users')
-    .select('role')
-    .eq('id', user.id)
-    .maybeSingle();
+  // Vérification du rôle admin via service_role (bypass RLS —
+  // évite les subtilités de policies récursives sur admin_users)
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (serviceKey) {
+    const adminClient = createClient(url, serviceKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    const { data: adminRow } = await adminClient
+      .from('admin_users')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle();
 
-  if (!adminRow || !['admin', 'editor'].includes(adminRow.role)) {
-    const forbiddenUrl = req.nextUrl.clone();
-    forbiddenUrl.pathname = '/admin/login';
-    forbiddenUrl.searchParams.set('error', 'forbidden');
-    return NextResponse.redirect(forbiddenUrl);
+    if (!adminRow || !['admin', 'editor'].includes(adminRow.role)) {
+      const forbiddenUrl = req.nextUrl.clone();
+      forbiddenUrl.pathname = '/admin/login';
+      forbiddenUrl.searchParams.set('error', 'forbidden');
+      return NextResponse.redirect(forbiddenUrl);
+    }
   }
 
   return res;
