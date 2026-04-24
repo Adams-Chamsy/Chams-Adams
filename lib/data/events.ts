@@ -3,8 +3,6 @@ import {
   createSupabaseServerClient,
   isSupabaseEnabled,
 } from '@/lib/supabase/server';
-import { sanityClient, isSanityEnabled } from '@/lib/sanity/client';
-import { ALL_EVENTS_QUERY } from '@/lib/sanity/queries';
 import { EVENTS as EVENTS_MOCK, type Event } from './events.mock';
 
 export type { Event } from './events.mock';
@@ -17,7 +15,6 @@ export {
   type EventType,
 } from './events.mock';
 
-/** Loader Events — Supabase → Sanity → mock. */
 export async function getEvents(): Promise<Event[]> {
   if (isSupabaseEnabled()) {
     try {
@@ -47,19 +44,5 @@ export async function getEvents(): Promise<Event[]> {
       console.error('[supabase] getEvents fallback:', err);
     }
   }
-
-  if (isSanityEnabled()) {
-    try {
-      const data = await sanityClient.fetch<Event[]>(
-        ALL_EVENTS_QUERY,
-        {},
-        { next: { revalidate: 60, tags: ['events'] } }
-      );
-      if (data.length > 0) return data;
-    } catch {
-      // noop
-    }
-  }
-
   return EVENTS_MOCK;
 }

@@ -4,14 +4,16 @@ import { LogOut } from 'lucide-react';
 import { createSupabaseServerClient, isSupabaseEnabled } from '@/lib/supabase/server';
 import { logoutAction } from './actions';
 
-const NAV_ITEMS = [
+type NavItem = { href: string; label: string; disabled?: boolean };
+
+const NAV_ITEMS: NavItem[] = [
   { href: '/admin', label: 'Tableau de bord' },
   { href: '/admin/faq', label: 'FAQ' },
   { href: '/admin/events', label: 'Événements' },
   { href: '/admin/press', label: 'Presse' },
   { href: '/admin/articles', label: 'Articles' },
   { href: '/admin/products', label: 'Produits' },
-  { href: '/admin/collections', label: 'Collections', disabled: true },
+  { href: '/admin/collections', label: 'Collections' },
 ];
 
 export default async function AdminLayout({

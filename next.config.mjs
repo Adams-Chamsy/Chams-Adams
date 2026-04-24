@@ -18,8 +18,7 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
-      { protocol: 'https', hostname: 'cdn.sanity.io' },
-      { protocol: 'https', hostname: '*.apicdn.sanity.io' },
+      { protocol: 'https', hostname: '*.supabase.co' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
@@ -44,8 +43,8 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "connect-src 'self' https://plausible.io https://challenges.cloudflare.com https://api.stripe.com https://*.sanity.io https://*.apicdn.sanity.io wss://*.sanity.io",
-      "frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com https://hooks.stripe.com https://*.sanity.io",
+      "connect-src 'self' https://plausible.io https://challenges.cloudflare.com https://api.stripe.com https://*.supabase.co wss://*.supabase.co",
+      "frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com https://hooks.stripe.com",
       "worker-src 'self' blob:",
       "media-src 'self' blob: data:",
       "object-src 'none'",

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { createSupabaseServerClient, isSupabaseEnabled } from '@/lib/supabase/server';
 import type { FaqItemRow } from '@/lib/supabase/types';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { deleteFaqAction } from './actions';
 
 const CATEGORY_LABELS: Record<FaqItemRow['category'], string> = {
@@ -33,23 +34,21 @@ export default async function AdminFaqListPage() {
 
   return (
     <section className="flex flex-col gap-8">
-      <header className="flex items-end justify-between gap-4">
-        <div className="flex flex-col gap-2">
-          <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
-            FAQ — {items.length} entrée{items.length > 1 ? 's' : ''}
-          </span>
-          <h1 className="font-serif text-3xl font-light text-ivoire md:text-4xl">
-            Questions fréquentes
-          </h1>
-        </div>
-        <Link
-          href="/admin/faq/new"
-          className="inline-flex items-center gap-2 border border-or bg-or px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"
-        >
-          <Plus className="h-4 w-4" aria-hidden />
-          Ajouter
-        </Link>
-      </header>
+      <AdminPageHeader
+        eyebrow={`FAQ — ${items.length} entrée${items.length > 1 ? 's' : ''}`}
+        title="Questions fréquentes"
+        publicHref="/faq"
+        publicLabel="Voir /faq"
+        action={
+          <Link
+            href="/admin/faq/new"
+            className="inline-flex items-center gap-2 border border-or bg-or px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"
+          >
+            <Plus className="h-4 w-4" aria-hidden />
+            Ajouter
+          </Link>
+        }
+      />
 
       {items.length === 0 ? (
         <p className="font-serif italic text-ivoire/60">

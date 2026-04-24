@@ -3,14 +3,11 @@ import {
   createSupabaseServerClient,
   isSupabaseEnabled,
 } from '@/lib/supabase/server';
-import { sanityClient, isSanityEnabled } from '@/lib/sanity/client';
-import { ALL_PRESS_QUERY } from '@/lib/sanity/queries';
 import { PRESS as PRESS_MOCK, type PressEntry } from './press.mock';
 
 export type { PressEntry } from './press.mock';
 export { sortPressByDate } from './press.mock';
 
-/** Loader Presse — Supabase → Sanity → mock. */
 export async function getPress(): Promise<PressEntry[]> {
   if (isSupabaseEnabled()) {
     try {
@@ -37,19 +34,5 @@ export async function getPress(): Promise<PressEntry[]> {
       console.error('[supabase] getPress fallback:', err);
     }
   }
-
-  if (isSanityEnabled()) {
-    try {
-      const data = await sanityClient.fetch<PressEntry[]>(
-        ALL_PRESS_QUERY,
-        {},
-        { next: { revalidate: 300, tags: ['press'] } }
-      );
-      if (data.length > 0) return data;
-    } catch {
-      // noop
-    }
-  }
-
   return PRESS_MOCK;
 }

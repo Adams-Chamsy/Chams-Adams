@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { deleteProductAction } from './actions';
 
 type ProductListItem = {
@@ -44,23 +45,21 @@ export default async function AdminProductsPage() {
 
   return (
     <section className="flex flex-col gap-8">
-      <header className="flex items-end justify-between gap-4">
-        <div className="flex flex-col gap-2">
-          <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
-            Catalogue — {items.length}
-          </span>
-          <h1 className="font-serif text-3xl font-light text-ivoire md:text-4xl">
-            Produits
-          </h1>
-        </div>
-        <Link
-          href="/admin/products/new"
-          className="inline-flex items-center gap-2 border border-or bg-or px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"
-        >
-          <Plus className="h-4 w-4" aria-hidden />
-          Nouveau produit
-        </Link>
-      </header>
+      <AdminPageHeader
+        eyebrow={`Catalogue — ${items.length}`}
+        title="Produits"
+        publicHref="/boutique"
+        publicLabel="Voir /boutique"
+        action={
+          <Link
+            href="/admin/products/new"
+            className="inline-flex items-center gap-2 border border-or bg-or px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"
+          >
+            <Plus className="h-4 w-4" aria-hidden />
+            Nouveau produit
+          </Link>
+        }
+      />
 
       {items.length === 0 ? (
         <p className="font-serif italic text-ivoire/60">Aucun produit. Crée le premier.</p>

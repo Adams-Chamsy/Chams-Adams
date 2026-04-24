@@ -3,12 +3,6 @@ import {
   createSupabaseServerClient,
   isSupabaseEnabled,
 } from '@/lib/supabase/server';
-import { sanityClient, isSanityEnabled } from '@/lib/sanity/client';
-import { urlFor } from '@/lib/sanity/image';
-import {
-  ALL_PRODUCTS_QUERY,
-  PRODUCT_BY_SLUG_QUERY,
-} from '@/lib/sanity/queries';
 import {
   PRODUCTS as PRODUCTS_MOCK,
   getProductBySlug as getMockProductBySlug,
@@ -23,8 +17,6 @@ import type {
 } from '@/lib/types/product';
 
 export type { Product } from '@/lib/types/product';
-
-// ---------- Supabase ----------
 
 type SupaVariantImage = {
   url: string;
@@ -159,125 +151,19 @@ async function fetchSupabaseProduct(slug: string): Promise<Product | null> {
   }
 }
 
-// ---------- Sanity ----------
-
-type SanityImageInput = {
-  asset?: { _ref?: string; _type?: 'reference' };
-  alt?: string;
-  type?: ProductImage['type'];
-};
-
-type SanityRawProduct = Omit<Product, 'variants'> & {
-  variants: {
-    id: string;
-    color: string;
-    colorName: string;
-    sizes: ProductSize[];
-    stock?: number;
-    images: SanityImageInput[];
-  }[];
-};
-
-function transformSanityProduct(raw: SanityRawProduct): Product | null {
-  try {
-    const variants = (raw.variants ?? [])
-      .map((v, vIdx) => {
-        const images: ProductImage[] = (v.images ?? [])
-          .filter(
-            (img): img is Required<Pick<SanityImageInput, 'asset'>> & SanityImageInput =>
-              !!img?.asset
-          )
-          .map((img, imgIdx) => ({
-            url: urlFor({ _type: 'image', asset: img.asset! })
-              .width(1400)
-              .fit('max')
-              .auto('format')
-              .url(),
-            alt: img.alt ?? `${raw.name} — ${v.colorName ?? 'variante'}`,
-            width: 900,
-            height: 1125,
-            type: (img.type ?? 'flat') as ProductImage['type'],
-            isPrimary: imgIdx === 0,
-          }));
-        return {
-          id: v.id || `var-${vIdx}`,
-          color: v.color ?? '#000000',
-          colorName: v.colorName ?? '—',
-          sizes: v.sizes ?? [],
-          stock: v.stock,
-          images,
-        };
-      })
-      .filter((v) => v.images.length > 0);
-
-    if (variants.length === 0) return null;
-
-    return {
-      ...raw,
-      category: (raw.category ?? 'pret-a-porter') as ProductCategory,
-      materials: raw.materials ?? [],
-      details: raw.details ?? { care: [] },
-      variants,
-    } as Product;
-  } catch {
-    return null;
-  }
-}
-
-async function fetchSanityProducts(): Promise<Product[]> {
-  if (!isSanityEnabled()) return [];
-  try {
-    const raw = await sanityClient.fetch<SanityRawProduct[]>(
-      ALL_PRODUCTS_QUERY,
-      {},
-      { next: { revalidate: 60, tags: ['products'] } }
-    );
-    return raw.map(transformSanityProduct).filter((p): p is Product => p !== null);
-  } catch {
-    return [];
-  }
-}
-
-async function fetchSanityProduct(slug: string): Promise<Product | null> {
-  if (!isSanityEnabled()) return null;
-  try {
-    const raw = await sanityClient.fetch<SanityRawProduct | null>(
-      PRODUCT_BY_SLUG_QUERY,
-      { slug },
-      { next: { revalidate: 60, tags: [`product:${slug}`] } }
-    );
-    return raw ? transformSanityProduct(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-// ---------- Public API ----------
-
-/** Merge Supabase + Sanity + mock par slug (Supabase > Sanity > mock). */
+/** Merge Supabase + mock par slug (Supabase prioritaire). */
 export async function getAllProducts(): Promise<Product[]> {
-  const [fromSupabase, fromSanity] = await Promise.all([
-    fetchSupabaseProducts(),
-    fetchSanityProducts(),
-  ]);
-  const seen = new Set<string>();
-  const out: Product[] = [];
-  for (const list of [fromSupabase, fromSanity, PRODUCTS_MOCK]) {
-    for (const p of list) {
-      if (!seen.has(p.slug)) {
-        seen.add(p.slug);
-        out.push(p);
-      }
-    }
-  }
-  return out;
+  const fromSupabase = await fetchSupabaseProducts();
+  const seen = new Set(fromSupabase.map((p) => p.slug));
+  return [
+    ...fromSupabase,
+    ...PRODUCTS_MOCK.filter((p) => !seen.has(p.slug)),
+  ];
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const fromSupabase = await fetchSupabaseProduct(slug);
   if (fromSupabase) return fromSupabase;
-  const fromSanity = await fetchSanityProduct(slug);
-  if (fromSanity) return fromSanity;
   return getMockProductBySlug(slug) ?? null;
 }
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { COLLECTIONS } from '@/lib/data/collections.mock';
+import { getAllCollections } from '@/lib/data/collections';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
@@ -29,7 +29,8 @@ const BENTO_CLASSES = [
   'lg:col-span-7 lg:row-span-2 aspect-[4/5] lg:aspect-[4/5]', // 4
 ];
 
-export default function CollectionsPage() {
+export default async function CollectionsPage() {
+  const COLLECTIONS = await getAllCollections();
   return (
     <>
       {/* Hero */}

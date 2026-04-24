@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
 import type { EventRow } from '@/lib/supabase/types';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { deleteEventAction } from './actions';
 
 const TYPE_LABELS: Record<EventRow['type'], string> = {
@@ -31,23 +32,21 @@ export default async function AdminEventsPage() {
 
   return (
     <section className="flex flex-col gap-8">
-      <header className="flex items-end justify-between gap-4">
-        <div className="flex flex-col gap-2">
-          <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
-            Calendrier — {items.length}
-          </span>
-          <h1 className="font-serif text-3xl font-light text-ivoire md:text-4xl">
-            Événements
-          </h1>
-        </div>
-        <Link
-          href="/admin/events/new"
-          className="inline-flex items-center gap-2 border border-or bg-or px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"
-        >
-          <Plus className="h-4 w-4" aria-hidden />
-          Ajouter
-        </Link>
-      </header>
+      <AdminPageHeader
+        eyebrow={`Calendrier — ${items.length}`}
+        title="Événements"
+        publicHref="/evenements"
+        publicLabel="Voir /evenements"
+        action={
+          <Link
+            href="/admin/events/new"
+            className="inline-flex items-center gap-2 border border-or bg-or px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"
+          >
+            <Plus className="h-4 w-4" aria-hidden />
+            Ajouter
+          </Link>
+        }
+      />
 
       {items.length === 0 ? (
         <p className="font-serif italic text-ivoire/60">Aucun événement. Crée le premier.</p>

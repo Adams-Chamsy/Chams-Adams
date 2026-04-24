@@ -2,21 +2,22 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { COLLECTIONS, getCollectionBySlug } from '@/lib/data/collections.mock';
-import { getProductsByIds } from '@/lib/data/products.mock';
+import { getAllCollections, getCollectionBySlug } from '@/lib/data/collections';
+import { getProductsByIds } from '@/lib/data/products';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 
-export function generateStaticParams() {
-  return COLLECTIONS.map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  const cols = await getAllCollections();
+  return cols.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata(
   props: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const params = await props.params;
-  const col = getCollectionBySlug(params.slug);
+  const col = await getCollectionBySlug(params.slug);
   if (!col) return {};
   return {
     title: col.name,
@@ -33,10 +34,10 @@ export default async function CollectionDetailPage(
   props: { params: Promise<{ slug: string }> }
 ) {
   const params = await props.params;
-  const collection = getCollectionBySlug(params.slug);
+  const collection = await getCollectionBySlug(params.slug);
   if (!collection) notFound();
 
-  const products = getProductsByIds(collection.productIds);
+  const products = await getProductsByIds(collection.productIds);
 
   return (
     <>

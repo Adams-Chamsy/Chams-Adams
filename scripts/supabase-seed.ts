@@ -9,6 +9,7 @@ import { createHash } from 'node:crypto';
 import { FAQ } from '../lib/data/faq.mock';
 import { EVENTS } from '../lib/data/events.mock';
 import { PRESS } from '../lib/data/press.mock';
+import { COLLECTIONS } from '../lib/data/collections.mock';
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -79,11 +80,30 @@ async function seedPress() {
   console.log(`  ✓ ${rows.length} parutions`);
 }
 
+async function seedCollections() {
+  console.log('→ Collections');
+  const rows = COLLECTIONS.map((c, i) => ({
+    id: deterministicId('collection', c.slug),
+    slug: c.slug,
+    name: c.name,
+    tagline: c.tagline,
+    description: c.description,
+    long_description: c.longDescription ?? null,
+    hero_image_url: c.heroImage.url,
+    hero_image_alt: c.heroImage.alt,
+    sort_order: i,
+  }));
+  const { error } = await supabase.from('collections').upsert(rows, { onConflict: 'id' });
+  if (error) throw error;
+  console.log(`  ✓ ${rows.length} collections`);
+}
+
 async function main() {
   console.log('\n→ Seed Supabase\n');
   await seedFaq();
   await seedEvents();
   await seedPress();
+  await seedCollections();
   console.log('\n✓ Seed terminé.\n');
 }
 

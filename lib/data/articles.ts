@@ -3,11 +3,6 @@ import {
   createSupabaseServerClient,
   isSupabaseEnabled,
 } from '@/lib/supabase/server';
-import { sanityClient, isSanityEnabled } from '@/lib/sanity/client';
-import {
-  ALL_ARTICLES_QUERY,
-  ARTICLE_BY_SLUG_QUERY,
-} from '@/lib/sanity/queries';
 import {
   getAllArticleMetas as getAllMdxArticleMetas,
   getArticleBySlug as getMdxArticleBySlug,
@@ -21,16 +16,13 @@ export { getAllCategoriesFromMetas as getAllCategories };
 
 /**
  * Résultat unifié pour /journal/[slug] :
- *  - `source: 'supabase'` → body Tiptap JSON
- *  - `source: 'sanity'`   → body Portable Text
- *  - `source: 'mdx'`      → content MDX brut
+ *  - `source: 'supabase'` → body Tiptap JSON (rendu via <TiptapBody>)
+ *  - `source: 'mdx'`      → content MDX brut (rendu via compileMDX) pour les
+ *                           3 articles historiques `content/journal/*.mdx`
  */
 export type Article =
   | { source: 'supabase'; meta: JournalArticleMeta; body: unknown }
-  | { source: 'sanity'; meta: JournalArticleMeta; body: unknown[] }
   | { source: 'mdx'; meta: JournalArticleMeta; content: string };
-
-// ---------- Supabase ----------
 
 async function fetchSupabaseArticles(): Promise<JournalArticleMeta[]> {
   if (!isSupabaseEnabled()) return [];
@@ -106,71 +98,24 @@ async function fetchSupabaseArticle(
   }
 }
 
-// ---------- Sanity ----------
-
-async function fetchSanityArticles(): Promise<JournalArticleMeta[]> {
-  if (!isSanityEnabled()) return [];
-  try {
-    return await sanityClient.fetch<JournalArticleMeta[]>(
-      ALL_ARTICLES_QUERY,
-      {},
-      { next: { revalidate: 120, tags: ['articles'] } }
-    );
-  } catch {
-    return [];
-  }
-}
-
-async function fetchSanityArticle(
-  slug: string
-): Promise<{ meta: JournalArticleMeta; body: unknown[] } | null> {
-  if (!isSanityEnabled()) return null;
-  try {
-    const data = await sanityClient.fetch<
-      (JournalArticleMeta & { body?: unknown[] }) | null
-    >(
-      ARTICLE_BY_SLUG_QUERY,
-      { slug },
-      { next: { revalidate: 120, tags: [`article:${slug}`] } }
-    );
-    if (!data) return null;
-    const { body, ...meta } = data;
-    return { meta: meta as JournalArticleMeta, body: body ?? [] };
-  } catch {
-    return null;
-  }
-}
-
-// ---------- Public API ----------
-
-/** Merge Supabase + Sanity + MDX. Priorité : Supabase → Sanity → MDX. */
+/** Merge Supabase + MDX legacy. Supabase prioritaire. */
 export async function getAllArticles(): Promise<JournalArticleMeta[]> {
-  const [fromSupabase, fromSanity, fromMdx] = await Promise.all([
+  const [fromSupabase, fromMdx] = await Promise.all([
     fetchSupabaseArticles(),
-    fetchSanityArticles(),
     getAllMdxArticleMetas().catch(() => [] as JournalArticleMeta[]),
   ]);
-  const seen = new Set<string>();
-  const all: JournalArticleMeta[] = [];
-  for (const list of [fromSupabase, fromSanity, fromMdx]) {
-    for (const a of list) {
-      if (!seen.has(a.slug)) {
-        seen.add(a.slug);
-        all.push(a);
-      }
-    }
-  }
-  return all.sort((a, b) => b.date.localeCompare(a.date));
+  const seen = new Set(fromSupabase.map((a) => a.slug));
+  const merged = [
+    ...fromSupabase,
+    ...fromMdx.filter((a) => !seen.has(a.slug)),
+  ];
+  return merged.sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   const fromSupabase = await fetchSupabaseArticle(slug);
   if (fromSupabase) {
     return { source: 'supabase', meta: fromSupabase.meta, body: fromSupabase.body };
-  }
-  const fromSanity = await fetchSanityArticle(slug);
-  if (fromSanity && Array.isArray(fromSanity.body) && fromSanity.body.length > 0) {
-    return { source: 'sanity', meta: fromSanity.meta, body: fromSanity.body };
   }
   const fromMdx = await getMdxArticleBySlug(slug).catch(() => null);
   if (!fromMdx) return null;

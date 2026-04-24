@@ -7,7 +7,6 @@ import { mdxComponents } from '@/mdx-components';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
-import { PortableBody } from '@/components/editorial/PortableBody';
 import { TiptapBody } from '@/components/editorial/TiptapBody';
 import {
   getArticleBySlug,
@@ -53,12 +52,10 @@ export default async function JournalArticlePage(
 
   const { meta } = article;
 
-  // Corps : Tiptap (Supabase) | Portable Text (Sanity) | MDX (fallback)
+  // Corps : Tiptap (Supabase) ou MDX (3 articles legacy content/journal/*.mdx)
   let bodyNode: React.ReactNode;
   if (article.source === 'supabase') {
     bodyNode = <TiptapBody value={article.body} />;
-  } else if (article.source === 'sanity') {
-    bodyNode = <PortableBody value={article.body} />;
   } else {
     const { content: mdxContent } = await compileMDX({
       source: article.content,
