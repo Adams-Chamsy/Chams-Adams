@@ -5,8 +5,10 @@ import {
   getProductsByIds,
   getAllProductSlugs,
 } from '@/lib/data/products';
-import { getCollectionBySlug } from '@/lib/data/collections.mock';
+import { getCollectionBySlug } from '@/lib/data/collections';
 import { formatPrice } from '@/lib/types/product';
+import { ReviewsSection } from '@/components/product/ReviewsSection';
+import { WaitlistForm } from '@/components/product/WaitlistForm';
 import { ProductDetailClient } from './ProductDetailClient';
 
 export async function generateStaticParams() {
@@ -40,11 +42,14 @@ export default async function ProductPage(
   const product = await getProductBySlug(params.slug);
   if (!product) notFound();
 
-  const collection = getCollectionBySlug(product.category);
+  const collection = await getCollectionBySlug(product.category);
   const related = (await getProductsByIds(product.relatedProductIds ?? []))
     .filter((p) => p.id !== product.id);
 
-  // Schema.org Product (JSON-LD) pour SEO / résultats riches Google
+  const outOfStock = product.variants.every(
+    (v) => v.stock !== undefined && v.stock <= 0
+  );
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -57,10 +62,9 @@ export default async function ProductPage(
       '@type': 'Offer',
       price: product.price.amount,
       priceCurrency: product.price.currency,
-      availability:
-        product.variants.some((v) => v.stock === undefined || v.stock > 0)
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
+      availability: outOfStock
+        ? 'https://schema.org/OutOfStock'
+        : 'https://schema.org/InStock',
       priceValidUntil: '2027-12-31',
     },
   };
@@ -77,6 +81,30 @@ export default async function ProductPage(
         collectionSlug={product.category}
         related={related}
         formattedPrice={formatPrice(product.price)}
+      />
+
+      {/* Prévenez-moi : pertinent si hors-stock ou pour une pré-commande */}
+      {outOfStock && (
+        <section className="bg-noir py-[60px]">
+          <div className="container-content max-w-xl">
+            <div className="flex flex-col gap-4 border border-or/30 p-6">
+              <p className="font-serif italic text-ivoire/80">
+                Cette pièce est momentanément épuisée.
+              </p>
+              <WaitlistForm
+                productSlug={product.slug}
+                productName={product.name}
+                label={`Me prévenir quand ${product.name} revient`}
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
+      <ReviewsSection
+        productId={product.id}
+        productSlug={product.slug}
+        productName={product.name}
       />
     </>
   );

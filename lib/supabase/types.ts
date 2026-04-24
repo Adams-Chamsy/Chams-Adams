@@ -164,3 +164,46 @@ export interface NewsletterSubscriberRow {
   subscribed_at: string;
   unsubscribed_at: string | null;
 }
+
+export interface ProductReviewRow {
+  id: string;
+  product_id: string | null;
+  customer_name: string;
+  customer_email: string | null;
+  rating: number;
+  title: string | null;
+  body: string;
+  verified_buyer: boolean;
+  approved: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WaitlistEntryRow {
+  id: string;
+  product_id: string | null;
+  product_slug: string;
+  email: string;
+  variant_id: string | null;
+  size: string | null;
+  notified_at: string | null;
+  created_at: string;
+}
+
+export type PromoDiscountType = 'percent' | 'fixed';
+
+export interface PromoCodeRow {
+  id: string;
+  code: string;
+  label: string | null;
+  discount_type: PromoDiscountType;
+  discount_value: number;
+  min_amount_cents: number;
+  max_uses: number | null;
+  uses_count: number;
+  starts_at: string;
+  ends_at: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
