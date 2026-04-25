@@ -116,7 +116,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
   },
   manifest: '/manifest.webmanifest',
 };
