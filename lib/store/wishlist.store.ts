@@ -46,6 +46,12 @@ export const useWishlistStore = create<WishlistStore>()(
         const exists = get().items.find((i) => i.productId === input.productId);
         if (exists) {
           set({ items: get().items.filter((i) => i.productId !== input.productId) });
+          // Best-effort serveur (no-op si non auth)
+          fetch('/api/wishlist', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_slug: exists.productSlug }),
+          }).catch(() => {});
         } else {
           set({
             items: [...get().items, { ...input, addedAt: new Date().toISOString() }],
@@ -53,8 +59,17 @@ export const useWishlistStore = create<WishlistStore>()(
         }
       },
 
-      removeItem: (productId) =>
-        set({ items: get().items.filter((i) => i.productId !== productId) }),
+      removeItem: (productId) => {
+        const item = get().items.find((i) => i.productId === productId);
+        set({ items: get().items.filter((i) => i.productId !== productId) });
+        if (item) {
+          fetch('/api/wishlist', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_slug: item.productSlug }),
+          }).catch(() => {});
+        }
+      },
 
       has: (productId) => get().items.some((i) => i.productId === productId),
 

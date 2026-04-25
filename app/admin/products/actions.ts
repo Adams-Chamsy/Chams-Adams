@@ -64,6 +64,8 @@ function parseMain(formData: FormData) {
         .split('\n')
         .map((l) => l.trim())
         .filter(Boolean),
+      glbUrl: ((formData.get('glb_url') as string | null) ?? '').trim() || undefined,
+      usdzUrl: ((formData.get('usdz_url') as string | null) ?? '').trim() || undefined,
     },
   };
 }

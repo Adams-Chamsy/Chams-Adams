@@ -56,6 +56,10 @@ export interface ProductDetails {
   care?: string[];
   /** Codes de pictogrammes d'entretien (voir CarePictos.tsx) */
   carePictos?: string[];
+  /** URL d'un modèle 3D .glb pour l'essayage AR (model-viewer + Scene Viewer/Quick Look) */
+  glbUrl?: string;
+  /** URL d'un modèle .usdz pour iOS Quick Look (optionnel — fallback du .glb) */
+  usdzUrl?: string;
 }
 
 export interface Product {

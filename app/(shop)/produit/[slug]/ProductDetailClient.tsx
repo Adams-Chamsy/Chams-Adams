@@ -19,6 +19,7 @@ import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Price } from '@/components/ui/Price';
 import { CarePictos } from '@/components/product/CarePictos';
+import { ARTryOn } from '@/components/product/ARTryOn';
 import {
   MATERIAL_LABELS,
   type Product,
@@ -155,6 +156,13 @@ export function ProductDetailClient({
                   variant={variant}
                   size={size}
                 />
+                {product.details.glbUrl && (
+                  <ARTryOn
+                    productName={product.name}
+                    glbUrl={product.details.glbUrl}
+                    usdzUrl={product.details.usdzUrl}
+                  />
+                )}
                 <div className="flex items-center gap-4">
                   <Link
                     href="/sur-mesure"

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { EditorialBlock } from '@/components/editorial/EditorialBlock';
+import { getAllArticles } from '@/lib/data/articles';
 
 export const metadata: Metadata = {
   title: 'Savoir-faire — L’atelier',
@@ -40,7 +41,12 @@ const ARTISANS = [
   },
 ];
 
-export default function SavoirFairePage() {
+export default async function SavoirFairePage() {
+  const allArticles = await getAllArticles();
+  const coulissesArticles = allArticles
+    .filter((a) => a.category === 'Coulisses')
+    .slice(0, 3);
+
   return (
     <>
       {/* HERO */}
@@ -287,6 +293,70 @@ export default function SavoirFairePage() {
           </ul>
         </div>
       </section>
+
+      {/* COULISSES — articles depuis le journal */}
+      {coulissesArticles.length > 0 && (
+        <section
+          aria-labelledby="coulisses-title"
+          className="bg-noir py-[120px]"
+        >
+          <div className="container-content">
+            <header className="mb-16 flex flex-col gap-4">
+              <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
+                Coulisses
+              </span>
+              <h2
+                id="coulisses-title"
+                className="font-serif font-light text-ivoire text-[clamp(2rem,4vw,3.5rem)] leading-tight"
+              >
+                Dans la lumière de l&apos;atelier
+              </h2>
+            </header>
+            <ul className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+              {coulissesArticles.map((a) => (
+                <li key={a.slug}>
+                  <Link
+                    href={`/journal/${a.slug}`}
+                    data-cursor="hover"
+                    className="group flex flex-col gap-4"
+                  >
+                    {a.coverImage && (
+                      <div className="relative aspect-[4/5] w-full overflow-hidden bg-noir-800">
+                        <Image
+                          src={a.coverImage}
+                          alt={a.title}
+                          fill
+                          sizes="(max-width: 768px) 90vw, 30vw"
+                          className="object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
+                        />
+                      </div>
+                    )}
+                    <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-or">
+                      {a.category} · {a.readingTime} min
+                    </span>
+                    <h3 className="font-serif font-light text-ivoire text-xl md:text-2xl transition-colors duration-300 group-hover:text-or">
+                      {a.title}
+                    </h3>
+                    {a.excerpt && (
+                      <p className="font-serif italic text-ivoire/70">
+                        {a.excerpt}
+                      </p>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-12">
+              <Link
+                href="/journal?category=Coulisses"
+                className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.25em] text-or hover:underline"
+              >
+                Tous les articles Coulisses →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA FINAL */}
       <section className="bg-noir py-[120px]">

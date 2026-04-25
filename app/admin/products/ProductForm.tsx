@@ -52,6 +52,8 @@ export function ProductForm({
     embroidery?: string;
     origin?: string;
     care?: string[];
+    glbUrl?: string;
+    usdzUrl?: string;
   };
 
   function addVariant() {
@@ -221,6 +223,26 @@ export function ProductForm({
             className={inputCls}
           />
         </Field>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <Field label="URL modèle 3D (.glb) — pour essayage AR" hint="Optionnel. Active le bouton « Essayer en 3D · AR » sur la fiche produit.">
+            <input
+              type="url"
+              name="glb_url"
+              defaultValue={details.glbUrl ?? ''}
+              placeholder="https://…/kaftan.glb"
+              className={inputCls}
+            />
+          </Field>
+          <Field label="URL .usdz — fallback iOS Quick Look" hint="Optionnel. Recommandé pour la qualité maximale sur iPhone/iPad.">
+            <input
+              type="url"
+              name="usdz_url"
+              defaultValue={details.usdzUrl ?? ''}
+              placeholder="https://…/kaftan.usdz"
+              className={inputCls}
+            />
+          </Field>
+        </div>
       </fieldset>
 
       {/* Meta */}

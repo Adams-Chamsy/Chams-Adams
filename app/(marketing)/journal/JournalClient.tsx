@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { formatArticleDate, type JournalArticleMeta } from '@/lib/journal-shared';
@@ -17,8 +18,21 @@ type Props = {
 };
 
 export function JournalClient({ articles, categories }: Props) {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get('category');
+  const [activeCategory, setActiveCategory] = useState<string | null>(
+    initialCategory && categories.includes(initialCategory)
+      ? initialCategory
+      : null
+  );
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    const param = searchParams.get('category');
+    if (param && categories.includes(param)) {
+      setActiveCategory(param);
+    }
+  }, [searchParams, categories]);
 
   const filtered = useMemo(
     () =>

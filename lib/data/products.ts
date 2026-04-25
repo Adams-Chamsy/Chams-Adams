@@ -86,6 +86,8 @@ function supaToProduct(raw: SupaProduct): Product | null {
     embroidery?: string;
     origin?: string;
     care?: string[];
+    glbUrl?: string;
+    usdzUrl?: string;
   };
 
   return {
@@ -112,6 +114,8 @@ function supaToProduct(raw: SupaProduct): Product | null {
       carePictos:
         ((raw as unknown as { care_pictos?: string[] }).care_pictos ?? []) ||
         [],
+      glbUrl: details.glbUrl,
+      usdzUrl: details.usdzUrl,
     },
     tags: raw.tags,
     isNew: raw.is_new,

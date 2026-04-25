@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
+import { WishlistSync } from '@/components/wishlist/WishlistSync';
 import { LocaleProvider } from '@/lib/i18n/client';
 import { getLocale } from '@/lib/i18n/server';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -141,12 +142,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LocaleProvider locale={locale}>
           <SmoothScroll>
             <>
+              <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:border focus:border-or focus:bg-noir focus:px-4 focus:py-2 focus:font-sans focus:text-xs focus:uppercase focus:tracking-[0.2em] focus:text-or"
+              >
+                Aller au contenu
+              </a>
               <CustomCursor />
               <Header />
-              <main>{children}</main>
+              <main id="main-content">{children}</main>
               <Footer />
               <CartDrawer />
               <WishlistDrawer />
+              <WishlistSync />
               <Toaster />
               <CookieBanner />
               <ScrollToTop />
