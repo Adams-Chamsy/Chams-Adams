@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Coins } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n/client';
 import {
   CURRENCIES,
   useCurrencyStore,
@@ -19,6 +20,7 @@ export function CurrencyButton({ className }: { className?: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const currency = useCurrencyStore((s) => s.currency);
   const setCurrency = useCurrencyStore((s) => s.setCurrency);
+  const t = useT();
 
   useEffect(() => {
     if (!open) return;
@@ -45,7 +47,7 @@ export function CurrencyButton({ className }: { className?: string }) {
     <div ref={wrapRef} className={cn('relative', className)}>
       <button
         type="button"
-        aria-label="Devise"
+        aria-label={t('common.currency')}
         aria-expanded={open}
         aria-haspopup="menu"
         onClick={() => setOpen((v) => !v)}

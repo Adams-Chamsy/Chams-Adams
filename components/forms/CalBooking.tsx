@@ -70,7 +70,10 @@ export function CalBooking({ calLink }: Props) {
       <p className="font-serif italic text-ivoire/60">
         La prise de rendez-vous en ligne est en cours d&apos;activation.
         Écrivez-nous à{' '}
-        <a href="mailto:contact@chams-adams.com" className="text-or hover:underline">
+        <a
+          href="mailto:contact@chams-adams.com"
+          className="text-or underline underline-offset-4"
+        >
           contact@chams-adams.com
         </a>{' '}
         pour fixer un entretien.

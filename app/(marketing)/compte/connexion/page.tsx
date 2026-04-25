@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 export default async function CustomerLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: { next?: string };
 }) {
-  const { next } = await searchParams;
+  const { next } = searchParams;
 
   const supabase = await createSupabaseServerClient();
   const {

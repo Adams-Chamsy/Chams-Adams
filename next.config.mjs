@@ -39,12 +39,12 @@ const nextConfig = {
     // nonces via middleware. À durcir dans un chantier perf/security dédié.
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://challenges.cloudflare.com https://js.stripe.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://challenges.cloudflare.com https://js.stripe.com https://ajax.googleapis.com https://app.cal.com https://cal.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "connect-src 'self' https://plausible.io https://challenges.cloudflare.com https://api.stripe.com https://*.supabase.co wss://*.supabase.co",
-      "frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com https://hooks.stripe.com",
+      "connect-src 'self' https://plausible.io https://challenges.cloudflare.com https://api.stripe.com https://*.supabase.co wss://*.supabase.co https://app.cal.com https://cal.com https://modelviewer.dev",
+      "frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com https://hooks.stripe.com https://app.cal.com https://cal.com",
       "worker-src 'self' blob:",
       "media-src 'self' blob: data:",
       "object-src 'none'",

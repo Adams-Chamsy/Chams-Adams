@@ -8,7 +8,7 @@ import { CartDrawer } from '@/components/cart/CartDrawer';
 import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
 import { WishlistSync } from '@/components/wishlist/WishlistSync';
 import { LocaleProvider } from '@/lib/i18n/client';
-import { getLocale } from '@/lib/i18n/server';
+import { getLocale, getT } from '@/lib/i18n/server';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { organizationSchema, websiteSchema } from '@/lib/seo/json-ld';
 import './globals.css';
@@ -130,6 +130,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = getLocale();
+  const t = getT(locale);
   return (
     <html
       lang={locale}
@@ -146,7 +147,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 href="#main-content"
                 className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:border focus:border-or focus:bg-noir focus:px-4 focus:py-2 focus:font-sans focus:text-xs focus:uppercase focus:tracking-[0.2em] focus:text-or"
               >
-                Aller au contenu
+                {t('common.skipToContent')}
               </a>
               <CustomCursor />
               <Header />

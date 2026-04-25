@@ -1,11 +1,24 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import Link from 'next/link';
 import { customerSignupAction, type AuthResult } from '../actions';
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="self-start border border-or bg-or px-6 py-3 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong disabled:opacity-60"
+    >
+      {pending ? 'Création…' : 'Créer mon accès'}
+    </button>
+  );
+}
+
 export function CustomerSignupForm() {
-  const [state, formAction, pending] = useActionState<AuthResult | null, FormData>(
+  const [state, formAction] = useFormState<AuthResult | null, FormData>(
     customerSignupAction,
     null
   );
@@ -51,13 +64,7 @@ export function CustomerSignupForm() {
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="self-start border border-or bg-or px-6 py-3 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong disabled:opacity-60"
-      >
-        {pending ? 'Création…' : 'Créer mon accès'}
-      </button>
+      <SubmitButton />
 
       <p className="font-serif italic text-sm text-ivoire/70">
         Vous avez déjà un compte ?{' '}

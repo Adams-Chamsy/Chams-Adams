@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n/client';
 import {
   getPrimaryImage,
   getSecondaryImage,
@@ -31,6 +32,7 @@ export function ProductCard({
   priority,
   className,
 }: ProductCardProps) {
+  const t = useT();
   const primary = getPrimaryImage(product);
   const secondary = getSecondaryImage(product);
 
@@ -80,11 +82,13 @@ export function ProductCard({
         <div className="pointer-events-none absolute left-4 top-4 flex flex-col gap-2">
           {product.isNew && (
             <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-ivoire">
-              Nouveau
+              {t('product.new')}
             </span>
           )}
           {product.isSignature && (
-            <span className="font-serif italic text-sm text-or">Signature</span>
+            <span className="font-serif italic text-sm text-or">
+              {t('product.signature')}
+            </span>
           )}
         </div>
 
@@ -92,7 +96,7 @@ export function ProductCard({
         {!isCompact && (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-noir/60 py-3 text-center backdrop-blur-sm transition-transform duration-500 ease-out-expo group-hover:translate-y-0">
             <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-ivoire">
-              Composer
+              {t('product.compose')}
             </span>
           </div>
         )}

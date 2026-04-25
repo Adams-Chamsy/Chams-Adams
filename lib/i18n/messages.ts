@@ -30,9 +30,36 @@ type Messages = {
     openMenu: string;
     closeMenu: string;
     language: string;
+    currency: string;
+    skipToContent: string;
+    back: string;
+    loading: string;
   };
   hero: {
     cta: string;
+  };
+  product: {
+    new: string;
+    signature: string;
+    compose: string;
+    addToBag: string;
+    askMadeToMeasure: string;
+    sizeGuide: string;
+    notifyMe: string;
+    tryInAR: string;
+    care: string;
+    materials: string;
+  };
+  account: {
+    title: string;
+    login: string;
+    signup: string;
+    logout: string;
+    orders: string;
+    loyalty: string;
+    returns: string;
+    wishlist: string;
+    welcome: string;
   };
   footer: {
     colMaison: string;
@@ -68,9 +95,36 @@ export const messages: Record<Locale, Messages> = {
       openMenu: 'Ouvrir le menu',
       closeMenu: 'Fermer le menu',
       language: 'Changer de langue',
+      currency: 'Devise',
+      skipToContent: 'Aller au contenu',
+      back: 'Retour',
+      loading: 'Chargement…',
     },
     hero: {
       cta: "Entrer dans l'univers",
+    },
+    product: {
+      new: 'Nouveau',
+      signature: 'Signature',
+      compose: 'Composer',
+      addToBag: 'Ajouter au panier',
+      askMadeToMeasure: 'Demander le sur-mesure',
+      sizeGuide: 'Guide des tailles',
+      notifyMe: 'Prévenez-moi quand c\u2019est disponible',
+      tryInAR: 'Essayer en 3D · AR',
+      care: 'Entretien',
+      materials: 'Matières',
+    },
+    account: {
+      title: 'Mon compte',
+      login: 'Se connecter',
+      signup: 'Créer un accès',
+      logout: 'Déconnexion',
+      orders: 'Commandes',
+      loyalty: 'Fidélité',
+      returns: 'Retours',
+      wishlist: 'Mes envies',
+      welcome: 'Bonjour',
     },
     footer: {
       colMaison: 'Maison',
@@ -104,9 +158,36 @@ export const messages: Record<Locale, Messages> = {
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
       language: 'Change language',
+      currency: 'Currency',
+      skipToContent: 'Skip to content',
+      back: 'Back',
+      loading: 'Loading…',
     },
     hero: {
       cta: 'Enter the world',
+    },
+    product: {
+      new: 'New',
+      signature: 'Signature',
+      compose: 'Compose',
+      addToBag: 'Add to bag',
+      askMadeToMeasure: 'Request made-to-measure',
+      sizeGuide: 'Size guide',
+      notifyMe: 'Notify me when available',
+      tryInAR: 'Try in 3D · AR',
+      care: 'Care',
+      materials: 'Materials',
+    },
+    account: {
+      title: 'My account',
+      login: 'Sign in',
+      signup: 'Create an account',
+      logout: 'Sign out',
+      orders: 'Orders',
+      loyalty: 'Loyalty',
+      returns: 'Returns',
+      wishlist: 'My wishlist',
+      welcome: 'Hello',
     },
     footer: {
       colMaison: 'The House',
