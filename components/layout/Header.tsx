@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -28,8 +29,15 @@ const BOUTIQUE_KEY = { key: 'nav.boutique', href: '/boutique' };
 
 const SCROLL_THRESHOLD = 80;
 
+/** Détermine si un href est l'actif courant (match exact ou sous-route). */
+function isActiveHref(pathname: string, href: string): boolean {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function Header() {
   const t = useT();
+  const pathname = usePathname() ?? '/';
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const burgerRef = useRef<HTMLButtonElement>(null);
@@ -90,9 +98,17 @@ export function Header() {
           {/* Nav desktop */}
           <nav aria-label={t('nav.ariaPrimary')} className="hidden items-center gap-10 lg:flex">
             {navItems.map((item) => (
-              <NavItem key={item.href} {...item} />
+              <NavItem
+                key={item.href}
+                {...item}
+                active={isActiveHref(pathname, item.href)}
+              />
             ))}
-            <NavItem {...boutique} highlighted />
+            <NavItem
+              {...boutique}
+              highlighted
+              active={isActiveHref(pathname, boutique.href)}
+            />
           </nav>
           {/* Spacer pour équilibrer la grille mobile */}
           <span aria-hidden className="lg:hidden" />
@@ -124,6 +140,7 @@ export function Header() {
         {menuOpen && (
           <MobileMenu
             items={[...navItems, boutique]}
+            pathname={pathname}
             closeLabel={t('common.closeMenu')}
             navLabel={t('nav.ariaMobile')}
             onClose={() => {
@@ -137,14 +154,24 @@ export function Header() {
   );
 }
 
-function NavItem({ label, href, highlighted = false }: NavLink & { highlighted?: boolean }) {
+function NavItem({
+  label,
+  href,
+  highlighted = false,
+  active = false,
+}: NavLink & { highlighted?: boolean; active?: boolean }) {
   return (
     <Link
       href={href}
       data-cursor="hover"
+      aria-current={active ? 'page' : undefined}
       className={cn(
         'group relative inline-flex items-center font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300',
-        highlighted ? 'text-or hover:text-or/80' : 'text-ivoire/80 hover:text-ivoire'
+        active
+          ? 'text-or'
+          : highlighted
+            ? 'text-or hover:text-or/80'
+            : 'text-ivoire/80 hover:text-ivoire'
       )}
     >
       {label}
@@ -152,7 +179,7 @@ function NavItem({ label, href, highlighted = false }: NavLink & { highlighted?:
         aria-hidden
         className={cn(
           'absolute left-0 right-0 -bottom-1.5 h-px origin-left scale-x-0 bg-or transition-transform duration-500 ease-out-expo group-hover:scale-x-100',
-          highlighted && 'scale-x-100 bg-or/60'
+          active && 'scale-x-100 bg-or'
         )}
       />
     </Link>
@@ -193,11 +220,18 @@ function IconButton({ icon: Icon, label, badge, className }: IconButtonProps) {
 type MobileMenuProps = {
   onClose: () => void;
   items: NavLink[];
+  pathname: string;
   closeLabel: string;
   navLabel: string;
 };
 
-function MobileMenu({ onClose, items, closeLabel, navLabel }: MobileMenuProps) {
+function MobileMenu({
+  onClose,
+  items,
+  pathname,
+  closeLabel,
+  navLabel,
+}: MobileMenuProps) {
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -254,27 +288,34 @@ function MobileMenu({ onClose, items, closeLabel, navLabel }: MobileMenuProps) {
           aria-label={navLabel}
           className="flex flex-1 flex-col justify-center gap-6 px-8"
         >
-          {items.map((item, i) => (
-            <motion.div
-              key={item.href}
-              initial={{ opacity: 0, x: 32 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                delay: 0.15 + i * 0.08,
-                duration: 0.6,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              <Link
-                href={item.href}
-                onClick={onClose}
-                data-cursor="hover"
-                className="block font-serif text-4xl font-light text-ivoire transition-colors duration-300 hover:text-or"
+          {items.map((item, i) => {
+            const active = isActiveHref(pathname, item.href);
+            return (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, x: 32 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  delay: 0.15 + i * 0.08,
+                  duration: 0.6,
+                  ease: [0.19, 1, 0.22, 1],
+                }}
               >
-                {item.label}
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  href={item.href}
+                  onClick={onClose}
+                  data-cursor="hover"
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    'block font-serif text-4xl font-light transition-colors duration-300 hover:text-or',
+                    active ? 'text-or' : 'text-ivoire'
+                  )}
+                >
+                  {item.label}
+                </Link>
+              </motion.div>
+            );
+          })}
         </nav>
 
         <div className="border-t border-bronze/15 px-8 py-6">
