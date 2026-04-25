@@ -50,6 +50,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/cgv', priority: 0.3, changeFrequency: 'yearly' },
     { path: '/confidentialite', priority: 0.3, changeFrequency: 'yearly' },
     { path: '/livraison-retours', priority: 0.4, changeFrequency: 'yearly' },
+    { path: '/retours/demande', priority: 0.5, changeFrequency: 'yearly' },
+    { path: '/presse/dossier', priority: 0.6, changeFrequency: 'yearly' },
   ];
 
   const collectionRoutes: RouteDef[] = COLLECTIONS.map((c) => ({
