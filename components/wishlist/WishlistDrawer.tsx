@@ -8,6 +8,7 @@ import { X, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWishlistStore, useWishlistCount } from '@/lib/store/wishlist.store';
 import { Price } from '@/components/ui/Price';
+import { WishlistToCarnet } from './WishlistToCarnet';
 
 const LUXE_EASE: [number, number, number, number] = [0.77, 0, 0.175, 1];
 
@@ -171,6 +172,15 @@ export function WishlistDrawer() {
                 </ul>
               )}
             </div>
+
+            {items.length > 0 && (
+              <div className="border-t border-bronze/15 px-6 py-5">
+                <WishlistToCarnet
+                  productSlugs={items.map((i) => i.productSlug)}
+                  onCreated={close}
+                />
+              </div>
+            )}
           </motion.aside>
         </motion.div>
       )}

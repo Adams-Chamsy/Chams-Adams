@@ -21,6 +21,7 @@ import { Price } from '@/components/ui/Price';
 import { CarePictos } from '@/components/product/CarePictos';
 import { ARTryOn } from '@/components/product/ARTryOn';
 import { ProductStory } from '@/components/product/ProductStory';
+import { AddToCarnet } from '@/components/product/AddToCarnet';
 import {
   MATERIAL_LABELS,
   type Product,
@@ -36,6 +37,7 @@ type Props = {
   collectionSlug: ProductCategory;
   related: Product[];
   formattedPrice: string;
+  recommendedSize?: string | null;
 };
 
 export function ProductDetailClient({
@@ -44,10 +46,13 @@ export function ProductDetailClient({
   collectionSlug,
   related,
   formattedPrice,
+  recommendedSize,
 }: Props) {
   const [variant, setVariant] = useState(product.variants[0]!);
   const [size, setSize] = useState<ProductSize | null>(
-    variant.sizes.length === 1 ? variant.sizes[0]! : null
+    variant.sizes.length === 1
+      ? variant.sizes[0]!
+      : (recommendedSize as ProductSize | null) ?? null
   );
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
@@ -137,13 +142,26 @@ export function ProductDetailClient({
                 {product.description}
               </p>
 
+              {/* Recommandation de taille (gabarit) */}
+              {recommendedSize && (
+                <p className="border-l-2 border-or/60 pl-4 font-serif italic text-sm text-ivoire/80">
+                  D&apos;après votre gabarit, la taille{' '}
+                  <strong className="text-or">{recommendedSize}</strong> vous
+                  conviendra.
+                </p>
+              )}
+
               {/* Variantes */}
               <VariantSelector
                 variants={product.variants}
                 selectedVariant={variant}
                 onVariantChange={(v) => {
                   setVariant(v);
-                  setSize(v.sizes.length === 1 ? v.sizes[0]! : null);
+                  setSize(
+                    v.sizes.length === 1
+                      ? v.sizes[0]!
+                      : (recommendedSize as ProductSize | null) ?? null
+                  );
                 }}
                 selectedSize={size}
                 onSizeChange={setSize}
@@ -195,6 +213,10 @@ export function ProductDetailClient({
                       strokeWidth={1.5}
                     />
                   </button>
+                </div>
+
+                <div className="mt-2">
+                  <AddToCarnet productSlug={product.slug} />
                 </div>
               </div>
 

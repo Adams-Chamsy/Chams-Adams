@@ -3,6 +3,28 @@ import { surMesureSchema } from '@/lib/schemas/surMesure';
 import { sendSurMesureEmails } from '@/lib/emails/sendSurMesureEmails';
 import { verifyTurnstile } from '@/lib/captcha/verifyTurnstile';
 import { rateLimitHourly, getClientIp } from '@/lib/rate-limit';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import type { CustomerMeasurementsRow } from '@/lib/supabase/types';
+
+function formatGabarit(g: CustomerMeasurementsRow): string {
+  const lines: string[] = [];
+  const push = (label: string, val: number | string | null) => {
+    if (val !== null && val !== undefined && val !== '')
+      lines.push(`  · ${label} : ${val}${typeof val === 'number' ? ' cm' : ''}`);
+  };
+  push('Poitrine', g.poitrine_cm);
+  push('Taille', g.taille_cm);
+  push('Hanches', g.hanches_cm);
+  push('Longueur de bras', g.longueur_bras_cm);
+  push('Longueur de jambe', g.longueur_jambe_cm);
+  push("Hauteur d'épaule", g.hauteur_epaule_cm);
+  push('Hauteur totale', g.hauteur_totale_cm);
+  push('Taille préférée', g.taille_preferee);
+  if (g.notes) lines.push(`  · Notes : ${g.notes}`);
+  return lines.length > 0
+    ? `\n\nGabarit enregistré du client :\n${lines.join('\n')}`
+    : '';
+}
 
 /**
  * POST /api/sur-mesure
@@ -61,8 +83,35 @@ export async function POST(req: NextRequest) {
 
   const submittedAt = new Date().toISOString();
 
+  // Si user authentifié + gabarit rempli → injecter dans la note interne
+  let payload = parsed.data;
+  try {
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data: gabarit } = await supabase
+        .from('customer_measurements')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (gabarit) {
+        const suffix = formatGabarit(gabarit as CustomerMeasurementsRow);
+        if (suffix) {
+          payload = {
+            ...payload,
+            vision: `${payload.vision ?? ''}${suffix}`,
+          } as typeof payload;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[sur-mesure] gabarit attach skipped:', err);
+  }
+
   // Envoi des 2 emails
-  const results = await sendSurMesureEmails(parsed.data, submittedAt);
+  const results = await sendSurMesureEmails(payload, submittedAt);
 
   // Log structuré (console pour l'instant ; à brancher sur un monitoring en prod)
   console.info('[sur-mesure] demande traitée', {

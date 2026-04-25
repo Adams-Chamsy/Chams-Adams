@@ -12,6 +12,7 @@ import type {
 import { getProductBySlug } from '@/lib/data/products';
 import { getPrimaryImage } from '@/lib/types/product';
 import { Price } from '@/components/ui/Price';
+import { ReserveButton } from '@/components/carnet/ReserveButton';
 
 const TYPE_LABEL: Record<string, string> = {
   mariage: 'Mariage',
@@ -164,10 +165,15 @@ export default async function PublicCarnetPage(props: {
                         />
                       </p>
                     </Link>
-                    {item.reserved_by_email && (
+                    {item.reserved_by_email ? (
                       <span className="inline-block self-start border border-or/60 px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em] text-or">
                         Réservée
                       </span>
+                    ) : (
+                      <ReserveButton
+                        carnetSlug={carnet.slug}
+                        productSlug={item.product_slug}
+                      />
                     )}
                   </li>
                 );

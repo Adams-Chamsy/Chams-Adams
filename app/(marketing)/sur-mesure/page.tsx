@@ -2,8 +2,13 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
+import Link from 'next/link';
 import { SurMesureForm } from '@/components/forms/SurMesureForm';
 import { CalBooking } from '@/components/forms/CalBooking';
+import {
+  createSupabaseServerClient,
+  createSupabaseServiceClient,
+} from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Sur-mesure — Composer votre pièce',
@@ -93,7 +98,30 @@ const FAQ = [
   },
 ];
 
-export default function SurMesurePage() {
+async function getGabaritStatus(): Promise<
+  'no-auth' | 'no-gabarit' | 'has-gabarit'
+> {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return 'no-auth';
+    const service = createSupabaseServiceClient();
+    const { data } = await service
+      .from('customer_measurements')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    return data ? 'has-gabarit' : 'no-gabarit';
+  } catch {
+    return 'no-auth';
+  }
+}
+
+export default async function SurMesurePage() {
+  const gabaritStatus = await getGabaritStatus();
+
   return (
     <>
       {/* HERO */}
@@ -312,7 +340,35 @@ export default function SurMesurePage() {
             </aside>
 
             {/* Colonne droite formulaire */}
-            <div className="lg:col-span-7 lg:col-start-6">
+            <div className="flex flex-col gap-5 lg:col-span-7 lg:col-start-6">
+              {gabaritStatus === 'has-gabarit' && (
+                <div className="border border-or/40 bg-or/5 px-5 py-4">
+                  <p className="font-serif italic text-ivoire/85">
+                    Vos mesures du gabarit sont enregistrées et seront
+                    automatiquement transmises avec votre demande.
+                  </p>
+                  <Link
+                    href="/compte/gabarit"
+                    className="mt-2 inline-block font-sans text-[11px] uppercase tracking-[0.2em] text-or hover:underline"
+                  >
+                    Voir / modifier mon gabarit →
+                  </Link>
+                </div>
+              )}
+              {gabaritStatus === 'no-gabarit' && (
+                <div className="border border-bronze/30 px-5 py-4">
+                  <p className="font-serif italic text-ivoire/80">
+                    Vous pouvez enregistrer vos mesures dans votre compte —
+                    nous les utiliserons pour toutes vos prochaines demandes.
+                  </p>
+                  <Link
+                    href="/compte/gabarit"
+                    className="mt-2 inline-block font-sans text-[11px] uppercase tracking-[0.2em] text-or hover:underline"
+                  >
+                    Renseigner mon gabarit →
+                  </Link>
+                </div>
+              )}
               <SurMesureForm />
             </div>
           </div>

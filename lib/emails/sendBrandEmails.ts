@@ -3,6 +3,7 @@ import { render } from '@react-email/render';
 import { Welcome } from './Welcome';
 import { Restock } from './Restock';
 import { ReturnStatus, type ReturnStatusProps } from './ReturnStatus';
+import { CarnetReservation } from './CarnetReservation';
 
 function getSender() {
   return (
@@ -152,6 +153,59 @@ Composer la pièce : ${SITE}/produit/${params.productSlug}
     return true;
   } catch (err) {
     console.error('[email] restock failed:', err);
+    return false;
+  }
+}
+
+export type SendCarnetReservationParams = {
+  to: string;
+  carnetName: string;
+  carnetSlug: string;
+  productName: string;
+  reservedByEmail: string;
+};
+
+export async function sendCarnetReservationEmail(
+  params: SendCarnetReservationParams
+): Promise<boolean> {
+  const resend = getResend();
+  if (!resend) return false;
+  const html = await render(
+    CarnetReservation({
+      carnetName: params.carnetName,
+      carnetSlug: params.carnetSlug,
+      productName: params.productName,
+      reservedByEmail: params.reservedByEmail,
+      siteUrl: SITE,
+    }),
+    { pretty: false }
+  );
+  const text = `Une attention vous est promise.
+
+${params.productName} vient d'être réservée dans votre carnet « ${params.carnetName} ».
+
+Réservation par : ${params.reservedByEmail}
+
+Voir votre carnet : ${SITE}/compte/carnets/${params.carnetSlug}
+
+— Chams Adams`;
+
+  try {
+    const { error } = await resend.emails.send({
+      from: getSender(),
+      to: params.to,
+      subject: `${params.productName} vient d'être réservée pour vous.`,
+      html,
+      text,
+      replyTo: process.env.CONTACT_EMAIL ?? 'contact@chams-adams.com',
+    });
+    if (error) {
+      console.error('[email] carnet reservation:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('[email] carnet reservation failed:', err);
     return false;
   }
 }
