@@ -60,6 +60,10 @@ export interface ProductDetails {
   glbUrl?: string;
   /** URL d'un modèle .usdz pour iOS Quick Look (optionnel — fallback du .glb) */
   usdzUrl?: string;
+  /** Vidéo silencieuse (15s recommandés) du produit en mouvement, pour l'onglet "Récit". */
+  storyVideoUrl?: string;
+  /** Audio d'ambiance d'atelier (toggle muet par défaut), pour l'onglet "Récit". */
+  ambientAudioUrl?: string;
 }
 
 export interface Product {
@@ -79,6 +83,8 @@ export interface Product {
   isNew?: boolean;
   isSignature?: boolean;
   relatedProductIds?: string[];
+  /** Slugs de produits curés pour compléter la silhouette (max 3 conseillés). */
+  relatedSilhouetteSlugs?: string[];
 }
 
 export interface Collection {

@@ -52,6 +52,14 @@ function parseMain(formData: FormData) {
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean),
+    related_silhouette_slugs: ((formData.get('related_silhouette_slugs') as string | null) ?? '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean),
+    story_video_url:
+      ((formData.get('story_video_url') as string | null) ?? '').trim() || null,
+    ambient_audio_url:
+      ((formData.get('ambient_audio_url') as string | null) ?? '').trim() || null,
     is_signature: (formData.get('is_signature') as string | null) === 'on',
     is_new: (formData.get('is_new') as string | null) === 'on',
     published: (formData.get('published') as string | null) === 'on',

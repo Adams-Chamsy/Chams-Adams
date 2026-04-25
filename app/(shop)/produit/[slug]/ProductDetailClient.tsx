@@ -20,6 +20,7 @@ import { TextReveal } from '@/components/animations/TextReveal';
 import { Price } from '@/components/ui/Price';
 import { CarePictos } from '@/components/product/CarePictos';
 import { ARTryOn } from '@/components/product/ARTryOn';
+import { ProductStory } from '@/components/product/ProductStory';
 import {
   MATERIAL_LABELS,
   type Product,
@@ -247,6 +248,17 @@ export function ProductDetailClient({
                     )}
                   </dl>
                 </DetailAccordion>
+
+                {(product.details.storyVideoUrl ||
+                  product.details.ambientAudioUrl) && (
+                  <DetailAccordion title="Récit">
+                    <ProductStory
+                      productName={product.name}
+                      videoUrl={product.details.storyVideoUrl}
+                      audioUrl={product.details.ambientAudioUrl}
+                    />
+                  </DetailAccordion>
+                )}
 
                 {((product.details.care && product.details.care.length > 0) ||
                   (product.details.carePictos &&

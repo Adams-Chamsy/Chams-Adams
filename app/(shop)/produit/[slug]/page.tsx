@@ -9,6 +9,7 @@ import { getCollectionBySlug } from '@/lib/data/collections';
 import { formatPrice } from '@/lib/types/product';
 import { ReviewsSection } from '@/components/product/ReviewsSection';
 import { WaitlistForm } from '@/components/product/WaitlistForm';
+import { CompleteSilhouette } from '@/components/product/CompleteSilhouette';
 import { ProductDetailClient } from './ProductDetailClient';
 
 export async function generateStaticParams() {
@@ -100,6 +101,10 @@ export default async function ProductPage(
           </div>
         </section>
       )}
+
+      <CompleteSilhouette
+        silhouetteSlugs={product.relatedSilhouetteSlugs ?? []}
+      />
 
       <ReviewsSection
         productId={product.id}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +26,16 @@ export function WaitlistForm({
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams({ product_slug: productSlug });
+    if (size) params.set('size', size);
+    fetch(`/api/waitlist/count?${params.toString()}`)
+      .then((r) => (r.ok ? r.json() : { count: 0 }))
+      .then((d) => setCount(typeof d.count === 'number' ? d.count : 0))
+      .catch(() => setCount(0));
+  }, [productSlug, size]);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,14 +73,21 @@ export function WaitlistForm({
 
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 border border-or/60 px-6 py-3 font-sans text-xs uppercase tracking-[0.2em] text-or transition-colors hover:bg-or/10"
-      >
-        <Bell className="h-4 w-4" aria-hidden />
-        {label}
-      </button>
+      <div className="flex flex-col gap-2">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center gap-2 self-start border border-or/60 px-6 py-3 font-sans text-xs uppercase tracking-[0.2em] text-or transition-colors hover:bg-or/10"
+        >
+          <Bell className="h-4 w-4" aria-hidden />
+          {label}
+        </button>
+        {count !== null && count >= 5 && (
+          <p className="font-serif italic text-xs text-ivoire/60">
+            {count} personnes attendent {size ? `la taille ${size}` : 'cette pièce'}.
+          </p>
+        )}
+      </div>
     );
   }
 

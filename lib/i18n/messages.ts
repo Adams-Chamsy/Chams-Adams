@@ -83,7 +83,7 @@ export const messages: Record<Locale, Messages> = {
     nav: {
       collections: 'Collections',
       surMesure: 'Sur-mesure',
-      savoirFaire: 'Savoir-faire',
+      savoirFaire: 'Atelier',
       lookbook: 'Lookbook',
       journal: 'Journal',
       boutique: 'Boutique',
@@ -146,7 +146,7 @@ export const messages: Record<Locale, Messages> = {
     nav: {
       collections: 'Collections',
       surMesure: 'Made-to-measure',
-      savoirFaire: 'Craftsmanship',
+      savoirFaire: 'Atelier',
       lookbook: 'Lookbook',
       journal: 'Journal',
       boutique: 'Shop',

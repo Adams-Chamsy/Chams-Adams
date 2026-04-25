@@ -52,6 +52,9 @@ type SupaProduct = {
   is_signature: boolean;
   is_new: boolean;
   related_product_slugs: string[];
+  related_silhouette_slugs?: string[];
+  story_video_url?: string | null;
+  ambient_audio_url?: string | null;
   variants: SupaVariant[];
 };
 
@@ -116,11 +119,14 @@ function supaToProduct(raw: SupaProduct): Product | null {
         [],
       glbUrl: details.glbUrl,
       usdzUrl: details.usdzUrl,
+      storyVideoUrl: raw.story_video_url ?? undefined,
+      ambientAudioUrl: raw.ambient_audio_url ?? undefined,
     },
     tags: raw.tags,
     isNew: raw.is_new,
     isSignature: raw.is_signature,
     relatedProductIds: raw.related_product_slugs,
+    relatedSilhouetteSlugs: raw.related_silhouette_slugs ?? [],
   };
 }
 

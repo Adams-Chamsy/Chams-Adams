@@ -73,6 +73,60 @@ export default function NewVipMemberPage() {
           />
         </Field>
 
+        <fieldset className="flex flex-col gap-6 border-t border-bronze/20 pt-8">
+          <legend className="font-sans text-[10px] uppercase tracking-[0.3em] text-or">
+            Conseillère / Conseiller (Gold &amp; Platinum)
+          </legend>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Field label="Nom du conseiller">
+              <input
+                name="advisor_name"
+                type="text"
+                placeholder="Aïssatou Ndiaye"
+                className="w-full border-b border-bronze/40 bg-transparent py-2 font-serif text-ivoire focus:border-or focus:outline-none"
+              />
+            </Field>
+            <Field label="Rôle">
+              <input
+                name="advisor_role"
+                type="text"
+                placeholder="Conseillère couture"
+                className="w-full border-b border-bronze/40 bg-transparent py-2 font-serif text-ivoire focus:border-or focus:outline-none"
+              />
+            </Field>
+            <Field label="URL photo">
+              <input
+                name="advisor_photo_url"
+                type="url"
+                className="w-full border-b border-bronze/40 bg-transparent py-2 font-serif text-ivoire focus:border-or focus:outline-none"
+              />
+            </Field>
+            <Field label="Email">
+              <input
+                name="advisor_email"
+                type="email"
+                className="w-full border-b border-bronze/40 bg-transparent py-2 font-serif text-ivoire focus:border-or focus:outline-none"
+              />
+            </Field>
+            <Field label="WhatsApp (format international)">
+              <input
+                name="advisor_whatsapp"
+                type="text"
+                placeholder="+221 77 000 00 00"
+                className="w-full border-b border-bronze/40 bg-transparent py-2 font-serif text-ivoire focus:border-or focus:outline-none"
+              />
+            </Field>
+            <Field label="Lien Cal.com personnel">
+              <input
+                name="advisor_cal_link"
+                type="url"
+                placeholder="https://cal.com/aissatou/..."
+                className="w-full border-b border-bronze/40 bg-transparent py-2 font-serif text-ivoire focus:border-or focus:outline-none"
+              />
+            </Field>
+          </div>
+        </fieldset>
+
         <button
           type="submit"
           className="self-start border border-or bg-or px-6 py-3 font-sans text-xs uppercase tracking-[0.25em] text-noir hover:shadow-halo-or-strong"

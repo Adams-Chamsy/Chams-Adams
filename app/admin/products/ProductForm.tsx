@@ -267,6 +267,46 @@ export function ProductForm({
         </Field>
       </div>
 
+      <Field
+        label='Pour parfaire la silhouette — slugs séparés par virgules (3 max)'
+        hint="Curation manuelle de pièces complémentaires (chaussures, bijou, foulard…). Affiché en bas de la fiche produit."
+      >
+        <input
+          type="text"
+          name="related_silhouette_slugs"
+          defaultValue={(initial?.related_silhouette_slugs ?? []).join(', ')}
+          placeholder="foulard-bazin-or, escarpins-noir-velours, bijou-tete-perles"
+          className={inputCls}
+        />
+      </Field>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <Field
+          label="Récit — URL vidéo silencieuse (15s recommandés)"
+          hint="Vidéo de port (marche, vent…) — affichée dans l'onglet Récit de la fiche produit."
+        >
+          <input
+            type="url"
+            name="story_video_url"
+            defaultValue={initial?.story_video_url ?? ''}
+            placeholder="https://…/recit.mp4"
+            className={inputCls}
+          />
+        </Field>
+        <Field
+          label="Récit — URL audio d'ambiance (atelier)"
+          hint="Optionnel. Toggle muet par défaut."
+        >
+          <input
+            type="url"
+            name="ambient_audio_url"
+            defaultValue={initial?.ambient_audio_url ?? ''}
+            placeholder="https://…/atelier.mp3"
+            className={inputCls}
+          />
+        </Field>
+      </div>
+
       <div className="flex flex-wrap gap-6">
         <Toggle name="is_signature" label="Pièce signature" defaultChecked={initial?.is_signature} />
         <Toggle name="is_new" label="Nouveauté" defaultChecked={initial?.is_new} />

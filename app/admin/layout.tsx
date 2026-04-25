@@ -19,6 +19,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/admin/gift-cards', label: 'Cartes cadeaux' },
   { href: '/admin/newsletter', label: 'Newsletter' },
   { href: '/admin/faq', label: 'FAQ' },
+  { href: '/admin/takeovers', label: 'Cérémonies' },
   { href: '/admin/events', label: 'Événements' },
   { href: '/admin/press', label: 'Presse' },
   { href: '/admin/articles', label: 'Articles' },

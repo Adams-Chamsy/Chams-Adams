@@ -88,7 +88,10 @@ export interface ProductRow {
   is_signature: boolean;
   is_new: boolean;
   related_product_slugs: string[];
+  related_silhouette_slugs: string[];
   care_pictos: string[];
+  story_video_url: string | null;
+  ambient_audio_url: string | null;
   published: boolean;
   published_at: string | null;
   created_at: string;
@@ -262,6 +265,80 @@ export interface VipMemberRow {
   invited_by: string | null;
   notes: string | null;
   active: boolean;
+  advisor_name: string | null;
+  advisor_role: string | null;
+  advisor_photo_url: string | null;
+  advisor_email: string | null;
+  advisor_whatsapp: string | null;
+  advisor_cal_link: string | null;
+  updated_at: string;
+}
+
+export interface CustomerMeasurementsRow {
+  id: string;
+  user_id: string;
+  poitrine_cm: number | null;
+  taille_cm: number | null;
+  hanches_cm: number | null;
+  longueur_bras_cm: number | null;
+  longueur_jambe_cm: number | null;
+  hauteur_epaule_cm: number | null;
+  hauteur_totale_cm: number | null;
+  taille_preferee: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type EventType =
+  | 'mariage'
+  | 'tabaski'
+  | 'magal'
+  | 'maouloud'
+  | 'bapteme'
+  | 'ceremonie'
+  | 'autre';
+
+export interface EventCarnetRow {
+  id: string;
+  user_id: string | null;
+  slug: string;
+  event_name: string;
+  event_type: EventType;
+  event_date: string | null;
+  honoree_name: string | null;
+  message: string | null;
+  cover_image_url: string | null;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EventCarnetItemRow {
+  id: string;
+  carnet_id: string;
+  product_id: string | null;
+  product_slug: string;
+  added_at: string;
+  reserved_by_email: string | null;
+  reserved_at: string | null;
+}
+
+export interface SeasonalTakeoverRow {
+  id: string;
+  slug: string;
+  title: string;
+  event_type: string;
+  event_date: string;
+  hero_eyebrow: string | null;
+  hero_subtitle: string | null;
+  hero_image_url: string | null;
+  description: string | null;
+  curated_product_slugs: string[];
+  delivery_deadline: string | null;
+  cta_label: string;
+  published: boolean;
+  created_at: string;
   updated_at: string;
 }
 

@@ -7,6 +7,11 @@ import type { VipTier } from '@/lib/supabase/types';
 
 const TIERS: VipTier[] = ['silver', 'gold', 'platinum'];
 
+function adv(formData: FormData, key: string): string | null {
+  const v = (formData.get(key) as string | null)?.trim();
+  return v && v.length > 0 ? v : null;
+}
+
 export async function createVipMemberAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
   const full_name = (formData.get('full_name') as string) || null;
@@ -29,6 +34,12 @@ export async function createVipMemberAction(formData: FormData) {
     invited_by,
     notes,
     active: true,
+    advisor_name: adv(formData, 'advisor_name'),
+    advisor_role: adv(formData, 'advisor_role'),
+    advisor_photo_url: adv(formData, 'advisor_photo_url'),
+    advisor_email: adv(formData, 'advisor_email'),
+    advisor_whatsapp: adv(formData, 'advisor_whatsapp'),
+    advisor_cal_link: adv(formData, 'advisor_cal_link'),
   });
   if (error) throw error;
 
