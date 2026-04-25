@@ -14,8 +14,12 @@ export function NewsletterForm() {
     if (!email) return;
     setStatus('submitting');
     try {
-      // TODO: brancher Resend côté API (étape ultérieure).
-      await new Promise((r) => setTimeout(r, 600));
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error('failed');
       setStatus('success');
       setEmail('');
     } catch {

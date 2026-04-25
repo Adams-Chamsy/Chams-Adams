@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWishlistStore, useWishlistCount } from '@/lib/store/wishlist.store';
-import { formatPrice } from '@/lib/utils/price';
+import { Price } from '@/components/ui/Price';
 
 const LUXE_EASE: [number, number, number, number] = [0.77, 0, 0.175, 1];
 
@@ -153,7 +153,7 @@ export function WishlistDrawer() {
                           </span>
                         )}
                         <span className="mt-1 font-sans text-sm tracking-[0.1em] text-ivoire/85">
-                          {formatPrice(item.price, item.currency)}
+                          <Price cents={item.price} baseCurrency={item.currency} />
                         </span>
                         <button
                           type="button"

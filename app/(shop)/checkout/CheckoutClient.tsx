@@ -29,9 +29,48 @@ export function CheckoutClient() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Promo code state
+  const [promoInput, setPromoInput] = useState('');
+  const [promoApplied, setPromoApplied] = useState<{
+    code: string;
+    discount_cents: number;
+  } | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [promoError, setPromoError] = useState<string | null>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  async function applyPromo(e: React.FormEvent) {
+    e.preventDefault();
+    setPromoError(null);
+    if (!promoInput.trim()) return;
+    setPromoLoading(true);
+    try {
+      const res = await fetch('/api/promos/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: promoInput.trim(),
+          cart_total_cents: subtotal,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Code invalide.');
+      setPromoApplied({ code: data.code, discount_cents: data.discount_cents });
+      setPromoInput('');
+    } catch (err) {
+      setPromoError(err instanceof Error ? err.message : 'Erreur.');
+    } finally {
+      setPromoLoading(false);
+    }
+  }
+
+  function removePromo() {
+    setPromoApplied(null);
+    setPromoError(null);
+  }
 
   // Si le panier est vide au mount → redirect UX-friendly (pas de useRouter
   // push dans useEffect pour éviter un re-render supplémentaire côté ssr).
@@ -50,7 +89,11 @@ export function CheckoutClient() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, email }),
+        body: JSON.stringify({
+          items,
+          email,
+          promo_code: promoApplied?.code,
+        }),
       });
       if (!res.ok) {
         const { error: serverError } = await res
@@ -198,6 +241,16 @@ export function CheckoutClient() {
                       {formatPrice(subtotal, currency)}
                     </dd>
                   </div>
+                  {promoApplied && (
+                    <div className="flex items-baseline justify-between gap-4">
+                      <dt className="font-sans uppercase tracking-[0.2em] text-or">
+                        Code {promoApplied.code}
+                      </dt>
+                      <dd className="font-sans tracking-[0.1em] text-or">
+                        −{formatPrice(promoApplied.discount_cents, currency)}
+                      </dd>
+                    </div>
+                  )}
                   <div className="flex items-baseline justify-between gap-4">
                     <dt className="font-sans uppercase tracking-[0.2em] text-ivoire/60">
                       Livraison
@@ -207,6 +260,54 @@ export function CheckoutClient() {
                     </dd>
                   </div>
                 </dl>
+
+                {/* Code promo */}
+                <div className="flex flex-col gap-2 border-t border-bronze/15 pt-4">
+                  {promoApplied ? (
+                    <div className="flex items-center justify-between gap-3 border border-or/40 px-3 py-2">
+                      <span className="font-sans text-xs uppercase tracking-[0.2em] text-or">
+                        ✓ {promoApplied.code} appliqué
+                      </span>
+                      <button
+                        type="button"
+                        onClick={removePromo}
+                        className="font-sans text-[11px] uppercase tracking-[0.2em] text-ivoire/60 hover:text-destructive"
+                      >
+                        Retirer
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={applyPromo} className="flex flex-col gap-2">
+                      <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-ivoire/60">
+                        Code promo
+                      </span>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={promoInput}
+                          onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+                          placeholder="TABASKI25"
+                          className={cn(
+                            'flex-1 border-b border-bronze/40 bg-transparent py-2 font-sans uppercase tracking-[0.1em] text-ivoire focus:border-or focus:outline-none',
+                            promoError && 'border-destructive'
+                          )}
+                        />
+                        <button
+                          type="submit"
+                          disabled={promoLoading || !promoInput.trim()}
+                          className="border border-or/60 px-4 py-2 font-sans text-xs uppercase tracking-[0.2em] text-or hover:bg-or/10 disabled:opacity-40"
+                        >
+                          {promoLoading ? '…' : 'Appliquer'}
+                        </button>
+                      </div>
+                      {promoError && (
+                        <p role="alert" className="font-sans text-xs italic text-destructive">
+                          {promoError}
+                        </p>
+                      )}
+                    </form>
+                  )}
+                </div>
 
                 <form
                   onSubmit={onSubmit}

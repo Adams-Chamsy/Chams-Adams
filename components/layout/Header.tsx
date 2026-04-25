@@ -10,6 +10,7 @@ import { CartButton } from './CartButton';
 import { WishlistButton } from './WishlistButton';
 import { SearchButton } from './SearchButton';
 import { LanguageButton } from './LanguageButton';
+import { CurrencyButton } from './CurrencyButton';
 import { Logo } from './Logo';
 
 type NavLink = { label: string; href: string };
@@ -101,6 +102,7 @@ export function Header() {
             <SearchButton className="hidden sm:inline-flex" />
             <WishlistButton className="hidden sm:inline-flex" />
             <CartButton />
+            <CurrencyButton className="hidden md:inline-flex" />
             <LanguageButton className="hidden md:inline-flex" />
             <button
               ref={burgerRef}

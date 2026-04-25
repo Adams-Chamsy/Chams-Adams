@@ -4,11 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import {
-  formatPrice,
   getPrimaryImage,
   getSecondaryImage,
   type Product,
 } from '@/lib/types/product';
+import { Price } from '@/components/ui/Price';
 
 export type ProductCardVariant = 'default' | 'editorial' | 'compact';
 
@@ -119,7 +119,10 @@ export function ProductCard({
             isEditorial ? 'text-base' : 'text-sm'
           )}
         >
-          {formatPrice(product.price)}
+          <Price
+            cents={Math.round(product.price.amount * 100)}
+            baseCurrency={product.price.currency}
+          />
         </p>
       </div>
     </Link>

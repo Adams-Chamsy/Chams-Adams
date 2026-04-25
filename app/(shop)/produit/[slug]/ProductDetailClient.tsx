@@ -17,6 +17,7 @@ import { ProductCard } from '@/components/product/ProductCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { TextReveal } from '@/components/animations/TextReveal';
+import { Price } from '@/components/ui/Price';
 import {
   MATERIAL_LABELS,
   type Product,
@@ -121,7 +122,10 @@ export function ProductDetailClient({
                   </p>
                 )}
                 <p className="mt-2 font-sans text-2xl tracking-[0.1em] text-ivoire">
-                  {formattedPrice}
+                  <Price
+                    cents={centsFromAmount(product.price.amount)}
+                    baseCurrency={product.price.currency}
+                  />
                 </p>
               </div>
 

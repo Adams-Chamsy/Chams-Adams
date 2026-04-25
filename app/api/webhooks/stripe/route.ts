@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import type Stripe from 'stripe';
 import { getStripe } from '@/lib/stripe';
 import { sendOrderConfirmation } from '@/lib/emails/sendOrderConfirmation';
+import { recordPromoUse } from '@/lib/promos/validate';
+import { createSupabaseServiceClient } from '@/lib/supabase/server';
 
 /**
  * POST /api/webhooks/stripe
@@ -148,6 +150,32 @@ async function handleCheckoutSessionCompleted(
     session: session.id,
     email,
   });
+
+  // -- Incrémente le compteur d'utilisation du code promo si présent
+  const promoId = session.metadata?.promo_id;
+  if (promoId) {
+    try {
+      await recordPromoUse(promoId);
+    } catch (err) {
+      console.error('[webhook] recordPromoUse failed:', err);
+    }
+  }
+
+  // -- Crédit fidélité : 1 € dépensé = 1 point (basé sur amount_subtotal)
+  const subtotalCents = session.amount_subtotal ?? 0;
+  if (subtotalCents > 0) {
+    try {
+      const points = Math.floor(subtotalCents / 100);
+      const supabase = createSupabaseServiceClient();
+      await supabase.from('loyalty_points').insert({
+        email,
+        points,
+        reason: `Commande ${session.id}`,
+      });
+    } catch (err) {
+      console.error('[webhook] loyalty credit failed:', err);
+    }
+  }
 
   // TODO(étape 8+) : persister la commande en base (Sanity / DB)
 }

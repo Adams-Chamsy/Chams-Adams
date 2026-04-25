@@ -207,3 +207,68 @@ export interface PromoCodeRow {
   created_at: string;
   updated_at: string;
 }
+
+export type ReturnReason =
+  | 'taille'
+  | 'qualite'
+  | 'pas-conforme'
+  | 'changement-avis'
+  | 'defaut'
+  | 'autre';
+
+export type ReturnStatus =
+  | 'pending'
+  | 'approved'
+  | 'received'
+  | 'refunded'
+  | 'rejected';
+
+export interface ReturnRequestRow {
+  id: string;
+  order_id: string | null;
+  email: string;
+  reason: ReturnReason;
+  details: string | null;
+  status: ReturnStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GiftCardRow {
+  id: string;
+  code: string;
+  initial_amount_cents: number;
+  remaining_cents: number;
+  currency: string;
+  recipient_name: string | null;
+  recipient_email: string | null;
+  sender_name: string | null;
+  message: string | null;
+  expires_at: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type VipTier = 'silver' | 'gold' | 'platinum';
+
+export interface VipMemberRow {
+  id: string;
+  email: string;
+  full_name: string | null;
+  tier: VipTier;
+  joined_at: string;
+  invited_by: string | null;
+  notes: string | null;
+  active: boolean;
+  updated_at: string;
+}
+
+export interface LoyaltyPointRow {
+  id: string;
+  email: string;
+  points: number;
+  reason: string | null;
+  order_id: string | null;
+  created_at: string;
+}

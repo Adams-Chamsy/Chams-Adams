@@ -95,7 +95,9 @@ export default function LivraisonRetoursPage() {
       <h3>Procédure</h3>
       <ol>
         <li>
-          Nous écrire à{' '}
+          Initier la demande depuis le{' '}
+          <a href="/retours/demande">formulaire de retour en ligne</a>{' '}
+          ou nous écrire à{' '}
           <a href="mailto:service@chams-adams.com">
             service@chams-adams.com
           </a>{' '}

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { SurMesureForm } from '@/components/forms/SurMesureForm';
+import { CalBooking } from '@/components/forms/CalBooking';
 
 export const metadata: Metadata = {
   title: 'Sur-mesure — Composer votre pièce',
@@ -203,6 +204,33 @@ export default function SurMesurePage() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* RDV — CAL.COM */}
+      <section
+        id="rdv"
+        aria-labelledby="rdv-title"
+        className="bg-noir pb-[120px] md:pb-[180px]"
+      >
+        <div className="container-content">
+          <header className="mb-12 flex flex-col gap-4">
+            <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
+              Prendre rendez-vous
+            </span>
+            <h2
+              id="rdv-title"
+              className="font-serif font-light leading-tight text-ivoire text-[clamp(1.75rem,3.5vw,3rem)]"
+            >
+              Réserver un entretien
+            </h2>
+            <p className="max-w-prose font-serif italic text-ivoire/75 text-lg leading-relaxed">
+              Choisissez un créneau qui vous convient — atelier ou
+              visioconférence. La prise de mesures se fait dans la foulée
+              ou lors d&apos;un second rendez-vous.
+            </p>
+          </header>
+          <CalBooking />
         </div>
       </section>
 

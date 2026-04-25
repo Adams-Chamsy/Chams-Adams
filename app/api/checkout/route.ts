@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe, getSiteUrl } from '@/lib/stripe';
 import { rateLimitPerMinute } from '@/lib/rate-limit';
+import { validatePromoCode } from '@/lib/promos/validate';
 import type { CartItem } from '@/lib/store/cart.store';
 
 /**
@@ -33,14 +34,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { items?: CartItem[]; email?: string };
+  let body: { items?: CartItem[]; email?: string; promo_code?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: 'Corps JSON invalide.' }, { status: 400 });
   }
 
-  const { items, email } = body;
+  const { items, email, promo_code } = body;
 
   // -- Validation
   if (!Array.isArray(items) || items.length === 0) {
@@ -76,6 +77,33 @@ export async function POST(req: NextRequest) {
   const stripe = getStripe();
   const siteUrl = getSiteUrl();
 
+  // -- Promo code (optionnel)
+  let stripeDiscounts: { coupon: string }[] | undefined;
+  let promoMeta: { code: string; promo_id: string; discount_cents: number } | undefined;
+  if (promo_code && typeof promo_code === 'string') {
+    const subtotalCents = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
+    const validated = await validatePromoCode(promo_code, subtotalCents);
+    if (!validated.ok) {
+      return NextResponse.json({ error: validated.error }, { status: 400 });
+    }
+    try {
+      const coupon = await stripe.coupons.create({
+        amount_off: validated.promo.discount_cents,
+        currency: (items[0]?.currency ?? 'EUR').toLowerCase(),
+        duration: 'once',
+        name: `Code ${validated.promo.code}`,
+      });
+      stripeDiscounts = [{ coupon: coupon.id }];
+      promoMeta = validated.promo;
+    } catch (err) {
+      console.error('[checkout] coupon create failed:', err);
+      return NextResponse.json(
+        { error: 'Impossible d\u2019appliquer le code.' },
+        { status: 500 }
+      );
+    }
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -101,6 +129,7 @@ export async function POST(req: NextRequest) {
           },
         },
       })),
+      ...(stripeDiscounts ? { discounts: stripeDiscounts } : {}),
       success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/checkout`,
       shipping_address_collection: {
@@ -113,6 +142,13 @@ export async function POST(req: NextRequest) {
       phone_number_collection: { enabled: true },
       metadata: {
         source: 'chams-adams-web',
+        ...(promoMeta
+          ? {
+              promo_code: promoMeta.code,
+              promo_id: promoMeta.promo_id,
+              promo_discount_cents: String(promoMeta.discount_cents),
+            }
+          : {}),
       },
     });
 
