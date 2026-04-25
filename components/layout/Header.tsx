@@ -106,7 +106,6 @@ export function Header() {
             ))}
             <NavItem
               {...boutique}
-              highlighted
               active={isActiveHref(pathname, boutique.href)}
             />
           </nav>
@@ -157,9 +156,8 @@ export function Header() {
 function NavItem({
   label,
   href,
-  highlighted = false,
   active = false,
-}: NavLink & { highlighted?: boolean; active?: boolean }) {
+}: NavLink & { active?: boolean }) {
   return (
     <Link
       href={href}
@@ -167,11 +165,7 @@ function NavItem({
       aria-current={active ? 'page' : undefined}
       className={cn(
         'group relative inline-flex items-center font-sans text-xs uppercase tracking-[0.2em] transition-colors duration-300',
-        active
-          ? 'text-or'
-          : highlighted
-            ? 'text-or hover:text-or/80'
-            : 'text-ivoire/80 hover:text-ivoire'
+        active ? 'text-or' : 'text-ivoire/80 hover:text-ivoire'
       )}
     >
       {label}
