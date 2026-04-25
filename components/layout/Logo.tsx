@@ -114,6 +114,7 @@ function Monogram({ heightPx }: { heightPx: number }) {
       height={heightPx}
       role="img"
       aria-hidden
+      overflow="visible"
       className="block shrink-0"
     >
       <linearGradient
@@ -151,16 +152,19 @@ function Monogram({ heightPx }: { heightPx: number }) {
 // fill="currentColor" → hérite de la couleur du parent (ivoire, or, noir…)
 // --------------------------------------------------------------------
 function Wordmark({ heightPx }: { heightPx: number }) {
-  const width = Math.round(heightPx * (770 / 175));
+  // viewBox élargi vers le haut + overflow:visible pour ne pas tronquer les
+  // hampes calligraphiques (boucle supérieure du C/h, fioritures cursives).
+  const width = Math.round(heightPx * (770 / 195));
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="40 255 770 175"
+      viewBox="40 235 770 195"
       width={width}
       height={heightPx}
       role="img"
       aria-hidden
       fill="currentColor"
+      overflow="visible"
       className="block shrink-0"
     >
       <g>
