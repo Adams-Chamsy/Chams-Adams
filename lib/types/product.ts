@@ -54,6 +54,8 @@ export interface ProductDetails {
   embroidery?: string;
   origin?: string;
   care?: string[];
+  /** Codes de pictogrammes d'entretien (voir CarePictos.tsx) */
+  carePictos?: string[];
 }
 
 export interface Product {

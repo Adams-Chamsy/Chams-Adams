@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import { render } from '@react-email/render';
 import { Welcome } from './Welcome';
 import { Restock } from './Restock';
+import { ReturnStatus, type ReturnStatusProps } from './ReturnStatus';
 
 function getSender() {
   return (
@@ -49,6 +50,59 @@ Visiter la maison : ${SITE}
     return true;
   } catch (err) {
     console.error('[email] welcome failed:', err);
+    return false;
+  }
+}
+
+export type SendReturnStatusParams = {
+  to: string;
+  status: ReturnStatusProps['status'];
+  reason: string;
+};
+
+export async function sendReturnStatusEmail(
+  params: SendReturnStatusParams
+): Promise<boolean> {
+  const resend = getResend();
+  if (!resend) return false;
+  const html = await render(
+    ReturnStatus({
+      status: params.status,
+      reason: params.reason,
+      siteUrl: SITE,
+    }),
+    { pretty: false }
+  );
+  const subjects: Record<ReturnStatusProps['status'], string> = {
+    approved: 'Votre demande de retour est approuvée.',
+    received: 'Pièce bien reçue.',
+    refunded: 'Remboursement émis.',
+    rejected: 'Votre demande de retour n’a pas pu être approuvée.',
+  };
+  const text = `${subjects[params.status]}
+
+Motif : ${params.reason}.
+
+Suivre dans votre compte : ${SITE}/compte/retours
+
+— Chams Adams`;
+
+  try {
+    const { error } = await resend.emails.send({
+      from: getSender(),
+      to: params.to,
+      subject: subjects[params.status],
+      html,
+      text,
+      replyTo: process.env.CONTACT_EMAIL ?? 'contact@chams-adams.com',
+    });
+    if (error) {
+      console.error('[email] return status:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('[email] return status failed:', err);
     return false;
   }
 }

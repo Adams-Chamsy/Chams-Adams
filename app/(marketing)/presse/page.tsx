@@ -55,6 +55,14 @@ export default async function PressePage() {
             La Maison vue par la presse internationale&nbsp;— un regard
             extérieur, une mesure de la justesse.
           </p>
+          <div>
+            <a
+              href="/presse/dossier"
+              className="inline-flex items-center gap-2 border border-or/60 px-5 py-2.5 font-sans text-xs uppercase tracking-[0.25em] text-or hover:bg-or/10"
+            >
+              Dossier de presse
+            </a>
+          </div>
         </div>
       </section>
 

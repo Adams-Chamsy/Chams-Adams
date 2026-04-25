@@ -212,6 +212,15 @@ export function ProductForm({
             className="border border-bronze/40 bg-transparent p-3 font-serif text-base text-ivoire focus:border-or focus:outline-none"
           />
         </Field>
+        <Field label="Pictogrammes d'entretien (codes séparés par virgules)" hint="Codes acceptés : lavage-main, lavage-30, pas-machine, pressing-conseille, pas-seche-linge, pas-javel, fer-doux, pas-fer, sechage-ombre, broderies">
+          <input
+            type="text"
+            name="care_pictos"
+            defaultValue={(initial?.care_pictos ?? []).join(', ')}
+            placeholder="lavage-main, pas-javel, fer-doux, broderies"
+            className={inputCls}
+          />
+        </Field>
       </fieldset>
 
       {/* Meta */}
@@ -394,13 +403,26 @@ export function ProductForm({
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="flex flex-col gap-2">
       <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-ivoire/70">
         {label}
       </span>
       {children}
+      {hint && (
+        <span className="font-sans text-[10px] italic text-ivoire/50">
+          {hint}
+        </span>
+      )}
     </label>
   );
 }

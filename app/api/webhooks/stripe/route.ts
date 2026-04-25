@@ -3,6 +3,7 @@ import type Stripe from 'stripe';
 import { getStripe } from '@/lib/stripe';
 import { sendOrderConfirmation } from '@/lib/emails/sendOrderConfirmation';
 import { recordPromoUse } from '@/lib/promos/validate';
+import { debitGiftCard } from '@/lib/gift-cards/validate';
 import { createSupabaseServiceClient } from '@/lib/supabase/server';
 
 /**
@@ -161,12 +162,23 @@ async function handleCheckoutSessionCompleted(
     }
   }
 
+  // -- Décrémente le solde de la carte cadeau si utilisée
+  const giftCardId = session.metadata?.gift_card_id;
+  const giftCardApplied = session.metadata?.gift_card_applied_cents;
+  if (giftCardId && giftCardApplied) {
+    try {
+      await debitGiftCard(giftCardId, parseInt(giftCardApplied, 10));
+    } catch (err) {
+      console.error('[webhook] debitGiftCard failed:', err);
+    }
+  }
+
   // -- Crédit fidélité : 1 € dépensé = 1 point (basé sur amount_subtotal)
   const subtotalCents = session.amount_subtotal ?? 0;
+  const supabase = createSupabaseServiceClient();
   if (subtotalCents > 0) {
     try {
       const points = Math.floor(subtotalCents / 100);
-      const supabase = createSupabaseServiceClient();
       await supabase.from('loyalty_points').insert({
         email,
         points,
@@ -177,5 +189,74 @@ async function handleCheckoutSessionCompleted(
     }
   }
 
-  // TODO(étape 8+) : persister la commande en base (Sanity / DB)
+  // -- Persiste la commande + lignes en base
+  try {
+    // Lookup user_id si un compte client existe avec cet email
+    let userId: string | null = null;
+    try {
+      const { data: authList } = await supabase.auth.admin.listUsers();
+      userId =
+        authList?.users.find(
+          (u) => u.email?.toLowerCase() === email.toLowerCase()
+        )?.id ?? null;
+    } catch {
+      // listUsers peut être désactivé — on garde null
+    }
+
+    const shippingAddress =
+      (session as unknown as { shipping_details?: { address?: unknown } })
+        .shipping_details?.address ??
+      (session as unknown as {
+        collected_information?: { shipping_details?: { address?: unknown } };
+      }).collected_information?.shipping_details?.address ??
+      session.customer_details?.address ??
+      null;
+
+    const { data: order, error: orderErr } = await supabase
+      .from('orders')
+      .insert({
+        user_id: userId,
+        stripe_session_id: session.id,
+        stripe_payment_intent_id:
+          typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : session.payment_intent?.id ?? null,
+        email,
+        status: 'paid',
+        subtotal_cents: subtotalCents,
+        shipping_cents: session.shipping_cost?.amount_total ?? 0,
+        total_cents: session.amount_total ?? 0,
+        currency: (session.currency ?? 'eur').toUpperCase(),
+        shipping_address: shippingAddress,
+      })
+      .select('id')
+      .single();
+
+    if (orderErr) throw orderErr;
+
+    // Lignes de commande
+    const itemRows = lineItems.data.map((li) => {
+      const product = li.price?.product as Stripe.Product | undefined;
+      const productMeta = product?.metadata ?? {};
+      return {
+        order_id: order.id,
+        product_id: productMeta.productId
+          ? (productMeta.productId as string)
+          : null,
+        product_name: product?.name ?? 'Pièce',
+        variant_color_name: null,
+        size: (productMeta.size as string | undefined) ?? null,
+        quantity: li.quantity ?? 1,
+        unit_price_cents: li.price?.unit_amount ?? 0,
+        line_total_cents: (li.price?.unit_amount ?? 0) * (li.quantity ?? 1),
+      };
+    });
+    if (itemRows.length > 0) {
+      await supabase.from('order_items').insert(itemRows);
+    }
+
+    console.info('[webhook] order persisted', { orderId: order.id });
+  } catch (err) {
+    console.error('[webhook] order persist failed:', err);
+  }
 }

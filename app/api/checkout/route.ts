@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStripe, getSiteUrl } from '@/lib/stripe';
 import { rateLimitPerMinute } from '@/lib/rate-limit';
 import { validatePromoCode } from '@/lib/promos/validate';
+import { validateGiftCard } from '@/lib/gift-cards/validate';
 import type { CartItem } from '@/lib/store/cart.store';
 
 /**
@@ -34,14 +35,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { items?: CartItem[]; email?: string; promo_code?: string };
+  let body: {
+    items?: CartItem[];
+    email?: string;
+    promo_code?: string;
+    gift_card_code?: string;
+  };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: 'Corps JSON invalide.' }, { status: 400 });
   }
 
-  const { items, email, promo_code } = body;
+  const { items, email, promo_code, gift_card_code } = body;
 
   // -- Validation
   if (!Array.isArray(items) || items.length === 0) {
@@ -77,28 +83,60 @@ export async function POST(req: NextRequest) {
   const stripe = getStripe();
   const siteUrl = getSiteUrl();
 
-  // -- Promo code (optionnel)
+  // -- Promo + carte cadeau (cumulés sur un coupon Stripe unique)
+  const subtotalCents = items.reduce(
+    (sum, it) => sum + it.price * it.quantity,
+    0
+  );
   let stripeDiscounts: { coupon: string }[] | undefined;
-  let promoMeta: { code: string; promo_id: string; discount_cents: number } | undefined;
+  let promoMeta:
+    | { code: string; promo_id: string; discount_cents: number }
+    | undefined;
+  let giftCardMeta:
+    | { code: string; card_id: string; applied_cents: number }
+    | undefined;
+  let totalDiscountCents = 0;
+
   if (promo_code && typeof promo_code === 'string') {
-    const subtotalCents = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
     const validated = await validatePromoCode(promo_code, subtotalCents);
     if (!validated.ok) {
       return NextResponse.json({ error: validated.error }, { status: 400 });
     }
+    promoMeta = validated.promo;
+    totalDiscountCents += validated.promo.discount_cents;
+  }
+
+  if (gift_card_code && typeof gift_card_code === 'string') {
+    const remainingCart = Math.max(0, subtotalCents - totalDiscountCents);
+    const validated = await validateGiftCard(gift_card_code, remainingCart);
+    if (!validated.ok) {
+      return NextResponse.json({ error: validated.error }, { status: 400 });
+    }
+    giftCardMeta = {
+      code: validated.card.code,
+      card_id: validated.card.card_id,
+      applied_cents: validated.card.applied_cents,
+    };
+    totalDiscountCents += validated.card.applied_cents;
+  }
+
+  if (totalDiscountCents > 0) {
     try {
+      const labels = [
+        promoMeta ? `Code ${promoMeta.code}` : null,
+        giftCardMeta ? `Carte ${giftCardMeta.code}` : null,
+      ].filter(Boolean);
       const coupon = await stripe.coupons.create({
-        amount_off: validated.promo.discount_cents,
+        amount_off: Math.min(totalDiscountCents, subtotalCents),
         currency: (items[0]?.currency ?? 'EUR').toLowerCase(),
         duration: 'once',
-        name: `Code ${validated.promo.code}`,
+        name: labels.join(' + ') || 'Réduction',
       });
       stripeDiscounts = [{ coupon: coupon.id }];
-      promoMeta = validated.promo;
     } catch (err) {
       console.error('[checkout] coupon create failed:', err);
       return NextResponse.json(
-        { error: 'Impossible d\u2019appliquer le code.' },
+        { error: 'Impossible d\u2019appliquer la réduction.' },
         { status: 500 }
       );
     }
@@ -147,6 +185,13 @@ export async function POST(req: NextRequest) {
               promo_code: promoMeta.code,
               promo_id: promoMeta.promo_id,
               promo_discount_cents: String(promoMeta.discount_cents),
+            }
+          : {}),
+        ...(giftCardMeta
+          ? {
+              gift_card_code: giftCardMeta.code,
+              gift_card_id: giftCardMeta.card_id,
+              gift_card_applied_cents: String(giftCardMeta.applied_cents),
             }
           : {}),
       },

@@ -38,6 +38,16 @@ export function CheckoutClient() {
   const [promoLoading, setPromoLoading] = useState(false);
   const [promoError, setPromoError] = useState<string | null>(null);
 
+  // Gift card state
+  const [giftInput, setGiftInput] = useState('');
+  const [giftApplied, setGiftApplied] = useState<{
+    code: string;
+    applied_cents: number;
+    remaining_cents: number;
+  } | null>(null);
+  const [giftLoading, setGiftLoading] = useState(false);
+  const [giftError, setGiftError] = useState<string | null>(null);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -72,6 +82,44 @@ export function CheckoutClient() {
     setPromoError(null);
   }
 
+  async function applyGiftCard(e: React.FormEvent) {
+    e.preventDefault();
+    setGiftError(null);
+    if (!giftInput.trim()) return;
+    setGiftLoading(true);
+    try {
+      const remaining = Math.max(
+        0,
+        subtotal - (promoApplied?.discount_cents ?? 0)
+      );
+      const res = await fetch('/api/gift-cards/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: giftInput.trim(),
+          cart_total_cents: remaining,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Carte invalide.');
+      setGiftApplied({
+        code: data.code,
+        applied_cents: data.applied_cents,
+        remaining_cents: data.remaining_cents,
+      });
+      setGiftInput('');
+    } catch (err) {
+      setGiftError(err instanceof Error ? err.message : 'Erreur.');
+    } finally {
+      setGiftLoading(false);
+    }
+  }
+
+  function removeGiftCard() {
+    setGiftApplied(null);
+    setGiftError(null);
+  }
+
   // Si le panier est vide au mount → redirect UX-friendly (pas de useRouter
   // push dans useEffect pour éviter un re-render supplémentaire côté ssr).
 
@@ -93,6 +141,7 @@ export function CheckoutClient() {
           items,
           email,
           promo_code: promoApplied?.code,
+          gift_card_code: giftApplied?.code,
         }),
       });
       if (!res.ok) {
@@ -251,6 +300,16 @@ export function CheckoutClient() {
                       </dd>
                     </div>
                   )}
+                  {giftApplied && (
+                    <div className="flex items-baseline justify-between gap-4">
+                      <dt className="font-sans uppercase tracking-[0.2em] text-or">
+                        Carte {giftApplied.code}
+                      </dt>
+                      <dd className="font-sans tracking-[0.1em] text-or">
+                        −{formatPrice(giftApplied.applied_cents, currency)}
+                      </dd>
+                    </div>
+                  )}
                   <div className="flex items-baseline justify-between gap-4">
                     <dt className="font-sans uppercase tracking-[0.2em] text-ivoire/60">
                       Livraison
@@ -303,6 +362,56 @@ export function CheckoutClient() {
                       {promoError && (
                         <p role="alert" className="font-sans text-xs italic text-destructive">
                           {promoError}
+                        </p>
+                      )}
+                    </form>
+                  )}
+                </div>
+
+                {/* Carte cadeau */}
+                <div className="flex flex-col gap-2">
+                  {giftApplied ? (
+                    <div className="flex items-center justify-between gap-3 border border-or/40 px-3 py-2">
+                      <span className="font-sans text-xs uppercase tracking-[0.2em] text-or">
+                        ✓ Carte {giftApplied.code} appliquée
+                      </span>
+                      <button
+                        type="button"
+                        onClick={removeGiftCard}
+                        className="font-sans text-[11px] uppercase tracking-[0.2em] text-ivoire/60 hover:text-destructive"
+                      >
+                        Retirer
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={applyGiftCard} className="flex flex-col gap-2">
+                      <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-ivoire/60">
+                        Carte cadeau
+                      </span>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={giftInput}
+                          onChange={(e) =>
+                            setGiftInput(e.target.value.toUpperCase())
+                          }
+                          placeholder="CA-XXXX-XXXX-XXXX-XXXX"
+                          className={cn(
+                            'flex-1 border-b border-bronze/40 bg-transparent py-2 font-sans uppercase tracking-[0.1em] text-ivoire focus:border-or focus:outline-none',
+                            giftError && 'border-destructive'
+                          )}
+                        />
+                        <button
+                          type="submit"
+                          disabled={giftLoading || !giftInput.trim()}
+                          className="border border-or/60 px-4 py-2 font-sans text-xs uppercase tracking-[0.2em] text-or hover:bg-or/10 disabled:opacity-40"
+                        >
+                          {giftLoading ? '…' : 'Appliquer'}
+                        </button>
+                      </div>
+                      {giftError && (
+                        <p role="alert" className="font-sans text-xs italic text-destructive">
+                          {giftError}
                         </p>
                       )}
                     </form>

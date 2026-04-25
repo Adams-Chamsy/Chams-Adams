@@ -18,6 +18,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Price } from '@/components/ui/Price';
+import { CarePictos } from '@/components/product/CarePictos';
 import {
   MATERIAL_LABELS,
   type Product,
@@ -239,16 +240,30 @@ export function ProductDetailClient({
                   </dl>
                 </DetailAccordion>
 
-                {product.details.care && product.details.care.length > 0 && (
+                {((product.details.care && product.details.care.length > 0) ||
+                  (product.details.carePictos &&
+                    product.details.carePictos.length > 0)) && (
                   <DetailAccordion title="Entretien">
-                    <ul className="flex flex-col gap-2 font-sans text-sm text-ivoire/75">
-                      {product.details.care.map((c, i) => (
-                        <li key={i} className="flex gap-3">
-                          <span aria-hidden className="mt-2 h-px w-4 shrink-0 bg-or/60" />
-                          <span>{c}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="flex flex-col gap-5">
+                      {product.details.carePictos &&
+                        product.details.carePictos.length > 0 && (
+                          <CarePictos codes={product.details.carePictos} />
+                        )}
+                      {product.details.care &&
+                        product.details.care.length > 0 && (
+                          <ul className="flex flex-col gap-2 font-sans text-sm text-ivoire/75">
+                            {product.details.care.map((c, i) => (
+                              <li key={i} className="flex gap-3">
+                                <span
+                                  aria-hidden
+                                  className="mt-2 h-px w-4 shrink-0 bg-or/60"
+                                />
+                                <span>{c}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                    </div>
                   </DetailAccordion>
                 )}
 

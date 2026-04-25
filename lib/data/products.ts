@@ -109,6 +109,9 @@ function supaToProduct(raw: SupaProduct): Product | null {
       embroidery: details.embroidery,
       origin: details.origin,
       care: details.care ?? [],
+      carePictos:
+        ((raw as unknown as { care_pictos?: string[] }).care_pictos ?? []) ||
+        [],
     },
     tags: raw.tags,
     isNew: raw.is_new,

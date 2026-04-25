@@ -48,6 +48,10 @@ function parseMain(formData: FormData) {
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean),
+    care_pictos: ((formData.get('care_pictos') as string | null) ?? '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean),
     is_signature: (formData.get('is_signature') as string | null) === 'on',
     is_new: (formData.get('is_new') as string | null) === 'on',
     published: (formData.get('published') as string | null) === 'on',

@@ -88,6 +88,7 @@ export interface ProductRow {
   is_signature: boolean;
   is_new: boolean;
   related_product_slugs: string[];
+  care_pictos: string[];
   published: boolean;
   published_at: string | null;
   created_at: string;
