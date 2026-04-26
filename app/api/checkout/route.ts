@@ -155,7 +155,11 @@ export async function POST(req: NextRequest) {
           unit_amount: item.price, // déjà en cents dans le store
           product_data: {
             name: item.productName,
-            description: [item.productSubtitle, `${item.variantColorName} · Taille ${item.size}`]
+            description: [
+              item.productSubtitle,
+              `${item.variantColorName} · Taille ${item.size}`,
+              item.monogram ? `Initiale : ${item.monogram}` : null,
+            ]
               .filter(Boolean)
               .join(' — '),
             images: [toAbsoluteUrl(item.image.url, siteUrl)],
@@ -163,6 +167,7 @@ export async function POST(req: NextRequest) {
               productId: item.productId,
               variantId: item.variantId,
               size: item.size,
+              ...(item.monogram ? { monogram: item.monogram } : {}),
             },
           },
         },

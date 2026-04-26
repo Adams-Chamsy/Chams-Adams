@@ -12,7 +12,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
  * les float qui provoquent des erreurs d'arrondi (0.1 + 0.2 !== 0.3).
  */
 export interface CartItem {
-  /** Unique ID = productId__variantId__size */
+  /** Unique ID = productId__variantId__size__monogram */
   id: string;
   productId: string;
   productSlug: string;
@@ -22,6 +22,8 @@ export interface CartItem {
   variantColor: string;
   variantColorName: string;
   size: string;
+  /** Monogramme brodé à la commande (1 à 3 caractères, optionnel) */
+  monogram?: string;
   /** En cents (ex: 2800 € → 280000) */
   price: number;
   currency: 'EUR' | 'XOF' | 'USD';
@@ -53,9 +55,11 @@ const MAX_QUANTITY = 10;
 export function buildCartItemId(
   productId: string,
   variantId: string,
-  size: string
+  size: string,
+  monogram?: string
 ): string {
-  return `${productId}__${variantId}__${size}`;
+  const m = (monogram ?? '').trim().toUpperCase();
+  return `${productId}__${variantId}__${size}${m ? `__${m}` : ''}`;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -65,7 +69,12 @@ export const useCartStore = create<CartStore>()(
       isOpen: false,
 
       addItem: (input) => {
-        const id = buildCartItemId(input.productId, input.variantId, input.size);
+        const id = buildCartItemId(
+          input.productId,
+          input.variantId,
+          input.size,
+          input.monogram
+        );
         const existing = get().items.find((i) => i.id === id);
 
         if (existing) {

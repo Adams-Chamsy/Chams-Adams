@@ -22,6 +22,7 @@ import { CarePictos } from '@/components/product/CarePictos';
 import { ARTryOn } from '@/components/product/ARTryOn';
 import { ProductStory } from '@/components/product/ProductStory';
 import { AddToCarnet } from '@/components/product/AddToCarnet';
+import { MonogramField } from '@/components/product/MonogramField';
 import {
   MATERIAL_LABELS,
   type Product,
@@ -55,6 +56,7 @@ export function ProductDetailClient({
       : (recommendedSize as ProductSize | null) ?? null
   );
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  const [monogram, setMonogram] = useState('');
 
   // Wishlist : persisted store (identique au cart). Toggle = add/remove.
   const wishlisted = useWishlistStore((s) => s.has(product.id));
@@ -168,12 +170,16 @@ export function ProductDetailClient({
                 onOpenSizeGuide={() => setSizeGuideOpen(true)}
               />
 
+              {/* Monogramme — option payante */}
+              <MonogramField value={monogram} onChange={setMonogram} />
+
               {/* CTAs */}
               <div className="flex flex-col gap-4">
                 <AddToBagButton
                   product={product}
                   variant={variant}
                   size={size}
+                  monogram={monogram}
                 />
                 {product.details.glbUrl && (
                   <ARTryOn

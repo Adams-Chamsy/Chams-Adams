@@ -157,9 +157,54 @@ export interface OrderItemRow {
   product_name: string;
   variant_color_name: string | null;
   size: string | null;
+  monogram: string | null;
   quantity: number;
   unit_price_cents: number;
   line_total_cents: number;
+}
+
+export type PieceEventType =
+  | 'creation'
+  | 'retouche'
+  | 'entretien'
+  | 'transmission'
+  | 'note';
+
+export interface PieceRow {
+  id: string;
+  piece_number: string;
+  order_item_id: string | null;
+  product_id: string | null;
+  product_name: string;
+  product_slug: string | null;
+  variant_color_name: string | null;
+  size: string | null;
+  monogram: string | null;
+  artisan_name: string | null;
+  artisan_role: string | null;
+  artisan_signature_url: string | null;
+  fabric_lot: string | null;
+  fabric_origin: string | null;
+  embroidery_hours: number | null;
+  completed_at: string | null;
+  owner_email: string;
+  owner_user_id: string | null;
+  owner_name: string | null;
+  certificate_published: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PieceEventRow {
+  id: string;
+  piece_id: string;
+  event_type: PieceEventType;
+  occurred_at: string;
+  note: string | null;
+  transferred_from_email: string | null;
+  transferred_to_email: string | null;
+  created_at: string;
 }
 
 export interface NewsletterSubscriberRow {

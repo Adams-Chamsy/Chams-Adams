@@ -16,9 +16,15 @@ type Props = {
   product: Product;
   variant: ProductVariant;
   size: ProductSize | null;
+  /** Monogramme brodé (1-3 caractères) — surcharge tarifaire via env. */
+  monogram?: string | null;
   disabled?: boolean;
   className?: string;
 };
+
+const MONOGRAM_FEE_CENTS = Number(
+  process.env.NEXT_PUBLIC_MONOGRAM_FEE_CENTS ?? 5000
+);
 
 type Status = 'idle' | 'loading' | 'success';
 
@@ -34,9 +40,11 @@ export function AddToBagButton({
   product,
   variant,
   size,
+  monogram,
   disabled,
   className,
 }: Props) {
+  const cleanMono = (monogram ?? '').trim().toUpperCase().slice(0, 3);
   const [status, setStatus] = useState<Status>('idle');
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
@@ -66,7 +74,10 @@ export function AddToBagButton({
         variantColor: variant.color,
         variantColorName: variant.colorName,
         size,
-        price: centsFromAmount(product.price.amount),
+        monogram: cleanMono || undefined,
+        price:
+          centsFromAmount(product.price.amount) +
+          (cleanMono ? MONOGRAM_FEE_CENTS : 0),
         currency: product.price.currency,
         image: {
           url: primaryImage.url,
