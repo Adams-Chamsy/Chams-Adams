@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Package, Ruler, BookHeart, Sparkles } from 'lucide-react';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
+import { BenefitsCarousel } from '@/components/sections/BenefitsCarousel';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { CustomerSignupForm } from './SignupForm';
 
@@ -93,33 +94,21 @@ export default async function CustomerSignupPage() {
               </p>
             </div>
 
-            {/* Bénéfices — colonne droite plus large, typographie ample */}
+            {/* Bénéfices — carousel éditorial : une promesse à la fois */}
             <aside
               aria-labelledby="benefits-title"
-              className="lg:col-span-7"
+              className="lg:col-span-7 lg:pl-8"
             >
               <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-or">
                 Ce que la maison vous offre
               </span>
               <h2
                 id="benefits-title"
-                className="mt-3 mb-10 font-serif font-light leading-tight text-ivoire text-[clamp(1.75rem,3.5vw,2.75rem)]"
+                className="mt-3 mb-12 font-serif font-light leading-tight text-ivoire text-[clamp(1.75rem,3vw,2.5rem)]"
               >
                 Quatre attentions, gardées avec soin
               </h2>
-              <ul className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
-                {BENEFITS.map(({ icon: Icon, label, body }) => (
-                  <li key={label} className="flex flex-col gap-3">
-                    <Icon className="h-6 w-6 text-or" aria-hidden />
-                    <h3 className="font-serif text-xl font-light text-ivoire">
-                      {label}
-                    </h3>
-                    <p className="font-serif italic leading-relaxed text-base text-ivoire/65">
-                      {body}
-                    </p>
-                  </li>
-                ))}
-              </ul>
+              <BenefitsCarousel benefits={BENEFITS} intervalMs={6000} />
             </aside>
           </div>
         </div>
