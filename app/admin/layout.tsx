@@ -1,27 +1,48 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { LogOut, ExternalLink } from 'lucide-react';
 import { createSupabaseServerClient, isSupabaseEnabled } from '@/lib/supabase/server';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { logoutAction } from './actions';
 
+/**
+ * Layout des routes /admin/*.
+ *
+ * Comportement :
+ * - Auth-gating géré par le middleware (redirige vers /admin/login si pas
+ *   de session / pas de rôle admin).
+ * - Si pas de user (cas légitime : /admin/login lui-même qui est public),
+ *   on rend les enfants SANS le shell — la page de connexion s'affiche
+ *   alors propre, sans sidebar ni "Déconnexion".
+ * - Si user connecté → shell complet avec sidebar, nav structurée et
+ *   actions de pied.
+ */
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  let userEmail = '—';
+  let userEmail: string | null = null;
   if (isSupabaseEnabled()) {
     try {
       const supabase = await createSupabaseServerClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) redirect('/admin/login');
-      userEmail = user.email ?? '—';
+      userEmail = user?.email ?? null;
     } catch {
       // dev fallback
     }
+  }
+
+  // Pas de session : rendu nu, pas de shell admin.
+  // (la page /admin/login pourra s'afficher proprement ; les autres routes
+  // ont déjà été redirigées par le middleware avant d'arriver ici.)
+  if (!userEmail) {
+    return (
+      <div className="relative z-[100] min-h-screen bg-[#0F0E0C] text-ivoire">
+        {children}
+      </div>
+    );
   }
 
   return (
