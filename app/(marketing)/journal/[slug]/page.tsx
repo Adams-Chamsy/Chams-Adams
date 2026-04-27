@@ -141,7 +141,9 @@ export default async function JournalArticlePage(
 
         {/* CORPS */}
         <div className="bg-noir py-[80px] md:py-[120px]">
-          <div className="mx-auto max-w-[720px] px-6 md:px-0">{bodyNode}</div>
+          <div className="drop-cap mx-auto max-w-[720px] px-6 md:px-0">
+            {bodyNode}
+          </div>
         </div>
       </article>
 

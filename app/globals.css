@@ -85,8 +85,41 @@
   }
 
   body {
-    @apply font-sans bg-noir text-ivoire/90 selection:bg-or/30 selection:text-ivoire;
-    font-feature-settings: 'ss01', 'cv11';
+    @apply font-sans bg-noir text-ivoire/90 selection:bg-or selection:text-noir;
+    font-feature-settings: 'ss01', 'cv11', 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  /* Sélection signature : bloc or sur ivoire/noir, codes éditoriaux print */
+  ::selection {
+    background-color: rgb(var(--color-or));
+    color: rgb(var(--color-noir));
+  }
+
+  /* Scrollbar minimaliste — fil d'or, fade out hors interaction */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-or) / 0);
+    transition: background 400ms ease;
+    border-radius: 0;
+  }
+  *:hover > ::-webkit-scrollbar-thumb,
+  *:focus > ::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-or) / 0.4);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-or) / 0.7);
+  }
+  /* Firefox */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-or) / 0.4) transparent;
   }
 
   /* Curseur natif masqué quand CustomCursor est actif (desktop + motion OK) */
@@ -170,5 +203,84 @@
   /* Voile éditorial subtil sur les images */
   .veil-bottom {
     mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  }
+
+  /* Vignettage radial subtil — focus l'œil au centre des heros */
+  .vignette {
+    position: relative;
+  }
+  .vignette::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 50%,
+      rgb(var(--color-noir) / 0.5) 100%
+    );
+  }
+
+  /* Numérales tabulaires + small-caps → prix alignés, codes magazine */
+  .nums-tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: 'tnum' 1, 'lnum' 1, 'kern' 1;
+  }
+  .nums-old-style {
+    font-variant-numeric: oldstyle-nums proportional-nums;
+  }
+
+  /* Drop cap éditorial pour articles long-form (à appliquer sur le wrapper prose) */
+  .drop-cap > p:first-of-type::first-letter {
+    @apply font-serif italic text-or;
+    font-size: 5.6em;
+    line-height: 0.85;
+    float: left;
+    margin: 0.05em 0.12em 0 0;
+    font-weight: 300;
+  }
+
+  /* Lien éditorial — underline animé left→right */
+  .link-editorial {
+    @apply relative inline transition-colors duration-300 hover:text-or;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition:
+      background-size 500ms cubic-bezier(0.19, 1, 0.22, 1),
+      color 300ms ease;
+    padding-bottom: 2px;
+  }
+  .link-editorial:hover,
+  .link-editorial:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* Halo doré subtil au hover sur cards (à composer avec une bordure existante) */
+  .card-glow-or {
+    transition:
+      border-color 500ms cubic-bezier(0.19, 1, 0.22, 1),
+      box-shadow 700ms cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  .card-glow-or:hover {
+    border-color: rgb(var(--color-or) / 0.7);
+    box-shadow: 0 0 0 1px rgb(var(--color-or) / 0.3),
+      0 0 30px -8px rgb(var(--color-or) / 0.4);
+  }
+
+  /* Curseur respiratoire — pulse subtil en idle */
+  .cursor-breath {
+    animation: cursor-breath 4s ease-in-out infinite;
+  }
+  @keyframes cursor-breath {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.95;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 1;
+    }
   }
 }

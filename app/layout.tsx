@@ -7,6 +7,8 @@ import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
 import { WishlistSync } from '@/components/wishlist/WishlistSync';
+import { FilmGrain } from '@/components/animations/FilmGrain';
+import { PageTransition } from '@/components/animations/PageTransition';
 import { LocaleProvider } from '@/lib/i18n/client';
 import { getLocale, getT } from '@/lib/i18n/server';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -149,6 +151,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               >
                 {t('common.skipToContent')}
               </a>
+              <FilmGrain />
+              <PageTransition />
               <CustomCursor />
               <Header />
               <main id="main-content">{children}</main>

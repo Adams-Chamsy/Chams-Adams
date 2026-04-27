@@ -18,7 +18,7 @@ type Props = {
 export function Price({ cents, baseCurrency = 'EUR', className }: Props) {
   const currency = useCurrencyStore((s) => s.currency);
   return (
-    <span className={cn(className)}>
+    <span className={cn('nums-tabular', className)}>
       {convertAndFormat(cents, baseCurrency, currency)}
     </span>
   );

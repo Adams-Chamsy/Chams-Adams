@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-type CursorState = 'default' | 'hover' | 'magnetic';
+type CursorState = 'default' | 'hover' | 'magnetic' | 'idle';
 
 /**
  * Curseur signature : point doré + follower circulaire qui suit avec un léger lag.
@@ -38,6 +39,12 @@ export function CustomCursor() {
     setEnabled(true);
     document.documentElement.classList.add('has-custom-cursor');
 
+    let idleTimer: number | undefined;
+    const armIdle = () => {
+      if (idleTimer) window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => setState('idle'), 1500);
+    };
+
     const onMove = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
@@ -51,6 +58,7 @@ export function CustomCursor() {
         x.set(e.clientX + (cx - e.clientX) * 0.25);
         y.set(e.clientY + (cy - e.clientY) * 0.25);
         setState('magnetic');
+        armIdle();
         return;
       }
 
@@ -59,6 +67,7 @@ export function CustomCursor() {
 
       const hoverEl = target.closest('[data-cursor="hover"], a, button, [role="button"]');
       setState(hoverEl ? 'hover' : 'default');
+      armIdle();
     };
 
     const onLeave = () => setState('default');
@@ -69,14 +78,17 @@ export function CustomCursor() {
     return () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseleave', onLeave);
+      if (idleTimer) window.clearTimeout(idleTimer);
       document.documentElement.classList.remove('has-custom-cursor');
     };
   }, [x, y]);
 
   if (!enabled) return null;
 
-  const followerSize = state === 'hover' ? 60 : state === 'magnetic' ? 48 : 32;
-  const followerOpacity = state === 'default' ? 0.45 : 0.7;
+  const followerSize =
+    state === 'hover' ? 60 : state === 'magnetic' ? 48 : state === 'idle' ? 28 : 32;
+  const followerOpacity =
+    state === 'default' ? 0.45 : state === 'idle' ? 0.55 : 0.7;
 
   return (
     <>
@@ -95,7 +107,10 @@ export function CustomCursor() {
       {/* Follower */}
       <motion.div
         aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full border border-or"
+        className={cn(
+          'pointer-events-none fixed left-0 top-0 z-[9999] rounded-full border border-or',
+          state === 'idle' && 'cursor-breath'
+        )}
         style={{
           x: followerX,
           y: followerY,

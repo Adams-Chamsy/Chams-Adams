@@ -270,7 +270,7 @@ function DashboardCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col gap-3 border border-bronze/30 p-6 transition-colors duration-300 hover:border-or"
+      className="card-glow-or group flex flex-col gap-3 border border-bronze/30 p-6"
     >
       <Icon
         className="h-5 w-5 text-or transition-transform duration-500 group-hover:-translate-y-0.5"
