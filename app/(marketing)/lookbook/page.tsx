@@ -130,35 +130,13 @@ export default function LookbookPage() {
         </div>
       </section>
 
-      {/* NAV SAISONS */}
-      <section className="bg-noir pb-12">
-        <div className="container-content">
-          <nav
-            aria-label="Saisons disponibles"
-            className="flex items-center gap-8 border-b border-bronze/15 pb-6 overflow-x-auto scrollbar-none"
-          >
-            {['Printemps 2026', 'Hiver 2025', 'Automne 2025', 'Été 2025'].map((s, i) => (
-              <button
-                key={s}
-                type="button"
-                aria-current={i === 0}
-                data-cursor="hover"
-                className={cn(
-                  'whitespace-nowrap font-sans text-xs uppercase tracking-[0.25em] transition-colors duration-300',
-                  i === 0 ? 'text-or border-b border-or pb-2 -mb-[25px]' : 'text-ivoire/60 hover:text-ivoire'
-                )}
-              >
-                {s}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </section>
-
-      {/* INTRO SÉRIE */}
+      {/* INTRO SÉRIE — eyebrow saison + titre + description */}
       <section className="bg-noir pb-[80px]">
-        <div className="container-content grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
+        <div className="container-content border-t border-bronze/15 pt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="flex flex-col gap-3 lg:col-span-5">
+            <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-or">
+              Série · {currentSeries.season}
+            </span>
             <h2 className="font-serif font-light leading-tight text-ivoire text-[clamp(2.5rem,5vw,4rem)]">
               {currentSeries.title}
             </h2>
