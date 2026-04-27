@@ -1,31 +1,8 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 import { createSupabaseServerClient, isSupabaseEnabled } from '@/lib/supabase/server';
+import { AdminNav } from '@/components/admin/AdminNav';
 import { logoutAction } from './actions';
-
-type NavItem = { href: string; label: string; disabled?: boolean };
-
-const NAV_ITEMS: NavItem[] = [
-  { href: '/admin', label: 'Tableau de bord' },
-  { href: '/admin/orders', label: 'Commandes' },
-  { href: '/admin/returns', label: 'Retours' },
-  { href: '/admin/customers', label: 'Clients' },
-  { href: '/admin/vip', label: 'Cercle VIP' },
-  { href: '/admin/loyalty', label: 'Fidélité' },
-  { href: '/admin/reviews', label: 'Témoignages' },
-  { href: '/admin/waitlist', label: 'Liste d\u2019attente' },
-  { href: '/admin/promos', label: 'Codes promo' },
-  { href: '/admin/gift-cards', label: 'Cartes cadeaux' },
-  { href: '/admin/newsletter', label: 'Newsletter' },
-  { href: '/admin/faq', label: 'FAQ' },
-  { href: '/admin/takeovers', label: 'Cérémonies' },
-  { href: '/admin/events', label: 'Événements' },
-  { href: '/admin/press', label: 'Presse' },
-  { href: '/admin/articles', label: 'Articles' },
-  { href: '/admin/products', label: 'Produits' },
-  { href: '/admin/collections', label: 'Collections' },
-];
 
 export default async function AdminLayout({
   children,
@@ -62,27 +39,7 @@ export default async function AdminLayout({
             </p>
           </div>
 
-          <nav aria-label="Navigation admin" className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.disabled ? '#' : item.href}
-                aria-disabled={item.disabled}
-                className={`flex items-center justify-between px-3 py-2 font-sans text-sm transition-colors duration-200 ${
-                  item.disabled
-                    ? 'pointer-events-none text-ivoire/30'
-                    : 'text-ivoire/80 hover:bg-ivoire/[0.04] hover:text-or'
-                }`}
-              >
-                <span>{item.label}</span>
-                {item.disabled && (
-                  <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-ivoire/30">
-                    bientôt
-                  </span>
-                )}
-              </Link>
-            ))}
-          </nav>
+          <AdminNav />
 
           <form
             action={logoutAction}
