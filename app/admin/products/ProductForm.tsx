@@ -73,9 +73,10 @@ export function ProductForm({
   }
 
   async function uploadVariantImage(i: number, file: File) {
+    const isVideo = file.type.startsWith('video/');
     const fd = new FormData();
     fd.append('file', file);
-    fd.append('folder', 'products');
+    fd.append('folder', isVideo ? 'products/videos' : 'products');
     const res = await fetch('/admin/api/upload', { method: 'POST', body: fd });
     if (!res.ok) {
       alert('Upload échoué');
@@ -83,7 +84,10 @@ export function ProductForm({
     }
     const { url } = (await res.json()) as { url: string };
     updateVariant(i, {
-      images: [...variants[i]!.images, { url, alt: '', type: 'flat' }],
+      images: [
+        ...variants[i]!.images,
+        { url, alt: '', type: isVideo ? 'video' : 'flat' },
+      ],
     });
   }
 
@@ -399,34 +403,58 @@ export function ProductForm({
               </div>
             </Field>
 
-            <Field label={`Images (${v.images.length})`}>
+            <Field label={`Médias (${v.images.length})`} hint="Photos JPG/PNG/WebP ou vidéos MP4/WebM. Max ~50 Mo par fichier.">
               <div className="flex flex-wrap items-start gap-3">
-                {v.images.map((img, imgIdx) => (
-                  <div
-                    key={imgIdx}
-                    className="relative aspect-[4/5] w-20 overflow-hidden bg-noir-800"
-                  >
-                    <Image src={img.url} alt={img.alt ?? ''} fill sizes="80px" className="object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => removeVariantImage(i, imgIdx)}
-                      aria-label="Retirer"
-                      className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-noir/80 text-ivoire hover:text-destructive"
+                {v.images.map((img, imgIdx) => {
+                  const isVideo = img.type === 'video';
+                  return (
+                    <div
+                      key={imgIdx}
+                      className="relative aspect-[4/5] w-20 overflow-hidden bg-noir-800"
                     >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                    {imgIdx === 0 && (
-                      <span className="absolute bottom-1 left-1 bg-or px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-widest text-noir">
-                        Principale
-                      </span>
-                    )}
-                  </div>
-                ))}
+                      {isVideo ? (
+                        <video
+                          src={img.url}
+                          muted
+                          playsInline
+                          preload="metadata"
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <Image
+                          src={img.url}
+                          alt={img.alt ?? ''}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      )}
+                      {isVideo && (
+                        <span className="absolute right-1 bottom-1 bg-noir/80 px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-widest text-or">
+                          Vidéo
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeVariantImage(i, imgIdx)}
+                        aria-label="Retirer"
+                        className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-noir/80 text-ivoire hover:text-destructive"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                      {imgIdx === 0 && !isVideo && (
+                        <span className="absolute bottom-1 left-1 bg-or px-1.5 py-0.5 font-sans text-[9px] uppercase tracking-widest text-noir">
+                          Principale
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
                 <label className="inline-flex aspect-[4/5] w-20 cursor-pointer items-center justify-center border border-dashed border-bronze/50 text-or hover:border-or">
                   <Plus className="h-5 w-5" aria-hidden />
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/*,video/*"
                     className="hidden"
                     onChange={(e) => {
                       const f = e.target.files?.[0];

@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ProductImage } from '@/lib/types/product';
+
+const isVideo = (m: ProductImage) => m.type === 'video';
 
 type Props = {
   images: ProductImage[];
@@ -59,18 +61,36 @@ export function ProductGallery({ images, productName, className }: Props) {
                   : 'border-bronze/30 opacity-60 hover:opacity-90'
               )}
             >
-              <Image
-                src={img.url}
-                alt=""
-                fill
-                sizes="80px"
-                className="object-cover"
-              />
+              {isVideo(img) ? (
+                <>
+                  <video
+                    src={img.url}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 flex items-center justify-center bg-noir/30 text-ivoire"
+                  >
+                    <Play className="h-4 w-4" fill="currentColor" />
+                  </span>
+                </>
+              ) : (
+                <Image
+                  src={img.url}
+                  alt=""
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              )}
             </button>
           ))}
         </div>
 
-        {/* Main image — desktop */}
+        {/* Main media — desktop */}
         <div className="relative hidden aspect-[4/5] w-full max-w-[640px] overflow-hidden bg-noir-800 lg:block">
           <button
             type="button"
@@ -88,14 +108,26 @@ export function ProductGallery({ images, productName, className }: Props) {
                 transition={{ duration: 0.4 }}
                 className="absolute inset-0"
               >
-                <Image
-                  src={activeImage.url}
-                  alt={activeImage.alt}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 90vw, 40vw"
-                  className="object-cover"
-                />
+                {isVideo(activeImage) ? (
+                  <video
+                    src={activeImage.url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={activeImage.url}
+                    alt={activeImage.alt}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 90vw, 40vw"
+                    className="object-cover"
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
             <span
@@ -114,14 +146,26 @@ export function ProductGallery({ images, productName, className }: Props) {
               key={`m-${img.url}-${i}`}
               className="relative aspect-[4/5] w-[85%] flex-shrink-0 snap-center overflow-hidden bg-noir-800"
             >
-              <Image
-                src={img.url}
-                alt={img.alt}
-                fill
-                priority={i === 0}
-                sizes="85vw"
-                className="object-cover"
-              />
+              {isVideo(img) ? (
+                <video
+                  src={img.url}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={img.url}
+                  alt={img.alt}
+                  fill
+                  priority={i === 0}
+                  sizes="85vw"
+                  className="object-cover"
+                />
+              )}
             </div>
           ))}
         </div>
@@ -215,7 +259,7 @@ function Lightbox({
         className="absolute inset-0"
       />
 
-      {/* Image */}
+      {/* Média */}
       <motion.div
         key={activeIdx}
         initial={{ opacity: 0, scale: 0.95 }}
@@ -225,14 +269,25 @@ function Lightbox({
         className="pointer-events-none absolute inset-0 flex items-center justify-center p-8 md:p-16"
       >
         <div className="relative h-full w-full">
-          <Image
-            src={active.url}
-            alt={active.alt}
-            fill
-            sizes="90vw"
-            className="object-contain"
-            priority
-          />
+          {isVideo(active) ? (
+            <video
+              src={active.url}
+              controls
+              autoPlay
+              loop
+              playsInline
+              className="pointer-events-auto h-full w-full object-contain"
+            />
+          ) : (
+            <Image
+              src={active.url}
+              alt={active.alt}
+              fill
+              sizes="90vw"
+              className="object-contain"
+              priority
+            />
+          )}
         </div>
       </motion.div>
 
