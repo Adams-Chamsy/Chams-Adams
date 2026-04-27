@@ -1,30 +1,36 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 /**
  * Transition de page "fade through black" — codes magazine print.
  *
- * À chaque changement de pathname :
+ * À chaque CHANGEMENT de pathname (pas au premier mount) :
  *  1. Voile noir s'opacifie (160 ms)
  *  2. Maintien (40 ms) — instant suspendu
  *  3. Voile s'efface (480 ms ease-out-expo) → contenu nouvelle page révélé
  *
  * Implémentation : overlay fixe global, déclenché par usePathname.
- * Respect strict de prefers-reduced-motion (le voile est rendu mais ne
- * s'anime pas — durée 0).
+ * Le premier mount est ignoré (sinon le voile masque la page d'arrivée et
+ * peut interagir avec les animations d'entrée GSAP/ScrollTrigger).
  *
+ * Respect strict de prefers-reduced-motion (composant retourne null).
  * Pas de blocage du clic : pointer-events-none toujours.
  */
 export function PageTransition() {
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const [show, setShow] = useState(false);
+  const isFirstMount = useRef(true);
 
   useEffect(() => {
     if (reduce) return;
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
     setShow(true);
     const t = window.setTimeout(() => setShow(false), 200);
     return () => window.clearTimeout(t);

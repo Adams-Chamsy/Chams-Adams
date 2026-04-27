@@ -60,21 +60,45 @@ export function TextReveal({
     const spans = root.querySelectorAll<HTMLSpanElement>('[data-reveal]');
     if (spans.length === 0) return;
 
-    const tween = gsap.from(spans, {
-      yPercent: 100,
-      opacity: 0,
+    // État initial explicite — évite tout flash visible→invisible→visible.
+    gsap.set(spans, { yPercent: 100, opacity: 0 });
+
+    const tween = gsap.to(spans, {
+      yPercent: 0,
+      opacity: 1,
       duration,
       delay,
       stagger,
       ease: 'power4.out',
       scrollTrigger: {
         trigger: root,
-        start: 'top 85%',
+        start: 'top 90%',
         once: true,
       },
     });
 
+    // Fallback : si après 1.5s le contenu reste invisible (ScrollTrigger n'a
+    // pas évalué — cas Lenis qui tarde à initialiser, layout shift, etc.),
+    // on force la révélation immédiate.
+    const fallback = window.setTimeout(() => {
+      const stillHidden = Array.from(spans).some(
+        (s) =>
+          parseFloat(getComputedStyle(s).opacity) === 0 ||
+          getComputedStyle(s).transform.includes('matrix')
+      );
+      if (stillHidden) {
+        gsap.to(spans, {
+          yPercent: 0,
+          opacity: 1,
+          duration: 0.4,
+          stagger,
+          ease: 'power4.out',
+        });
+      }
+    }, 1500);
+
     return () => {
+      window.clearTimeout(fallback);
       tween.scrollTrigger?.kill();
       tween.kill();
     };
