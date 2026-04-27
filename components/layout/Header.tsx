@@ -12,6 +12,7 @@ import { WishlistButton } from './WishlistButton';
 import { SearchButton } from './SearchButton';
 import { LanguageButton } from './LanguageButton';
 import { CurrencyButton } from './CurrencyButton';
+import { AccountButton } from './AccountButton';
 import { Logo } from './Logo';
 
 type NavLink = { label: string; href: string };
@@ -116,6 +117,7 @@ export function Header() {
           <div className="flex items-center justify-end gap-2 sm:gap-4">
             <SearchButton className="hidden sm:inline-flex" />
             <WishlistButton className="hidden sm:inline-flex" />
+            <AccountButton className="hidden sm:inline-flex" />
             <CartButton />
             <CurrencyButton className="hidden md:inline-flex" />
             <LanguageButton className="hidden md:inline-flex" />
@@ -313,7 +315,14 @@ function MobileMenu({
         </nav>
 
         <div className="border-t border-bronze/15 px-8 py-6">
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-ivoire/50">
+          <Link
+            href="/compte"
+            onClick={onClose}
+            className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.25em] text-or hover:underline"
+          >
+            Mon compte →
+          </Link>
+          <p className="mt-3 font-sans text-xs uppercase tracking-[0.2em] text-ivoire/50">
             FR · EN
           </p>
         </div>
