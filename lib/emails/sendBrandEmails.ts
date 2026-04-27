@@ -4,7 +4,6 @@ import { Welcome } from './Welcome';
 import { Restock } from './Restock';
 import { ReturnStatus, type ReturnStatusProps } from './ReturnStatus';
 import { CarnetReservation } from './CarnetReservation';
-import { PieceTransfer } from './PieceTransfer';
 
 function getSender() {
   return (
@@ -211,53 +210,3 @@ Voir votre carnet : ${SITE}/compte/carnets/${params.carnetSlug}
   }
 }
 
-export type SendPieceTransferParams = {
-  to: string;
-  pieceNumber: string;
-  productName: string;
-  fromEmail: string;
-  fromName?: string | null;
-};
-
-export async function sendPieceTransferEmail(
-  params: SendPieceTransferParams
-): Promise<boolean> {
-  const resend = getResend();
-  if (!resend) return false;
-  const html = await render(
-    PieceTransfer({
-      pieceNumber: params.pieceNumber,
-      productName: params.productName,
-      fromEmail: params.fromEmail,
-      fromName: params.fromName ?? null,
-      siteUrl: SITE,
-    }),
-    { pretty: false }
-  );
-  const text = `Une pièce vient à vous.
-
-${params.fromName ?? params.fromEmail} vous transmet « ${params.productName} » (N° ${params.pieceNumber}).
-
-Découvrez son registre : ${SITE}/compte/pieces
-
-— Chams Adams`;
-
-  try {
-    const { error } = await resend.emails.send({
-      from: getSender(),
-      to: params.to,
-      subject: `${params.productName} vous a été transmise.`,
-      html,
-      text,
-      replyTo: process.env.CONTACT_EMAIL ?? 'contact@chams-adams.com',
-    });
-    if (error) {
-      console.error('[email] piece transfer:', error);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error('[email] piece transfer failed:', err);
-    return false;
-  }
-}

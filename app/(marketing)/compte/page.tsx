@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Package, Sparkles, RotateCcw, LogOut, Heart, Ruler, BookHeart, ScrollText } from 'lucide-react';
+import { Package, Sparkles, RotateCcw, LogOut, Heart, Ruler, BookHeart } from 'lucide-react';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
 import {
@@ -140,15 +140,8 @@ export default async function ComptePage() {
         </div>
       </section>
 
-      <section className="bg-noir pb-[60px]">
-        <div className="container-content grid grid-cols-1 gap-6 md:grid-cols-3">
-          <DashboardCard
-            href="/compte/pieces"
-            icon={ScrollText}
-            label="Mes pièces"
-            value="Documentées à vie"
-            hint="Certificat & registre de chaque pièce"
-          />
+      <section className="bg-noir pb-[160px]">
+        <div className="container-content grid grid-cols-1 gap-6 md:grid-cols-2">
           <DashboardCard
             href="/compte/gabarit"
             icon={Ruler}

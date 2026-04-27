@@ -252,60 +252,8 @@ async function handleCheckoutSessionCompleted(
         line_total_cents: (li.price?.unit_amount ?? 0) * (li.quantity ?? 1),
       };
     });
-    let insertedItems: Array<{ id: string }> | null = null;
     if (itemRows.length > 0) {
-      const { data: items } = await supabase
-        .from('order_items')
-        .insert(itemRows)
-        .select('id');
-      insertedItems = (items ?? []) as Array<{ id: string }>;
-    }
-
-    // -- Crée une "pièce" par exemplaire (quantité dépliée) pour le certificat
-    if (insertedItems && insertedItems.length > 0) {
-      const piecesToInsert: Array<Record<string, unknown>> = [];
-      for (let i = 0; i < itemRows.length; i++) {
-        const itemRow = itemRows[i]!;
-        const orderItemId = insertedItems[i]?.id ?? null;
-        for (let q = 0; q < itemRow.quantity; q++) {
-          // Genère le numéro via la fonction SQL next_piece_number()
-          const { data: numData } = await supabase.rpc('next_piece_number');
-          const piece_number =
-            (numData as string | null) ??
-            `CA-${new Date().getFullYear()}-${Math.floor(Math.random() * 9999)
-              .toString()
-              .padStart(4, '0')}`;
-          piecesToInsert.push({
-            piece_number,
-            order_item_id: orderItemId,
-            product_id: itemRow.product_id,
-            product_name: itemRow.product_name,
-            product_slug: null,
-            size: itemRow.size,
-            monogram: itemRow.monogram,
-            owner_email: email,
-            owner_user_id: userId,
-            owner_name: session.customer_details?.name ?? null,
-          });
-        }
-      }
-      if (piecesToInsert.length > 0) {
-        const { data: piecesInserted } = await supabase
-          .from('pieces')
-          .insert(piecesToInsert)
-          .select('id');
-        // Événement de création
-        const events = ((piecesInserted ?? []) as Array<{ id: string }>).map(
-          (p) => ({
-            piece_id: p.id,
-            event_type: 'creation',
-            note: `Commande ${session.id}`,
-          })
-        );
-        if (events.length > 0) {
-          await supabase.from('piece_events').insert(events);
-        }
-      }
+      await supabase.from('order_items').insert(itemRows);
     }
 
     console.info('[webhook] order persisted', { orderId: order.id });
