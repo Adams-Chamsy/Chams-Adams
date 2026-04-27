@@ -9,6 +9,7 @@ import { WishlistDrawer } from '@/components/wishlist/WishlistDrawer';
 import { WishlistSync } from '@/components/wishlist/WishlistSync';
 import { FilmGrain } from '@/components/animations/FilmGrain';
 import { PageTransition } from '@/components/animations/PageTransition';
+import { PublicChrome } from '@/components/layout/PublicChrome';
 import { LocaleProvider } from '@/lib/i18n/client';
 import { getLocale, getT } from '@/lib/i18n/server';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -154,16 +155,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <FilmGrain />
               <PageTransition />
               <CustomCursor />
-              <Header />
+              <PublicChrome>
+                <Header />
+              </PublicChrome>
               <main id="main-content">{children}</main>
-              <Footer />
-              <CartDrawer />
-              <WishlistDrawer />
-              <WishlistSync />
+              <PublicChrome>
+                <Footer />
+                <CartDrawer />
+                <WishlistDrawer />
+                <WishlistSync />
+                <CookieBanner />
+                <ScrollToTop />
+                <WhatsAppButton />
+              </PublicChrome>
               <Toaster />
-              <CookieBanner />
-              <ScrollToTop />
-              <WhatsAppButton />
               <PlausibleAnalytics />
             </>
           </SmoothScroll>
