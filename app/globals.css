@@ -95,7 +95,8 @@
     color: rgb(var(--color-noir));
   }
 
-  /* Scrollbar minimaliste — fil d'or, fade out hors interaction */
+  /* Scrollbar minimaliste — fil d'or toujours présent (assez pour signaler
+     qu'il y a du contenu à scroller), s'éclaircit au hover. */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -104,14 +105,9 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--color-or) / 0);
-    transition: background 400ms ease;
+    background: rgb(var(--color-or) / 0.35);
     border-radius: 0;
-  }
-  *:hover > ::-webkit-scrollbar-thumb,
-  *:focus > ::-webkit-scrollbar-thumb,
-  body::-webkit-scrollbar-thumb {
-    background: rgb(var(--color-or) / 0.4);
+    transition: background 300ms ease;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(var(--color-or) / 0.7);

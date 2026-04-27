@@ -91,14 +91,14 @@ export function AdminNav() {
   return (
     <nav
       aria-label="Navigation admin"
-      className="flex flex-col gap-7"
+      className="flex flex-col gap-4"
     >
       {SECTIONS.map((section) => (
-        <div key={section.title} className="flex flex-col gap-2">
-          <span className="px-3 font-sans text-[10px] uppercase tracking-[0.3em] text-or/70">
+        <div key={section.title} className="flex flex-col gap-1">
+          <span className="px-3 pt-1 font-sans text-[9px] uppercase tracking-[0.3em] text-or/70">
             {section.title}
           </span>
-          <ul className="flex flex-col gap-0.5">
+          <ul className="flex flex-col">
             {section.items.map((item) => {
               const active = isActive(pathname, item.href);
               const Icon = item.icon;
@@ -116,7 +116,7 @@ export function AdminNav() {
                     href={item.href}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'relative flex items-center gap-3 rounded-sm px-3 py-2 font-sans text-sm transition-colors duration-200',
+                      'relative flex items-center gap-3 rounded-sm px-3 py-1.5 font-sans text-sm transition-colors duration-200',
                       active
                         ? 'bg-or/[0.06] text-or'
                         : 'text-ivoire/75 hover:bg-ivoire/[0.04] hover:text-or'
