@@ -16,6 +16,13 @@ type BreadcrumbsProps = {
   tone?: 'default' | 'muted';
   /** Désactive l'émission du JSON-LD BreadcrumbList (utile si déjà couvert ailleurs). */
   skipJsonLd?: boolean;
+  /**
+   * Affiche le rendu visuel du fil d'Ariane. Par défaut `false` :
+   * codes ultra-luxe — Hermès / Bottega / The Row n'affichent pas de
+   * breadcrumb visible. Le JSON-LD reste émis pour le SEO.
+   * Activer ponctuellement si la hiérarchie a un vrai intérêt visuel.
+   */
+  visible?: boolean;
 };
 
 /**
@@ -36,8 +43,16 @@ export function Breadcrumbs({
   className,
   tone = 'default',
   skipJsonLd,
+  visible = false,
 }: BreadcrumbsProps) {
   if (items.length === 0) return null;
+
+  // Par défaut : émet le JSON-LD pour le SEO mais ne rend rien visuellement.
+  // Les codes ultra-luxe préfèrent une hiérarchie implicite + un BackLink
+  // contextuel ponctuel (sur fiche produit, article, collection).
+  if (!visible) {
+    return skipJsonLd ? null : <JsonLd data={breadcrumbSchema(items)} />;
+  }
 
   return (
     <>

@@ -7,6 +7,7 @@ import { getProductsByIds } from '@/lib/data/products';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { BackLink } from '@/components/layout/BackLink';
 
 export async function generateStaticParams() {
   const cols = await getAllCollections();
@@ -67,6 +68,7 @@ export default async function CollectionDetailPage(
               { label: collection.name },
             ]}
           />
+          <BackLink href="/collections" label="Collections" />
           <span className="font-sans text-xs uppercase tracking-[0.3em] text-or">
             Collection
           </span>

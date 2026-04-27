@@ -6,6 +6,7 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 import { mdxComponents } from '@/mdx-components';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { BackLink } from '@/components/layout/BackLink';
 import { ReadingProgress } from '@/components/ui/ReadingProgress';
 import { TiptapBody } from '@/components/editorial/TiptapBody';
 import {
@@ -103,6 +104,7 @@ export default async function JournalArticlePage(
                 { label: meta.category },
               ]}
             />
+            <BackLink href="/journal" label="Journal" />
             <TextReveal
               as="h1"
               splitBy="words"

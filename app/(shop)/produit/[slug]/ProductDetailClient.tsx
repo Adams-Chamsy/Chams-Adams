@@ -15,6 +15,7 @@ import { AddToBagButton } from '@/components/product/AddToBagButton';
 import { SizeGuide } from '@/components/product/SizeGuide';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { BackLink } from '@/components/layout/BackLink';
 import { ZoomReveal } from '@/components/animations/ZoomReveal';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Price } from '@/components/ui/Price';
@@ -94,7 +95,7 @@ export function ProductDetailClient({
 
             {/* Infos */}
             <div className="flex flex-col gap-8 lg:col-span-5">
-              {/* Breadcrumb */}
+              {/* JSON-LD breadcrumb (SEO uniquement, pas de rendu visuel) */}
               <Breadcrumbs
                 items={[
                   { label: 'Accueil', href: '/' },
@@ -109,6 +110,14 @@ export function ProductDetailClient({
                     : []),
                   { label: product.name },
                 ]}
+              />
+              <BackLink
+                href={
+                  collectionName
+                    ? `/collections/${collectionSlug}`
+                    : '/boutique'
+                }
+                label={collectionName ?? 'Boutique'}
               />
 
               {/* Badges */}
