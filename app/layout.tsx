@@ -10,40 +10,23 @@ import { WishlistSync } from '@/components/wishlist/WishlistSync';
 import { FilmGrain } from '@/components/animations/FilmGrain';
 import { PageTransition } from '@/components/animations/PageTransition';
 import { PublicChrome } from '@/components/layout/PublicChrome';
+import { CustomCursor } from '@/components/layout/CustomCursor';
+import { Toaster } from '@/components/ui/Toaster';
+import { CookieBanner } from '@/components/layout/CookieBanner';
+import { ScrollToTop } from '@/components/layout/ScrollToTop';
+import { WhatsAppButton } from '@/components/layout/WhatsAppButton';
+import { PlausibleAnalytics } from '@/components/analytics/Plausible';
 import { LocaleProvider } from '@/lib/i18n/client';
 import { getLocale, getT } from '@/lib/i18n/server';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { organizationSchema, websiteSchema } from '@/lib/seo/json-ld';
 import './globals.css';
 
-// Ces deux composants n'impactent pas le rendu initial (effets post-hydration).
-// On les charge en dynamic sans SSR pour alléger le bundle du premier paint.
+// SmoothScroll utilise Lenis qui a besoin de window — seul composant qui
+// doit rester en dynamic ssr:false. Les autres ont 'use client' et sont
+// correctement splittés par Next.js sans dynamic().
 const SmoothScroll = dynamic(
   () => import('@/components/layout/SmoothScroll').then((m) => m.SmoothScroll),
-  { ssr: false, loading: () => null }
-);
-const CustomCursor = dynamic(
-  () => import('@/components/layout/CustomCursor').then((m) => m.CustomCursor),
-  { ssr: false, loading: () => null }
-);
-const Toaster = dynamic(
-  () => import('@/components/ui/Toaster').then((m) => m.Toaster),
-  { ssr: false, loading: () => null }
-);
-const CookieBanner = dynamic(
-  () => import('@/components/layout/CookieBanner').then((m) => m.CookieBanner),
-  { ssr: false, loading: () => null }
-);
-const ScrollToTop = dynamic(
-  () => import('@/components/layout/ScrollToTop').then((m) => m.ScrollToTop),
-  { ssr: false, loading: () => null }
-);
-const WhatsAppButton = dynamic(
-  () => import('@/components/layout/WhatsAppButton').then((m) => m.WhatsAppButton),
-  { ssr: false, loading: () => null }
-);
-const PlausibleAnalytics = dynamic(
-  () => import('@/components/analytics/Plausible').then((m) => m.PlausibleAnalytics),
   { ssr: false, loading: () => null }
 );
 
