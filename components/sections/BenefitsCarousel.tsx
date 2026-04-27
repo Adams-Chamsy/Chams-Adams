@@ -19,16 +19,22 @@ import { cn } from '@/lib/utils';
  * d'icône directement (Next.js refuse). On passe un nom d'icône (string), et
  * on résout le composant ici.
  */
-const ICON_MAP = {
+const ICON_MAP: Record<string, LucideIcon> = {
   package: Package,
   ruler: Ruler,
   carnet: BookHeart,
   sparkles: Sparkles,
   rotate: RotateCcw,
   crown: Crown,
-} as const satisfies Record<string, LucideIcon>;
+};
 
-export type BenefitIconName = keyof typeof ICON_MAP;
+export type BenefitIconName =
+  | 'package'
+  | 'ruler'
+  | 'carnet'
+  | 'sparkles'
+  | 'rotate'
+  | 'crown';
 
 type Benefit = {
   icon: BenefitIconName;
