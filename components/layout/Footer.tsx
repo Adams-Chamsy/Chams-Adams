@@ -73,7 +73,8 @@ const socials = [
   },
 ];
 
-const foundedYear = new Date().getFullYear();
+const FOUNDED_YEAR = 2018;
+const currentYear = new Date().getFullYear();
 
 export function Footer() {
   const t = getT();
@@ -176,7 +177,7 @@ export function Footer() {
         <div className="container-content flex flex-col items-center gap-8 text-center">
           <Logo as="div" variant="wordmark" size={64} className="text-ivoire" />
           <p className="font-script text-3xl text-or md:text-4xl">
-            {t('footer.foundedIn')} {foundedYear}
+            {t('footer.foundedIn')} {FOUNDED_YEAR}
           </p>
           <p className="max-w-md font-serif italic text-ivoire/55">
             Chams Adams · Paris · Dakar — une maison de couture qui prend le
@@ -189,7 +190,7 @@ export function Footer() {
       <div className="border-t border-bronze/15">
         <div className="container-content flex flex-col items-start justify-between gap-4 py-6 text-xs lg:flex-row lg:items-center">
           <p className="font-sans uppercase tracking-[0.15em] text-ivoire/50">
-            © {foundedYear} Chams Adams · {t('footer.rightsReserved')}
+            © {currentYear} Chams Adams · {t('footer.rightsReserved')}
           </p>
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 font-sans uppercase tracking-[0.15em] text-ivoire/50">
             {legalLinks.map((link) => (
