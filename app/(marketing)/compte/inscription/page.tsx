@@ -77,10 +77,10 @@ export default async function CustomerSignupPage() {
             </p>
           </header>
 
-          {/* CORPS — form + bénéfices 2 colonnes resserrées */}
+          {/* CORPS — form 5/12 + bénéfices 7/12 (équilibre rééquilibré) */}
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-            {/* Formulaire */}
-            <div className="lg:col-span-6">
+            {/* Formulaire — colonne gauche plus étroite */}
+            <div className="lg:col-span-5">
               <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-or">
                 Créer un accès
               </span>
@@ -93,28 +93,28 @@ export default async function CustomerSignupPage() {
               </p>
             </div>
 
-            {/* Bénéfices — 4 items en grille 2×2 dense */}
+            {/* Bénéfices — colonne droite plus large, typographie ample */}
             <aside
               aria-labelledby="benefits-title"
-              className="lg:col-span-5 lg:col-start-8"
+              className="lg:col-span-7"
             >
               <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-or">
                 Ce que la maison vous offre
               </span>
               <h2
                 id="benefits-title"
-                className="mt-3 mb-8 font-serif font-light leading-tight text-ivoire text-[clamp(1.5rem,2.8vw,2rem)]"
+                className="mt-3 mb-10 font-serif font-light leading-tight text-ivoire text-[clamp(1.75rem,3.5vw,2.75rem)]"
               >
                 Quatre attentions, gardées avec soin
               </h2>
-              <ul className="grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-2">
+              <ul className="grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2">
                 {BENEFITS.map(({ icon: Icon, label, body }) => (
-                  <li key={label} className="flex flex-col gap-2">
-                    <Icon className="h-4 w-4 text-or" aria-hidden />
-                    <h3 className="font-serif text-base font-light text-ivoire">
+                  <li key={label} className="flex flex-col gap-3">
+                    <Icon className="h-6 w-6 text-or" aria-hidden />
+                    <h3 className="font-serif text-xl font-light text-ivoire">
                       {label}
                     </h3>
-                    <p className="font-serif italic leading-snug text-sm text-ivoire/60">
+                    <p className="font-serif italic leading-relaxed text-base text-ivoire/65">
                       {body}
                     </p>
                   </li>
