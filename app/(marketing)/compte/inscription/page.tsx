@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { Package, Ruler, BookHeart, Sparkles } from 'lucide-react';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { TextReveal } from '@/components/animations/TextReveal';
-import { BenefitsCarousel } from '@/components/sections/BenefitsCarousel';
+import {
+  BenefitsCarousel,
+  type BenefitIconName,
+} from '@/components/sections/BenefitsCarousel';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { CustomerSignupForm } from './SignupForm';
 
@@ -13,24 +15,24 @@ export const metadata: Metadata = {
     'Créer votre accès Chams Adams — gabarit, commandes, points de fidélité, carnets de cérémonie.',
 };
 
-const BENEFITS = [
+const BENEFITS: Array<{ icon: BenefitIconName; label: string; body: string }> = [
   {
-    icon: Package,
+    icon: 'package',
     label: 'Vos commandes',
     body: "De l'atelier à votre porte, suivies dans un seul endroit.",
   },
   {
-    icon: Ruler,
+    icon: 'ruler',
     label: 'Votre gabarit',
     body: 'Mesures conservées, transmises à chaque demande sur-mesure.',
   },
   {
-    icon: BookHeart,
+    icon: 'carnet',
     label: 'Carnets de cérémonie',
     body: 'Listes partageables — mariage, Tabaski, Magal.',
   },
   {
-    icon: Sparkles,
+    icon: 'sparkles',
     label: 'Fidélité',
     body: 'Un euro dépensé, un point. La maison vous tient compte.',
   },

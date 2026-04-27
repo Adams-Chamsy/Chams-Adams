@@ -2,11 +2,36 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import type { LucideIcon } from 'lucide-react';
+import {
+  Package,
+  Ruler,
+  BookHeart,
+  Sparkles,
+  RotateCcw,
+  Crown,
+  type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+/**
+ * Le composant est un Client Component, mais ses props peuvent venir d'un
+ * Server Component — donc on ne peut pas y faire passer un function component
+ * d'icône directement (Next.js refuse). On passe un nom d'icône (string), et
+ * on résout le composant ici.
+ */
+const ICON_MAP = {
+  package: Package,
+  ruler: Ruler,
+  carnet: BookHeart,
+  sparkles: Sparkles,
+  rotate: RotateCcw,
+  crown: Crown,
+} as const satisfies Record<string, LucideIcon>;
+
+export type BenefitIconName = keyof typeof ICON_MAP;
+
 type Benefit = {
-  icon: LucideIcon;
+  icon: BenefitIconName;
   label: string;
   body: string;
 };
@@ -74,7 +99,7 @@ export function BenefitsCarousel({ benefits, intervalMs = 6000 }: Props) {
 
   if (len === 0) return null;
   const current = benefits[active]!;
-  const Icon = current.icon;
+  const Icon = ICON_MAP[current.icon];
 
   return (
     <div
