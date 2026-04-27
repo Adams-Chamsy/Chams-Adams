@@ -6,38 +6,44 @@ import { getT } from '@/lib/i18n/server';
 type FooterLink = { label: string; href: string };
 type FooterColumn = { title: string; links: FooterLink[] };
 
-/** Construit les colonnes en lisant les titres dans les messages i18n. */
+/**
+ * Construit les colonnes — toutes les routes sont vérifiées et fonctionnelles.
+ *
+ * Structure éditoriale :
+ *  - Maison : qui nous sommes (récit, transmission)
+ *  - Découvrir : ce que nous proposons (produit, image)
+ *  - Service : ce que nous tenons (transactionnel, support)
+ */
 function buildColumns(t: (k: string) => string): FooterColumn[] {
   return [
     {
       title: t('footer.colMaison'),
       links: [
         { label: 'La Maison', href: '/maison' },
-        { label: 'Savoir-faire', href: '/savoir-faire' },
-        { label: 'Nos artisans', href: '/savoir-faire#artisans' },
+        { label: 'Atelier', href: '/savoir-faire' },
         { label: 'Journal', href: '/journal' },
         { label: 'Calendrier', href: '/evenements' },
+        { label: 'Revue de presse', href: '/presse' },
       ],
     },
     {
-      title: t('footer.colCollections'),
+      title: t('footer.colDecouvrir'),
       links: [
-        { label: 'Cérémonies', href: '/collections/ceremonies' },
-        { label: 'Tabaski & Magal', href: '/collections/tabaski-magal' },
-        { label: 'Prêt-à-porter', href: '/collections/pret-a-porter' },
+        { label: 'Collections', href: '/collections' },
+        { label: 'Boutique', href: '/boutique' },
+        { label: 'Lookbook', href: '/lookbook' },
         { label: 'Sur-mesure', href: '/sur-mesure' },
       ],
     },
     {
       title: t('footer.colService'),
       links: [
-        { label: 'Prise de mesures', href: '/sur-mesure/mesures' },
         { label: 'Guide des tailles', href: '/guide-tailles' },
         { label: 'Livraison & retours', href: '/livraison-retours' },
+        { label: 'Initier un retour', href: '/retours/demande' },
         { label: 'Questions fréquentes', href: '/faq' },
         { label: 'Mon compte', href: '/compte' },
-        { label: 'Nous contacter', href: '/contact' },
-        { label: 'Revue de presse', href: '/presse' },
+        { label: 'Nous écrire', href: '/contact' },
       ],
     },
   ];
@@ -46,7 +52,7 @@ function buildColumns(t: (k: string) => string): FooterColumn[] {
 const legalLinks: FooterLink[] = [
   { label: 'Mentions légales', href: '/mentions-legales' },
   { label: 'CGV', href: '/cgv' },
-  { label: 'Politique de confidentialité', href: '/confidentialite' },
+  { label: 'Confidentialité', href: '/confidentialite' },
 ];
 
 const socials = [
@@ -72,33 +78,43 @@ const foundedYear = new Date().getFullYear();
 export function Footer() {
   const t = getT();
   const columns = buildColumns(t);
+
   return (
-    <footer className="bg-noir pt-[120px] pb-12 text-ivoire" aria-labelledby="footer-title">
+    <footer
+      className="relative bg-noir text-ivoire"
+      aria-labelledby="footer-title"
+    >
       <h2 id="footer-title" className="sr-only">
         Pied de page — Chams Adams
       </h2>
 
-      <div className="container-wide flex flex-col gap-16">
-        {/* Grille principale */}
-        <div className="grid grid-cols-1 gap-x-12 gap-y-4 lg:grid-cols-4 lg:gap-y-0">
-          {/* Newsletter — en tête mobile, 4e colonne desktop */}
-          <section
-            aria-labelledby="newsletter-title"
-            className="order-first flex flex-col gap-6 lg:order-none lg:col-start-4 lg:row-start-1"
-          >
-            <header className="flex flex-col gap-2">
-              <h3
-                id="newsletter-title"
-                className="font-serif text-2xl font-light text-ivoire"
-              >
-                {t('footer.newsletterTitle')}
-              </h3>
-              <p className="max-w-prose font-serif italic text-ivoire/60">
-                {t('footer.newsletterSubtitle')}
-              </p>
-            </header>
+      {/* ───────────── BANDEAU NEWSLETTER pleine largeur ───────────── */}
+      <section
+        aria-labelledby="newsletter-title"
+        className="border-t border-bronze/20 bg-noir/80 py-[80px] md:py-[120px]"
+      >
+        <div className="container-content grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="flex flex-col gap-4 lg:col-span-5">
+            <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-or">
+              {t('footer.newsletterEyebrow')}
+            </span>
+            <h3
+              id="newsletter-title"
+              className="font-serif font-light leading-[1.05] text-ivoire text-[clamp(2rem,4.5vw,3.25rem)]"
+            >
+              {t('footer.newsletterTitle')}
+            </h3>
+            <p className="max-w-prose font-serif italic text-ivoire/65 text-lg leading-relaxed">
+              {t('footer.newsletterSubtitle')}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-8 lg:col-span-6 lg:col-start-7 lg:justify-center">
             <NewsletterForm />
-            <ul className="mt-2 flex items-center gap-4">
+            <ul
+              aria-label="Réseaux sociaux"
+              className="flex items-center gap-2"
+            >
               {socials.map(({ label, href, Icon }) => (
                 <li key={label}>
                   <a
@@ -107,36 +123,43 @@ export function Footer() {
                     rel="noopener noreferrer"
                     aria-label={label}
                     data-cursor="hover"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ivoire/60 transition-colors duration-300 hover:text-or"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-bronze/30 text-ivoire/70 transition-all duration-300 hover:border-or hover:text-or"
                   >
                     <Icon className="h-[18px] w-[18px]" aria-hidden />
                   </a>
                 </li>
               ))}
             </ul>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          {/* Colonnes de navigation — accordéons sur mobile, toujours ouvertes sur desktop */}
-          {columns.map((col, i) => (
+      {/* Filet d'or séparateur */}
+      <div aria-hidden className="h-px w-full bg-or/20" />
+
+      {/* ───────────── 3 COLONNES VERBALES ───────────── */}
+      <section className="container-content py-[80px] md:py-[100px]">
+        <div className="grid grid-cols-1 gap-y-2 md:grid-cols-3 md:gap-x-12 md:gap-y-0">
+          {columns.map((col) => (
             <details
               key={col.title}
-              className="group border-b border-bronze/15 py-4 lg:border-0 lg:py-0 lg:[&>summary]:pointer-events-none lg:[&>summary]:cursor-default"
-              style={{ order: i + 1 }}
+              className="group border-b border-bronze/15 py-4 md:border-0 md:py-0 md:[&>summary]:pointer-events-none md:[&>summary]:cursor-default md:open:!flex md:!flex flex-col"
+              open
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between font-sans text-xs uppercase tracking-[0.2em] text-ivoire lg:mb-6">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-sans text-[11px] uppercase tracking-[0.3em] text-or md:mb-6">
                 {col.title}
                 <span
                   aria-hidden
-                  className="ml-2 inline-block h-px w-3 bg-ivoire transition-transform duration-300 group-open:rotate-90 lg:hidden"
+                  className="ml-2 inline-block h-px w-3 bg-ivoire transition-transform duration-300 group-open:rotate-90 md:hidden"
                 />
               </summary>
-              <ul className="mt-4 flex flex-col gap-3 lg:!mt-0 lg:!flex">
+              <ul className="mt-4 flex flex-col gap-3 md:!mt-0">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
                       data-cursor="hover"
-                      className="inline-block font-serif text-base text-ivoire/60 transition-colors duration-300 hover:text-ivoire"
+                      className="inline-block font-serif text-base text-ivoire/70 transition-colors duration-300 hover:text-or"
                     >
                       {link.label}
                     </Link>
@@ -146,24 +169,29 @@ export function Footer() {
             </details>
           ))}
         </div>
+      </section>
 
-        {/* Signature maison : monogramme or + wordmark script + italianno fondation */}
-        <div className="flex flex-col items-start justify-between gap-10 border-t border-bronze/15 pt-12 lg:flex-row lg:items-end">
-          <Logo as="div" variant="stacked" size={88} className="items-start" />
-          <p className="font-script text-3xl text-or lg:text-4xl">
+      {/* ───────────── SIGNATURE MAISON ───────────── */}
+      <section className="border-t border-bronze/15 bg-noir py-[80px] md:py-[120px]">
+        <div className="container-content flex flex-col items-center gap-8 text-center">
+          <Logo as="div" variant="wordmark" size={64} className="text-ivoire" />
+          <p className="font-script text-3xl text-or md:text-4xl">
             {t('footer.foundedIn')} {foundedYear}
           </p>
-        </div>
-
-        {/* Séparateur or */}
-        <div aria-hidden className="h-px w-full bg-or/20" />
-
-        {/* Mentions basses */}
-        <div className="flex flex-col items-start justify-between gap-4 pb-2 text-xs lg:flex-row lg:items-center">
-          <p className="font-sans uppercase tracking-[0.15em] text-ivoire/60">
-            © {foundedYear} Chams Adams — {t('footer.rightsReserved')}
+          <p className="max-w-md font-serif italic text-ivoire/55">
+            Chams Adams · Paris · Dakar — une maison de couture qui prend le
+            temps des mains, des mesures, du tombé.
           </p>
-          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 font-sans uppercase tracking-[0.15em] text-ivoire/60">
+        </div>
+      </section>
+
+      {/* ───────────── MENTIONS BASSES (compact) ───────────── */}
+      <div className="border-t border-bronze/15">
+        <div className="container-content flex flex-col items-start justify-between gap-4 py-6 text-xs lg:flex-row lg:items-center">
+          <p className="font-sans uppercase tracking-[0.15em] text-ivoire/50">
+            © {foundedYear} Chams Adams · {t('footer.rightsReserved')}
+          </p>
+          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 font-sans uppercase tracking-[0.15em] text-ivoire/50">
             {legalLinks.map((link) => (
               <li key={link.href}>
                 <Link
@@ -175,19 +203,6 @@ export function Footer() {
                 </Link>
               </li>
             ))}
-            <li>
-              <button
-                type="button"
-                data-cursor="hover"
-                className="inline-flex items-center gap-2 uppercase tracking-[0.15em] transition-colors duration-300 hover:text-or"
-              >
-                <span aria-current="true" className="text-ivoire">
-                  FR
-                </span>
-                <span aria-hidden>/</span>
-                <span>EN</span>
-              </button>
-            </li>
           </ul>
         </div>
       </div>

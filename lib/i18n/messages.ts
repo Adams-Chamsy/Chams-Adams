@@ -63,8 +63,9 @@ type Messages = {
   };
   footer: {
     colMaison: string;
-    colCollections: string;
+    colDecouvrir: string;
     colService: string;
+    newsletterEyebrow: string;
     newsletterTitle: string;
     newsletterSubtitle: string;
     foundedIn: string;
@@ -128,10 +129,11 @@ export const messages: Record<Locale, Messages> = {
     },
     footer: {
       colMaison: 'Maison',
-      colCollections: 'Collections',
+      colDecouvrir: 'Découvrir',
       colService: 'Service',
-      newsletterTitle: 'Recevoir nos correspondances',
-      newsletterSubtitle: "L'élégance par l'écrit, tous les mois.",
+      newsletterEyebrow: 'Correspondances',
+      newsletterTitle: 'Recevoir nos lettres',
+      newsletterSubtitle: "L'élégance par l'écrit, une fois par mois.",
       foundedIn: 'Maison fondée en',
       rightsReserved: 'Tous droits réservés',
     },
@@ -191,10 +193,11 @@ export const messages: Record<Locale, Messages> = {
     },
     footer: {
       colMaison: 'The House',
-      colCollections: 'Collections',
+      colDecouvrir: 'Discover',
       colService: 'Service',
-      newsletterTitle: 'Receive our correspondence',
-      newsletterSubtitle: 'Elegance in writing, every month.',
+      newsletterEyebrow: 'Correspondence',
+      newsletterTitle: 'Receive our letters',
+      newsletterSubtitle: 'Elegance in writing, once a month.',
       foundedIn: 'House founded in',
       rightsReserved: 'All rights reserved',
     },
